@@ -3,6 +3,10 @@ body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
+p {
+  width: min(100%, 47em);
+}
+
 #inputs {
   display: grid;
   grid-template-columns: 16em 30em;
@@ -27,6 +31,7 @@ textarea {
   font-family: 'Courier New', Courier, monospace;
   white-space-collapse: preserve;
   display: block;
+  width: min(100%, 47em);
   background: #eef;
 }
 
