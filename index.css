@@ -5,8 +5,8 @@ body {
 
 #inputs {
   display: grid;
-  grid-template-columns: 15em 30em;
-  @media (width < 47em) {
+  grid-template-columns: 16em 30em;
+  @media (width < 48em) {
     grid-template-columns: 100%;  
   }
   gap: 1em;
