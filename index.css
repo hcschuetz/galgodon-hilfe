@@ -1,0 +1,35 @@
+body {
+  margin: .5em;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+#inputs {
+  display: grid;
+  grid-template-columns: 15em 30em;
+  @media (width < 47em) {
+    grid-template-columns: 100%;  
+  }
+  gap: 1em;
+  > * {
+    align-self: self-start;
+  }
+}
+
+textarea {
+  height: 4lh;
+}
+
+#prefix, #letters {
+  background: #eef;
+}
+
+#out {
+  font-family: 'Courier New', Courier, monospace;
+  white-space-collapse: preserve;
+  display: block;
+  background: #eef;
+}
+
+button {
+  margin: 0.5em 0.3em 0 0;
+}

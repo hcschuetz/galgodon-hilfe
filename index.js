@@ -1,0 +1,94 @@
+const defaultInputs = {
+  tags   : "@galgodon@fedigroups.social #galgenmasto #galgenfedi",
+  prefix : `Das R habt Ihr also gewählt.
+Das ist ein Treffer.`,
+  secret : `Schöne Grüße`,
+  letters: "espätör",
+  missing: "Nicht vorhanden:",
+  suffix : "(6 + 5 Zeichen; ÄÖÜẞ nicht aufgelöst)",
+};
+
+const emptyInputs = {
+  tags   : defaultInputs.tags,
+  prefix : "",
+  secret : "",
+  letters: "",
+  missing: "",
+  suffix : "",
+};
+
+const tagsEl    = document.querySelector('#tags');
+const prefixEl  = document.querySelector('#prefix');
+const secretEl  = document.querySelector('#secret');
+const lettersEl = document.querySelector('#letters');
+const missingEl = document.querySelector('#missing');
+const suffixEl  = document.querySelector('#suffix');
+const outEl     = document.querySelector('#out');
+
+const storageKey = "galgodon-helper-inputs";
+
+function initInputs() {
+  const storageValue = localStorage.getItem(storageKey);
+  // TODO check if the stored value has the expected shape
+  const inputs = storageValue ? JSON.parse(storageValue) : defaultInputs;
+
+  tagsEl   .value = inputs.tags;
+  prefixEl .value = inputs.prefix;
+  secretEl .value = inputs.secret;
+  lettersEl.value = inputs.letters;
+  missingEl.value = inputs.missing;
+  suffixEl .value = inputs.suffix;
+}
+
+function update() {
+  localStorage.setItem(storageKey, JSON.stringify({
+    tags   : tagsEl   .value,
+    prefix : prefixEl .value,
+    secret : secretEl .value,
+    letters: lettersEl.value,
+    missing: missingEl.value,
+    suffix : suffixEl .value,
+  }));
+  // Explicitly replace lowercase ß with uppercase ẞ as long browsers still
+  // convert ß to SS:
+  const secret = secretEl.value.trim().replaceAll("ß", "ẞ").toLocaleUpperCase("de");
+  const letters = lettersEl.value.trim().replaceAll("ß", "ẞ").toLocaleUpperCase("de");
+  const missingText = missingEl.value.trim();
+  const missingLetters =
+    letters.split("").flatMap(c => secret.includes(c) ? [] : [c]).join(", ");
+  outEl.textContent = [
+    tagsEl.value.trim(),
+    prefixEl.value.trim(),
+    secret.split("").map(c =>
+      letters.includes(c) || !/^\p{Letter}$/u.test(c) ? c : "_"
+    ).join(" ").replaceAll(/^ /gm, ""),
+    missingText && missingLetters && (missingText + " " + missingLetters),
+    suffixEl.value.trim(),
+  ].filter(part => part).join("\n\n");
+}
+
+for (const el of [tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl]) {
+  el?.addEventListener("input", update);
+}
+
+function setup() {
+  initInputs();
+  update();
+}
+
+document.querySelector("#clear").addEventListener("click", () => {
+  localStorage.setItem(storageKey, JSON.stringify(emptyInputs));
+  setup();
+});
+
+document.querySelector("#reset").addEventListener("click", () => {
+  localStorage.removeItem(storageKey);
+  setup();
+});
+
+document.querySelector("#copy").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(outEl.value);
+  alert("Text in die Zwischenablage kopiert.");
+})
+
+setup();
