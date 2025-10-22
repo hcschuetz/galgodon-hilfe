@@ -40,6 +40,11 @@ function initInputs() {
   suffixEl .value = inputs.suffix;
 }
 
+const upcase = s =>
+  // Ensure that ß is not converted to SS.  But do not use uppercase ẞ either,
+  // as it still looks bad with some fonts:
+  s.replaceAll("ß", "ẞ").toLocaleUpperCase("de").replaceAll("ẞ", "ß");
+
 function update() {
   localStorage.setItem(storageKey, JSON.stringify({
     tags   : tagsEl   .value,
@@ -49,10 +54,8 @@ function update() {
     missing: missingEl.value,
     suffix : suffixEl .value,
   }));
-  // Explicitly replace lowercase ß with uppercase ẞ as long browsers still
-  // convert ß to SS:
-  const secret = secretEl.value.trim().replaceAll("ß", "ẞ").toLocaleUpperCase("de");
-  const letters = lettersEl.value.trim().replaceAll("ß", "ẞ").toLocaleUpperCase("de");
+  const secret = upcase(secretEl.value.trim());
+  const letters = upcase(lettersEl.value.trim());
   const missingText = missingEl.value.trim();
   const missingLetters =
     letters.split("").flatMap(c => secret.includes(c) ? [] : [c]).join(", ");
