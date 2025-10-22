@@ -1,17 +1,28 @@
+:root {
+  --body-margin: .5em;
+  --label-width-2c: 16em;
+  --gap-width: 1em;
+  --input-width-2c: 30em;
+  --grid-width-2c: calc(var(--label-width-2c) + var(--gap-width) + var(--input-width-2c));
+  --full-width-2c: calc(var(--grid-width-2c) + 2 * var(--body-margin));
+  --grid-width: min(100%, var(--grid-width-2c));
+}
+
 body {
-  margin: .5em;
+  margin: var(--body-margin);
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 p {
-  width: min(100%, 47em);
+  width: var(--grid-width);
 }
 
 #inputs {
   display: grid;
-  grid-template-columns: 16em 30em;
-  @media (width < 48em) {
-    grid-template-columns: 100%;  
+  grid-template-columns: var(--label-width-2c) var(--input-width-2c);
+  /* variables are not supported in media queries: */
+  @media (width < 48em /* var(--full-width-2c) */) {
+    grid-template-columns: 100%;
   }
   gap: 1em;
   > * {
@@ -31,7 +42,7 @@ textarea {
   font-family: 'Courier New', Courier, monospace;
   white-space-collapse: preserve;
   display: block;
-  width: min(100%, 47em);
+  width: var(--grid-width);
   background: #eef;
 }
 
