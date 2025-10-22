@@ -5,7 +5,7 @@ Das ist ein Treffer.`,
   secret : `Schöne Grüße`,
   letters: "espätör",
   missing: "Nicht vorhanden:",
-  suffix : "(6 + 5 Zeichen; ÄÖÜẞ nicht aufgelöst)",
+  suffix : "(6 + 5 Zeichen; ÄÖÜß nicht aufgelöst)",
 };
 
 const emptyInputs = {
