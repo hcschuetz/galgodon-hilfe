@@ -38,6 +38,10 @@ textarea {
   background: #eef;
 }
 
+button {
+  margin: 0.5em 0.3em 0 0;
+}
+
 #out {
   font-family: 'Courier New', Courier, monospace;
   white-space-collapse: preserve;
@@ -46,6 +50,20 @@ textarea {
   background: #eef;
 }
 
-button {
-  margin: 0.5em 0.3em 0 0;
+#stat {
+  display: grid;
+  grid-template-columns: 1.5em 5em;
+  > dt::after {
+    content: ":";
+  }
+  > * {
+    align-self: self-start;
+    margin: 0;
+    font-weight: bolder;
+  }
+  > dt.seen, > .seen + dd {
+    opacity: 50%;
+    text-decoration: line-through;
+    font-weight: inherit;
+  }
 }

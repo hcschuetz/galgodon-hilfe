@@ -24,6 +24,7 @@ const lettersEl = document.querySelector('#letters');
 const missingEl = document.querySelector('#missing');
 const suffixEl  = document.querySelector('#suffix');
 const outEl     = document.querySelector('#out');
+const statEl    = document.querySelector('#stat');
 
 const storageKey = "galgodon-helper-inputs";
 
@@ -59,6 +60,7 @@ function update() {
   const missingText = missingEl.value.trim();
   const missingLetters =
     letters.split("").flatMap(c => secret.includes(c) ? [] : [c]).join(", ");
+
   outEl.textContent = [
     tagsEl.value.trim(),
     prefixEl.value.trim(),
@@ -68,6 +70,27 @@ function update() {
     missingText && missingLetters && (missingText + " " + missingLetters),
     suffixEl.value.trim(),
   ].filter(part => part).join("\n\n");
+
+  const stats = {};
+  for (const c of secret) {
+    if (/^\p{Letter}$/u.test(c)) {
+      stats[c] = (stats[c] ?? 0) + 1;
+    }
+  }
+  statEl.replaceChildren(
+    ...Object.entries(stats)
+    .sort()
+    .flatMap(([c, n]) => {
+      const dt = document.createElement("dt");
+      if (letters.includes(c)) {
+        dt.className = "seen";
+      }
+      dt.append(c);
+      const dd = document.createElement("dd");
+      dd.append(n.toString());
+      return [dt, dd];
+    })
+  );
 }
 
 for (const el of [tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl]) {
