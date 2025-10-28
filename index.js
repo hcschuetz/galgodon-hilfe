@@ -64,7 +64,9 @@ function update() {
   outEl.textContent = [
     tagsEl.value.trim(),
     prefixEl.value.trim(),
-    secret.split("").map(c =>
+    // Some clients collapse whitespace.  So we convert blanks from the secret
+    // to some light-weight glyph:
+    secret.replaceAll(" ", "·").split("").map(c =>
       letters.includes(c) || !/^\p{Letter}$/u.test(c) ? c : "_"
     ).join(" ").replaceAll(/^ /gm, ""),
     missingText && missingLetters && (missingText + " " + missingLetters),
