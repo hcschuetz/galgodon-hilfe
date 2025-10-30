@@ -43,11 +43,10 @@ button {
 }
 
 #out {
-  font-family: 'Courier New', Courier, monospace;
-  white-space-collapse: preserve;
   display: block;
   width: var(--grid-width);
   background: #eef;
+  white-space: pre-wrap;
 }
 
 #stat {
