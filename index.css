@@ -58,7 +58,8 @@ button {
 #poll {
   display: inline-grid;
   grid-template-columns: 1.2em 12em 12em auto;
-  gap: 1em; 
+  align-items: baseline;
+  column-gap: .5em;
 }
 
 #poll-summary {
