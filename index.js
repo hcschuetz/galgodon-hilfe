@@ -93,6 +93,7 @@ function update() {
       return [dt, dd];
     })
   );
+  updatePoll();
 }
 
 for (const el of [tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl]) {
@@ -117,6 +118,85 @@ document.querySelector("#reset").addEventListener("click", () => {
 document.querySelector("#copy").addEventListener("click", async () => {
   await navigator.clipboard.writeText(outEl.value);
   alert("Text in die Zwischenablage kopiert.");
+});
+
+const poll = document.querySelector("#poll");
+const pollSummary = document.querySelector("#poll-summary");
+const choiceUpdates = [];
+const letterEls = [];
+function updatePoll() {
+  choiceUpdates.forEach(update => update());
+}
+for (let i = 0; i < 4; i++) {
+  const letterEl = document.createElement("input");
+  letterEl.maxLength = 1;
+  letterEl.addEventListener("keypress", event => {
+    const {key} = event;
+    if (/^[A-ZÄÖÜß]$/i.test(key)) {
+      letterEl.value = upcase(event.key);
+    }
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    updateChoice();
+  });
+  letterEl.addEventListener("input", updateChoice);
+
+  const wordEl = document.createElement("input");
+  wordEl.addEventListener("input", updateChoice);
+
+  const outEl = document.createElement("out");
+  outEl.style.whiteSpace = "pre-wrap";
+
+  const copyEl = document.createElement("button");
+  copyEl.append("Kopieren");
+  copyEl.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(outEl.textContent);
+    alert("Wahlmöglichkeit in die Zwischenablage kopiert.");
+  })
+
+  poll.append(letterEl, wordEl, outEl, copyEl);
+
+  function updateChoice() {
+    const letters = upcase(lettersEl.value.trim());
+    const secret = upcase(secretEl.value.trim());
+    const letter = upcase(letterEl.value);
+    const letterRE = RegExp(RegExp.escape(letter), "i");
+    const word = wordEl.value.trim();
+    const notALetter = !/^[A-ZÄÖÜß]/i.test(letter);
+    const seenLetter = letters.includes(letter);
+    const notInWord = !letterRE.test(word);
+    letterEl.style.backgroundColor =
+      !letter                 ? "#0000" :
+      notALetter || seenLetter? "#f008" :
+      secret.includes(letter) ? "#0f08" :
+                                "#ff08";
+    outEl.textContent =
+      !letter ? "" :
+      notALetter ? `"${letter}" ist kein Buchstabe` :
+      seenLetter ? `"${letter}" schon gewählt` :
+      word && notInWord ? `"${letter}" nicht im Wort` :
+      word.replace(letterRE, matched => `(${matched})`);
+    outEl.style.backgroundColor =
+      letter && (notALetter || seenLetter || word && notInWord) ? "#f008" : "revert";
+    copyEl.disabled = !letter || notALetter || seenLetter || notInWord;
+    updateSummary();
+  }
+
+  letterEls.push(letterEl);
+  choiceUpdates.push(updateChoice);
+}
+
+document.querySelector("#clear-poll").addEventListener("click", () => {
+  document.querySelectorAll("#poll > input").forEach(el => {
+    el.value = "";
+  });
+  updatePoll();
 })
+
+function updateSummary() {
+  const letters = letterEls.map(el => el.value).filter(v => v);
+  const repeated = letters.some((l, i) => letters.join("").substring(0, i).includes(l));
+  pollSummary.value = repeated ? "Gleicher Buchstabe für mehrere Fälle!" : "";
+}
 
 setup();

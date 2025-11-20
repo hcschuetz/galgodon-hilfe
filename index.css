@@ -50,6 +50,21 @@ button {
   white-space: pre-wrap;
 }
 
+.legend > span {
+  padding: 0 .2em;
+  border: 1px solid grey;
+}
+
+#poll {
+  display: inline-grid;
+  grid-template-columns: 1.2em 12em 12em auto;
+  gap: 1em; 
+}
+
+#poll-summary {
+  background: #f008;
+}
+
 #stat {
   margin: 0;
   border: var(--stat-border);
@@ -65,9 +80,10 @@ button {
     padding: 0 .5em;
     text-align: center;
     font-weight: bolder;
+    background-color: #0f08;
   }
   > dt.seen, > .seen + dd {
     font-weight: lighter;
-    background-color: #8884;
+    background-color: #f008;
   }
 }
