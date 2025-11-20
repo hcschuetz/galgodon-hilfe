@@ -51,10 +51,11 @@ button {
 }
 
 #stat {
-  display: inline-grid;
+  margin: 0;
   border: var(--stat-border);
   max-width: 100%;
   overflow-x: auto;
+  display: inline-grid;
   grid-auto-flow: column;
   grid-template-rows: auto auto;
   grid-auto-columns: min-content;
@@ -66,7 +67,7 @@ button {
     font-weight: bolder;
   }
   > dt.seen, > .seen + dd {
-    text-decoration: line-through;
     font-weight: lighter;
+    background-color: #8884;
   }
 }
