@@ -6,6 +6,7 @@
   --grid-width-2c: calc(var(--label-width-2c) + var(--gap-width) + var(--input-width-2c));
   --full-width-2c: calc(var(--grid-width-2c) + 2 * var(--body-margin));
   --grid-width: min(100%, var(--grid-width-2c));
+  --stat-border: 1px solid #888;
 }
 
 body {
@@ -50,19 +51,22 @@ button {
 }
 
 #stat {
-  display: grid;
-  grid-template-columns: 1.5em 5em;
-  > dt::after {
-    content: ":";
-  }
+  display: inline-grid;
+  border: var(--stat-border);
+  max-width: 100%;
+  overflow-x: auto;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  grid-auto-columns: min-content;
   > * {
-    align-self: self-start;
     margin: 0;
+    border: var(--stat-border);
+    padding: 0 .5em;
+    text-align: center;
     font-weight: bolder;
   }
   > dt.seen, > .seen + dd {
-    opacity: 50%;
     text-decoration: line-through;
-    font-weight: inherit;
+    font-weight: lighter;
   }
 }
