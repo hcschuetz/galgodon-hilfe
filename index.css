@@ -18,6 +18,11 @@ p {
   width: var(--grid-width);
 }
 
+summary:hover {
+  text-decoration: underline;
+  color: #00f;
+}
+
 #inputs {
   display: grid;
   grid-template-columns: var(--label-width-2c) var(--input-width-2c);
@@ -50,16 +55,21 @@ button {
   white-space: pre-wrap;
 }
 
-.legend > span {
-  padding: 0 .2em;
-  border: 1px solid grey;
-}
-
 #poll {
   display: inline-grid;
-  grid-template-columns: 1.2em 12em 12em auto;
+  grid-template-columns: 1.2em 12em 12em 10em;
   align-items: baseline;
   column-gap: .5em;
+}
+
+.letter {
+  border: 1px solid #0000;
+  &.clickable {
+    cursor: pointer;
+    &:hover {
+      border: 1px solid black;
+    }
+  }
 }
 
 #poll-summary {

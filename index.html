@@ -62,12 +62,30 @@
 
     <h2>Neue Umfrage (experimentell!)</h2>
 
-    <p class="legend">
-      Legende:
-      <span style="background: #0f08">Treffer</span>
-      <span style="background: #ff08">Niete</span>
-      <span style="background: #f008">Fehler</span>
-    </p>
+    <details>
+      <summary>Info</summary>
+      <p>
+        Wenn man sich die 4 Alternativen für eine Buchstaben-Umfrage überlegt,
+        beginnt man manchmal mit den Buchstaben und manchmal mit den Begriffen.
+        Dieses UI versucht, beide Vorgehensweisen zu unterstützen.
+      </p>
+      <p>
+        Farben:
+        <span style="background: #0f08">Treffer</span>
+        <span style="background: #ff08">Niete</span>
+        <span style="background: #f008">Fehler</span>
+      </p>
+      <p>
+        Die grün oder gelb hinterlegten Buchstaben in der 3. Spalte können
+        durch Klicken ausgewählt werden.
+      </p>
+      <p>
+        Die Daten im obigen Abschnitt "Eingaben" werden vom Browser gespeichert.
+        Sie bleiben beim Schließen und erneuten Öffnen der Seite erhalten.
+        Im Gegensatz dazu sind die Umfrage-Daten hier nicht persistent,
+        denn sie werden nicht über mehrere Umfrage-Runden hinweg gebraucht.
+      </p>
+    </details>
 
     <div id="poll"></div>
 
@@ -77,11 +95,12 @@
 
     <p>
       <button id="clear-poll">Umfrage löschen</button>
+      <button id="poll-example">Beispiel-Werte</button>
     </p>
 
     <h2>Statistik</h2>
 
-    <p class="legend">
+    <p>
       Diese Buchstaben aus dem  gesuchten Begriff sind den Mitspielern
       <span style="background: #0f08; font-weight: bolder;">unbekannt</span>
       /
