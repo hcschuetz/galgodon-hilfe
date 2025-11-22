@@ -98,7 +98,7 @@ button {
 }
 
 .poll-out {
-  min-width: 8em;
+  min-width: 8rem;
   white-space: pre-wrap;
   &:hover {
     font-family: monospace;

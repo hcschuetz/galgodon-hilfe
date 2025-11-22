@@ -172,14 +172,14 @@ for (let i = 0; i < 4; i++) {
     const marked =
       notALetter ? word :
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
+    const seen = [];
     outEl.replaceChildren(
       ...marked.split("").map((c, i) => {
         const span = document.createElement("span");
         span.textContent = c;
 
         const l = upcase(c);
-        const repeated = upcase(marked.substring(0, i)).includes(l);
-        if (/^[A-ZÄÖÜß]/i.test(c) && !repeated) {
+        if (/^[A-ZÄÖÜß]/i.test(c) && !seen.includes(l)) {
           const known = letters.includes(l);
           span.style.backgroundColor =
             known              ? "#f008" :
@@ -193,6 +193,7 @@ for (let i = 0; i < 4; i++) {
             span.classList.add("clickable");
           }
         }
+        seen.push(l);
         return span;
       })
     );
