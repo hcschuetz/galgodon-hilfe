@@ -173,14 +173,13 @@ for (let i = 0; i < 4; i++) {
       notALetter ? word :
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
     outEl.replaceChildren(
-      ...marked.split("").map(c => {
-        const inner = document.createElement("span");
-        inner.textContent = c;
+      ...marked.split("").map((c, i) => {
         const span = document.createElement("span");
-        span.append(inner);
+        span.textContent = c;
 
-        if (/^[A-ZÄÖÜß]/i.test(c)) {
-          const l = upcase(c);
+        const l = upcase(c);
+        const repeated = upcase(marked.substring(0, i)).includes(l);
+        if (/^[A-ZÄÖÜß]/i.test(c) && !repeated) {
           const known = letters.includes(l);
           span.style.backgroundColor =
             known              ? "#f008" :

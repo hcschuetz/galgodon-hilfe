@@ -98,41 +98,21 @@ button {
 }
 
 .poll-out {
-  white-space: pre;
-  > span {
-    border: 1px solid #0000;
-    &.clickable {
-      cursor: pointer;
-      &:hover {
-        border-color: black;
+  min-width: 8em;
+  white-space: pre-wrap;
+  &:hover {
+    font-family: monospace;
+    font-size: 150%;
+    > span {
+      border: 1px solid white;
+      &.clickable {
+        cursor: pointer;
+        &:hover {
+          border-color: black;
+        }
       }
     }
-    > span {
-      margin: -1px; /* compensate for the border */
-    }
-    &:hover > span {
-      margin: 5px;
-    }
   }
-  /* Here it gets a bit hacky */
-  /* ======================== */
-  min-width: 8em;
-  /*
-  The dynamic text size (due to the dynamic margins above) can cause a problem
-  for the last word before an automatic line break:  If we hover it, it
-  gets wider, does not fit on the line anymore, and jumps to the next line.
-  So we cannot click it.  To avoid this problem, scrolling is used instead
-  (with non-wrapping white-space):
-  */
-  overflow-x: auto;
-  /*
-  Somehow (at least in Firefox 145) the overflow-x support (even if unused)
-  hides the top and bottom borders of the hovered spans above.  Adding some
-  top and bottom padding solves this problem.
-  Furthermore we pad the right end so that we can easily reach the last
-  character.
-  */
-  padding: 1px 12px 1px 0;
 }
 
 #poll-summary {
