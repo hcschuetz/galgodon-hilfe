@@ -1,3 +1,7 @@
+import urlRegExpData from "./url-regex.json" with {type: "json"};
+
+const urlRegExp = new RegExp(urlRegExpData.source, urlRegExpData.flags);
+
 const defaultInputs = {
   tags   : "@galgodon@fedigroups.social #galgenmasto #galgenfedi",
   prefix : `Das R habt Ihr also gewählt.
@@ -26,6 +30,8 @@ const suffixEl  = document.querySelector('#suffix');
 const pollHeadingEl
                 = document.querySelector('#poll-heading');
 const outEl     = document.querySelector('#out');
+const outLengthEl
+                = document.querySelector('#out-length');
 const statEl    = document.querySelector('#stat');
 
 const storageKey = "galgodon-helper-inputs";
@@ -75,6 +81,15 @@ function update() {
     suffixEl.value.trim(),
     pollHeadingEl.value.trim(),
   ].filter(part => part).join("\n\n");
+  outLengthEl.textContent =
+    outEl.textContent
+    .replaceAll(
+      // This regexp is quite ad-hoc:
+      /(?<![a-z0-9_])(@[a-z_][a-z0-9_]*)@[a-z0-9][a-z0-9\-\.]*\b/gi,
+      (_, prefix) => prefix
+    )
+    .replaceAll(urlRegExp, "[a 23-character string]")
+    .length.toString();
 
   const stats = {};
   for (const c of secret) {

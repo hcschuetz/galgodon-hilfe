@@ -119,6 +119,25 @@
 
     <output id="out"></output>
     <button id="copy">Kopieren</button>
+    <span>(~<output id="out-length"></output> Zeichen)</span>
+
+    <details>
+      <summary>Zur Zahl der Zeichen</summary>
+      <p>
+        Diese wird wie in Mastodon berechnet:
+      </p>
+      <ul>
+        <li>URLs zählen immer als 23 Zeichen.</li>
+        <li>
+          Bei Handles wie @someone@example.org wird nur der Teil @someone
+          gezählt.
+        </li>
+      </ul>
+      <p>
+        Die Erkennung von URLs und Handles ist jedoch nicht ganz kompatibel.
+        Daher das "~".
+      </p>
+    </details>
 
     <h2>Statistik</h2>
 
