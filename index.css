@@ -21,6 +21,7 @@ details {
     display: inline;
     border-radius: 3px;
     padding: 0 3px 0 1px;
+    text-decoration: underline;
     color: #00f;
     cursor: pointer;
     &:hover {
@@ -34,7 +35,6 @@ details {
     &::after {
       content: "...";
     }
-    text-decoration: underline;
   }
   &[open] {
     border: 1px solid #888;
