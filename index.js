@@ -145,7 +145,7 @@ for (let i = 0; i < 4; i++) {
   const wordEl = document.createElement("input");
   wordEl.addEventListener("input", updateChoice);
 
-  const outEl = document.createElement("out");
+  const outEl = document.createElement("output");
   outEl.classList.add("poll-out");
 
   const copyEl = document.createElement("button");
