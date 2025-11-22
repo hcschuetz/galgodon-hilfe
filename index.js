@@ -139,13 +139,14 @@ for (let i = 0; i < 4; i++) {
     event.preventDefault();
     updateChoice();
   });
+  letterEl.classList.add("letter-input");
   letterEl.addEventListener("input", updateChoice);
 
   const wordEl = document.createElement("input");
   wordEl.addEventListener("input", updateChoice);
 
   const outEl = document.createElement("out");
-  outEl.style.whiteSpace = "pre-wrap";
+  outEl.classList.add("poll-out");
 
   const copyEl = document.createElement("button");
   copyEl.addEventListener("click", async () => {
@@ -173,8 +174,11 @@ for (let i = 0; i < 4; i++) {
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
     outEl.replaceChildren(
       ...marked.split("").map(c => {
+        const inner = document.createElement("span");
+        inner.textContent = c;
         const span = document.createElement("span");
-        span.textContent = c;
+        span.append(inner);
+
         if (/^[A-ZÄÖÜß]/i.test(c)) {
           const l = upcase(c);
           const known = letters.includes(l);
@@ -182,7 +186,6 @@ for (let i = 0; i < 4; i++) {
             known              ? "#f008" :
             secret.includes(l) ? "#0f08" :
                                  "#ff08" ;
-          span.classList.add("letter");
           if (!known) {
             span.addEventListener("click", () => {
               letterEl.value = l;
