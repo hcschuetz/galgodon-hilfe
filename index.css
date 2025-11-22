@@ -100,6 +100,7 @@ button {
 .poll-out {
   min-width: 8rem;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   &:hover {
     padding: .5rem;
     font-family: monospace;
