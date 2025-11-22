@@ -14,21 +14,27 @@
       <summary>Info</summary>
       <p>
         Diese simple Web-App hilft Rätsel-Erstellern im Galgodon-Spiel,
-        Posts mit dem aktuellen "Spielstand" zu erstellen.
+        Posts mit dem aktuellen Spielstand und einer neuen Umfrage
+        zu erstellen.
       </p>
       <p>
-        Die meisten Felder müssen nur zu Beginn eines Rätsels ausgefüllt werden.
+        Die meisten Eingabe-Felder zum Spielstand
+        müssen nur zu Beginn eines Rätsels ausgefüllt werden.
         Nach jeder Abstimmungs-Runde muss dann nur noch das Feld "Anfang" neu
         geschrieben und das Feld "Gewählte Buchstaben" ergänzt werden.
+      </p>
+      <p>
+        Und natürlich muss eine neue Umfrage erstellt werden (mit dem
+        Umfrage-Erstellungs-Tool unten oder direkt im Fedi-Client).
       </p>
       <p>
         <a href="https://github.com/hcschuetz/galgodon-hilfe/">Code</a>
       </p>
     </details>
 
-    <h2>Eingaben</h2>
+    <h2>Spielstand</h2>
 
-    <div id="inputs">
+    <div class="input-grid">
       <div>Tags:</div>
       <textarea id="tags"></textarea>
 
@@ -58,12 +64,12 @@
     <button id="clear">Felder leeren</button>
     <button id="reset">Beispiel-Werte</button>
 
-    <h2>Generierter Post-Text</h2>
+    <h2>Buchstaben-Umfrage (experimentell!)</h2>
 
-    <output id="out"></output>
-    <button id="copy">Kopieren</button>
-
-    <h2>Neue Umfrage (experimentell!)</h2>
+    <div class="input-grid">
+      <div>Kopf:</div>
+      <textarea id="poll-heading"></textarea>
+    </div>
 
     <details>
       <summary>Info</summary>
@@ -85,14 +91,18 @@
         da sie bereits (als Treffer oder Nieten) bekannt sind.
       </p>
       <p>
+        (Es kann derzeit nur das erste Vorkommen eines Buchstaben ausgewählt
+        werden.
+        Das ist nicht immer, was man will,
+        aber eine allgemeine Lösung ist leider nicht ganz einfach.)
+      </p>
+      <p>
         Die Daten im obigen Abschnitt "Eingaben" werden vom Browser gespeichert.
         Sie bleiben beim Schließen und erneuten Öffnen der Seite erhalten.
         Im Gegensatz dazu sind die Umfrage-Daten hier nicht persistent,
         denn sie werden nicht über mehrere Umfrage-Runden hinweg gebraucht.
       </p>
     </details>
-
-    <div style="height: 1ex;"></div>
 
     <div id="poll"></div>
 
@@ -104,6 +114,11 @@
       <button id="clear-poll">Umfrage löschen</button>
       <button id="poll-example">Beispiel-Werte</button>
     </p>
+
+    <h2>Generierter Post-Text</h2>
+
+    <output id="out"></output>
+    <button id="copy">Kopieren</button>
 
     <h2>Statistik</h2>
 

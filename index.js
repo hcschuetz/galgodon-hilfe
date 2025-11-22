@@ -23,6 +23,8 @@ const secretEl  = document.querySelector('#secret');
 const lettersEl = document.querySelector('#letters');
 const missingEl = document.querySelector('#missing');
 const suffixEl  = document.querySelector('#suffix');
+const pollHeadingEl
+                = document.querySelector('#poll-heading');
 const outEl     = document.querySelector('#out');
 const statEl    = document.querySelector('#stat');
 
@@ -71,6 +73,7 @@ function update() {
     ).join(""),
     missingText && missingLetters && (missingText + " " + missingLetters),
     suffixEl.value.trim(),
+    pollHeadingEl.value.trim(),
   ].filter(part => part).join("\n\n");
 
   const stats = {};
@@ -96,7 +99,9 @@ function update() {
   updatePoll();
 }
 
-for (const el of [tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl]) {
+for (const el of [
+  tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl, pollHeadingEl,
+]) {
   el?.addEventListener("input", update);
 }
 
@@ -215,18 +220,23 @@ for (let i = 0; i < 4; i++) {
 }
 
 document.querySelector("#clear-poll").addEventListener("click", () => {
+  pollHeadingEl.value = "";
+  update();
   document.querySelectorAll("#poll > input").forEach(el => {
     el.value = "";
   });
   updatePoll();
 })
+const pollHeadingExample = "Was ist Euere Lieblingsfarbe?"
 const pollExampleData = [
-  "G", "Gelb",
-  "I", "Pink",
-  "Ü", "Grün",
-  "ß", "Weiß",
+  "G", "Bananengelb",
+  "I", "Lila-Blassblau",
+  "Ü", "Lindgrün",
+  "ß", "Schwarz oder Weiß",
 ];
 document.querySelector("#poll-example").addEventListener("click", () => {
+  pollHeadingEl.value = pollHeadingExample;
+  update();
   document.querySelectorAll("#poll > input").forEach((el, i) => {
     el.value = pollExampleData[i];
   });

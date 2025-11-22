@@ -16,6 +16,7 @@ body {
 }
 
 details {
+  margin: 1ex 0;
   summary {
     display: inline;
     border-radius: 3px;
@@ -51,7 +52,7 @@ input, textarea {
   border-width: 1px;
 }
 
-#inputs {
+.input-grid {
   display: grid;
   grid-template-columns: var(--label-width-2c) var(--input-width-2c);
   /* variables are not supported in media queries: */
