@@ -110,6 +110,7 @@ button {
   line-height: 130%;
   > span {
     border: 2px solid #0000;
+    border-radius: 3px;
     &.clickable {
       cursor: pointer;
       &:hover {

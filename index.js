@@ -256,8 +256,10 @@ function updatePollProblems() {
   )) {
     problems.push("Kein Treffer angeboten.")
   }
-  if (wordEls.some(el => el.value.length > 48)) {
-    problems.push("Sehr langer Auswahl-Text.");
+  const maxLength = Math.max(...wordEls.map(el => el.value.length));
+  // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
+  if (maxLength > 48) {
+    problems.push(`Auswahl-Text mit ${maxLength} Zeichen.`);
   }
   pollProblemsEl.value = problems.join(" ");
 }
