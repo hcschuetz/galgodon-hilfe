@@ -264,28 +264,65 @@ function updatePollProblems() {
   pollProblemsEl.value = problems.join(" ");
 }
 
+let exampleCounter = 0;
+
 document.querySelector("#clear-poll").addEventListener("click", () => {
   pollHeadingEl.value = "";
   update();
   document.querySelectorAll("#poll > input").forEach(el => {
     el.value = "";
   });
+  exampleCounter = 0;
+  pollExampleEl.textContent = `Beispiel-Werte`;
   updatePoll();
 });
-const pollHeadingExample = "Was ist Deine Lieblingsfarbe?"
-const pollExampleData = [
-  "B", "blau",
-  "N", "blau, nein, gelb",
-  "G", "gelb",
-  "ß", "schwarz, weiß und grau",
-];
-
-document.querySelector("#poll-example").addEventListener("click", () => {
-  pollHeadingEl.value = pollHeadingExample;
+const pollExamples = `
+Wie lautet dein Name?
+L Sir Lancelot von Camelot.
+R Sir Robin von Camelot.
+G Sir Galahad von Camelot.
+A Artus, König der Briten.
+---
+Welches ist dein Auftrag?
+D Die Suche nach dem heiligen Gral.
+S Die Suche nach dem heiligen Gral.
+H Die Suche nach dem heiligen Gral.
+G Die Suche nach dem heiligen Gral.
+---
+Welches ist deine Lieblingsfarbe?
+B blau
+N blau, nein, gelb
+G gelb
+ß Egal!  Wie heißt die Hauptstadt von Assyrien?
+---
+Wie heißt die Hauptstadt von Assyrien?
+A Assur
+T Taidu
+W Waššukanni
+N Ninive
+---
+Welches ist die Höchstgeschwindigkeit einer unbeladenen Schwalbe?
+R Rauchschwalbe: 20 m/s
+M Mehlschwalbe: 74 km/h
+S Simson Schwalbe: 60 km/h
+O Eine europäische oder eine afrikanische?
+`.split("---").map(poll => {
+  const [question, ...choices] = poll.trim().split("\n");
+  return {
+    question,
+    answers: choices.flatMap(line => [line[0], line.substring(1).trim()]),
+  };
+});
+const pollExampleEl = document.querySelector("#poll-example");
+pollExampleEl.addEventListener("click", () => {
+  const {question, answers} = pollExamples[exampleCounter];
+  pollHeadingEl.value = question;
   update();
   document.querySelectorAll("#poll > input").forEach((el, i) => {
-    el.value = pollExampleData[i];
+    el.value = answers.flat()[i];
   });
+  exampleCounter++; exampleCounter %= pollExamples.length;
+  pollExampleEl.textContent = `Beispiel #${exampleCounter + 1}`;
   updatePoll();
 });
 
