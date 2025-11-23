@@ -168,9 +168,10 @@ for (let i = 0; i < 4; i++) {
   const outEl = document.createElement("output");
   outEl.classList.add("poll-out");
 
+  let outText = "";
   const copyEl = document.createElement("button");
   copyEl.addEventListener("click", async () => {
-    await navigator.clipboard.writeText(outEl.textContent);
+    await navigator.clipboard.writeText(outText);
     alert("Wahlmöglichkeit in die Zwischenablage kopiert.");
   });
 
@@ -189,12 +190,14 @@ for (let i = 0; i < 4; i++) {
       notALetter || seenLetter? "#f008" :
       secret.includes(letter) ? "#0f08" :
                                 "#ff08";
-    const marked =
+    outText =
       notALetter ? word :
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
     const seen = [];
     outEl.replaceChildren(
-      ...marked.split("").map((c, i) => {
+      // The zero-width space ensures that outEl keeps its height even if
+      // outText is empty.
+      ...(outText || "\u200b").split("").map((c, i) => {
         const span = document.createElement("span");
         span.textContent = c;
 
@@ -243,8 +246,11 @@ function updatePollProblems() {
     }
   });
   const secret = upcase(secretEl.value.trim());
+  const letters = upcase(lettersEl.value.trim());
   if (choices.every(choice =>
-    /^[A-ZÄÖÜß]$/i.test(choice) && !secret.includes(choice)
+    /^[A-ZÄÖÜß]$/i.test(choice) &&
+    !letters.includes(choice) &&
+    !secret.includes(choice)
   )) {
     problems.push("Kein Treffer angeboten.")
   }
@@ -259,12 +265,12 @@ document.querySelector("#clear-poll").addEventListener("click", () => {
   });
   updatePoll();
 })
-const pollHeadingExample = "Was ist Euere Lieblingsfarbe?"
+const pollHeadingExample = "Was ist Deine Lieblingsfarbe?"
 const pollExampleData = [
-  "G", "Bananengelb",
-  "I", "Lila-Blassblau",
-  "Ü", "Lindgrün",
-  "ß", "Schwarz oder Weiß",
+  "B", "blau",
+  "N", "blau, nein, gelb",
+  "G", "gelb",
+  "ß", "schwarz, weiß und grau",
 ];
 document.querySelector("#poll-example").addEventListener("click", () => {
   pollHeadingEl.value = pollHeadingExample;
