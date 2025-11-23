@@ -73,7 +73,7 @@ function update() {
     tagsEl.value.trim(),
     prefixEl.value.trim(),
     secret.split("").map(c =>
-      c === " " ? "   " :
+      c === " " ? " \u200b \u200b " :
       letters.includes(c) || !/^\p{Letter}$/u.test(c) ? c :
       "⌴"
       // "␣" is quite narrow in some fonts.
