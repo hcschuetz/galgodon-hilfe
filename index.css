@@ -119,8 +119,8 @@ button {
   }
 }
 
-#poll-summary {
-  background: #f008;
+#poll-problems {
+  color: #c00;
 }
 
 #stat {

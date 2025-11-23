@@ -141,7 +141,7 @@ document.querySelector("#copy").addEventListener("click", async () => {
 });
 
 const poll = document.querySelector("#poll");
-const pollSummary = document.querySelector("#poll-summary");
+const pollProblemsEl = document.querySelector("#poll-problems");
 const choiceUpdates = [];
 const letterEls = [];
 function updatePoll() {
@@ -227,11 +227,28 @@ for (let i = 0; i < 4; i++) {
       notInWord ? `("${letter}" nicht im Wort)` :
       "Kopieren";
 
-    updateSummary();
+    updatePollProblems();
   }
 
   letterEls.push(letterEl);
   choiceUpdates.push(updateChoice);
+}
+
+function updatePollProblems() {
+  const problems = [];
+  const choices = letterEls.map(el => el.value);
+  choices.forEach((choice, i) => {
+    if (choice && choices.findIndex(c => c == choice) < i) {
+      problems.push(`"${choice}" wiederholt angeboten.`);
+    }
+  });
+  const secret = upcase(secretEl.value.trim());
+  if (choices.every(choice =>
+    /^[A-ZÄÖÜß]$/i.test(choice) && !secret.includes(choice)
+  )) {
+    problems.push("Kein Treffer angeboten.")
+  }
+  pollProblemsEl.value = problems.join(" ");
 }
 
 document.querySelector("#clear-poll").addEventListener("click", () => {
@@ -256,12 +273,6 @@ document.querySelector("#poll-example").addEventListener("click", () => {
     el.value = pollExampleData[i];
   });
   updatePoll();
-})
-
-function updateSummary() {
-  const letters = letterEls.map(el => el.value).filter(v => v);
-  const repeated = letters.some((l, i) => letters.join("").substring(0, i).includes(l));
-  pollSummary.value = repeated ? "Gleicher Buchstabe für mehrere Alternativen!" : "";
-}
+});
 
 setup();
