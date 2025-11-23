@@ -144,6 +144,7 @@ const poll = document.querySelector("#poll");
 const pollProblemsEl = document.querySelector("#poll-problems");
 const choiceUpdates = [];
 const letterEls = [];
+const wordEls = [];
 function updatePoll() {
   choiceUpdates.forEach(update => update());
 }
@@ -234,6 +235,7 @@ for (let i = 0; i < 4; i++) {
   }
 
   letterEls.push(letterEl);
+  wordEls.push(wordEl);
   choiceUpdates.push(updateChoice);
 }
 
@@ -253,6 +255,9 @@ function updatePollProblems() {
     !secret.includes(choice)
   )) {
     problems.push("Kein Treffer angeboten.")
+  }
+  if (wordEls.some(el => el.value.length > 48)) {
+    problems.push("Sehr langer Auswahl-Text.");
   }
   pollProblemsEl.value = problems.join(" ");
 }
