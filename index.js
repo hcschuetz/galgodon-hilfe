@@ -264,7 +264,7 @@ document.querySelector("#clear-poll").addEventListener("click", () => {
     el.value = "";
   });
   updatePoll();
-})
+});
 const pollHeadingExample = "Was ist Deine Lieblingsfarbe?"
 const pollExampleData = [
   "B", "blau",
@@ -272,12 +272,30 @@ const pollExampleData = [
   "G", "gelb",
   "ß", "schwarz, weiß und grau",
 ];
+
 document.querySelector("#poll-example").addEventListener("click", () => {
   pollHeadingEl.value = pollHeadingExample;
   update();
   document.querySelectorAll("#poll > input").forEach((el, i) => {
     el.value = pollExampleData[i];
   });
+  updatePoll();
+});
+
+function shuffleArray(array) {
+  for (let i = array.length; i > 1; i--) {
+    const j = Math.floor(i * Math.random());
+    [array[i-1], array[j]] = [array[j], array[i-1]];
+  }
+  return array;
+}
+
+document.querySelector("#poll-randomize").addEventListener("click", () => {
+  const inputs = Array.from(document.querySelectorAll("#poll > input"));
+  let [l1, w1, l2, w2, l3, w3, l4, w4] = inputs.map(input => input.value);
+  [[l1, w1], [l2, w2], [l3, w3], [l4, w4]] =
+    shuffleArray([[l1, w1], [l2, w2], [l3, w3], [l4, w4]]);
+  [l1, w1, l2, w2, l3, w3, l4, w4].forEach((val, i) => inputs[i].value = val);
   updatePoll();
 });
 
