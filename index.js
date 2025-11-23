@@ -264,16 +264,12 @@ function updatePollProblems() {
   pollProblemsEl.value = problems.join(" ");
 }
 
-let exampleCounter = 0;
-
 document.querySelector("#clear-poll").addEventListener("click", () => {
   pollHeadingEl.value = "";
   update();
   document.querySelectorAll("#poll > input").forEach(el => {
     el.value = "";
   });
-  exampleCounter = 0;
-  pollExampleEl.textContent = `Beispiel-Werte`;
   updatePoll();
 });
 const pollExamples = `
@@ -313,18 +309,21 @@ O Eine europäische oder eine afrikanische?
     answers: choices.flatMap(line => [line[0], line.substring(1).trim()]),
   };
 });
-const pollExampleEl = document.querySelector("#poll-example");
-pollExampleEl.addEventListener("click", () => {
-  const {question, answers} = pollExamples[exampleCounter];
-  pollHeadingEl.value = question;
-  update();
-  document.querySelectorAll("#poll > input").forEach((el, i) => {
-    el.value = answers.flat()[i];
-  });
-  exampleCounter++; exampleCounter %= pollExamples.length;
-  pollExampleEl.textContent = `Beispiel #${exampleCounter + 1}`;
-  updatePoll();
-});
+document.querySelector("#poll-examples").append(
+  ...pollExamples.flatMap(({question, answers}, i) => {
+    const button = document.createElement("button");
+    button.textContent = `Beispiel #${i+1}`;
+    button.addEventListener("click", () => {
+      pollHeadingEl.value = question;
+      update();
+      document.querySelectorAll("#poll > input").forEach((el, i) => {
+        el.value = answers.flat()[i];
+      });
+      updatePoll();
+    });
+    return [button, " "];
+  })
+);
 
 function shuffleArray(array) {
   for (let i = array.length; i > 1; i--) {
