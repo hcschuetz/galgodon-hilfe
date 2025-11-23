@@ -313,7 +313,7 @@ O Eine europäische oder eine afrikanische?
   };
 });
 document.querySelector("#poll-examples").append(
-  ...pollExamples.flatMap(({question, answers}, i) => {
+  ...pollExamples.map(({question, answers}, i) => {
     const button = document.createElement("button");
     button.textContent = `Beispiel #${i+1}`;
     button.addEventListener("click", () => {
@@ -324,7 +324,7 @@ document.querySelector("#poll-examples").append(
       });
       updatePoll();
     });
-    return [button, " "];
+    return button;
   })
 );
 

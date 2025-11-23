@@ -61,8 +61,10 @@
       <textarea id="suffix"></textarea>
     </div>
 
-    <button id="clear">Felder leeren</button>
-    <button id="reset">Beispiel-Werte</button>
+    <div class="buttons">
+      <button id="clear">Felder leeren</button>
+      <button id="reset">Beispiel-Werte</button>
+    </div>
 
     <h2>Buchstaben-Umfrage (experimentell!)</h2>
 
@@ -108,17 +110,19 @@
       <output id="poll-problems"></output>
     </p>
 
-    <p>
+    <div class="buttons">
       <button id="clear-poll">Umfrage löschen</button>
       <span id="poll-examples"></span>
       <button id="poll-randomize">Zufällige Reihenfolge</button>
-    </p>
+    </div>
 
     <h2>Generierter Post-Text</h2>
 
     <output id="out"></output>
-    <button id="copy">Kopieren</button>
-    <span>(~<output id="out-length"></output> Zeichen)</span>
+    <div class="buttons">
+      <button id="copy">Kopieren</button>
+      <span>(~<output id="out-length"></output> Zeichen)</span>
+    </div>
 
     <details>
       <summary>Zur Zahl der Zeichen</summary>
