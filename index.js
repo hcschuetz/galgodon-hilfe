@@ -75,7 +75,10 @@ function update() {
     secret.split("").map(c =>
       c === " " ? "   " :
       letters.includes(c) || !/^\p{Letter}$/u.test(c) ? c :
-      "␣"
+      "⌴"
+      // "␣" is quite narrow in some fonts.
+      // Using "⌴" is a hack.  I hope it's available in the relevant fonts
+      // and it does not disturb anyone with a screen reader.
     ).join(""),
     missingText && missingLetters && (missingText + " " + missingLetters),
     suffixEl.value.trim(),
