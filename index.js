@@ -72,14 +72,51 @@ function update() {
   outEl.textContent = [
     tagsEl.value.trim(),
     prefixEl.value.trim(),
+
+/*
+Choices for representing unknown letters:
+- "_" (underscore): Needs blanks between the letters of a word so that
+  individual underscores can be recognized.  As a consequence, we have to
+  represent spaces between words by something wider.
+- "␣" (open box): The usual glyph representing a blank visually.
+  But it is quite narrow in some fonts.
+- "⌴" (counterbore): This glyph is meant for something different, but can be
+  misused to represent an unknown letter.  It typically has the needed width.
+- "?" or the like: Readable in any font.  But unknown and known letters are not
+  as quickly distinguishable as with the previous choices.
+- "·" (interpunct): Too narrow, needs some space around.  Not quickly
+  distinguishable from "-".
+- "~" (tilde): Not quickly distinguishable from "-".  May also be hard to count.
+
+While using wider inter-word spacing is absolutely necessary in the underscore
+case above, it may still make sense in the other cases to make word spacing
+easier to detect.
+
+Choices for wide spaces:
+- Multiple spaces: This has the problem that some fedi UIs lack the CSS
+  property "white-space: pre-wrap" and thus apply the default behavior of
+  collapsing multiple whitespaces.  See, for example,
+  https://codeberg.org/superseriousbusiness/gotosocial/issues/4533.
+- Multiple spaces separated by zero-width spaces (\u200b):  This prevents
+  collapsing of multiple spaces.
+- "em space" (\u2003): Probably the best and cleanest solution.
+
+Mastodon seems to transport both \u2003 and \u200b without "sanitizing them
+away".
+[TODO: What about other fedi software?]
+
+IIRC, using (multiple) no-break spaces (\u00a0) did not help.
+[TODO: Check again.]
+
+[TODO: Check behavior of the various spaces with respect to automatic line
+breaking.]
+*/
     secret.split("").map(c =>
-      c === " " ? " \u200b \u200b " :
+      c === " " ? "\u2003" :
       letters.includes(c) || !/^\p{Letter}$/u.test(c) ? c :
       "⌴"
-      // "␣" is quite narrow in some fonts.
-      // Using "⌴" is a hack.  I hope it's available in the relevant fonts
-      // and it does not disturb anyone with a screen reader.
     ).join(""),
+
     missingText && missingLetters && (missingText + " " + missingLetters),
     suffixEl.value.trim(),
     pollHeadingEl.value.trim(),
