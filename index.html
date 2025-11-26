@@ -102,6 +102,41 @@
         Im Gegensatz dazu sind die Umfrage-Daten hier nicht persistent,
         denn sie werden nicht über mehrere Umfrage-Runden hinweg gebraucht.
       </p>
+      <h2>Buttons</h2>
+      <p>Manche Buttons benötigen etwas zusätzliche Erklärung:</p>
+      <ul>
+        <li>
+          <p>
+            Bevor <strong>"Umfrage einfügen"</strong> geklickt wird,
+            sollte die Zwischenablage mindestens 5 Zeilen enthalten.
+            Davon werden die letzten 4 Zeilen als die möglichen Antworten
+            verwendet.
+            Alles davor bildet die Frage.
+          </p>
+          <p>
+            Unter bestimmten Umständen verlangt der Browser eine Bestätigung
+            für das Einfügen.  Damit soll vermieden werden,
+            dass bösartige Webseiten die Zwischenablage heimlich auslesen.
+          </p>
+          <p>
+            Die zu den Antworten gehörenden Buchstaben
+            werden von diesem Button nicht verändert.
+          </p>
+        </li>
+        <li>
+          <p>
+            Dagegen setzen bzw. löschen die <strong>"Beispiel"</strong>-Buttons
+            sowie <strong>"Umfrage löschen"</strong> auch die Buchstaben.
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>"Zufällige Reihenfolge"</strong> wählt eine zufällige
+            Reihenfolge für die Antworten.  (Diese ist übrigens mit einer
+            Wahrscheinlichkeit von 1/24 wieder die derzeitige Reihenfolge.)
+          </p>
+        </li>
+      </ul>
     </details>
 
     <div id="poll"></div>
@@ -112,6 +147,7 @@
 
     <div class="buttons">
       <button id="clear-poll">Umfrage löschen</button>
+      <button id="insert-poll">Umfrage einfügen</button>
       <span id="poll-examples"></span>
       <button id="poll-randomize">Zufällige Reihenfolge</button>
     </div>

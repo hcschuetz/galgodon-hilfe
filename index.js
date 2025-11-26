@@ -312,6 +312,21 @@ document.querySelector("#clear-poll").addEventListener("click", () => {
   });
   updatePoll();
 });
+document.querySelector("#insert-poll").addEventListener("click", async () => {
+  const text = await navigator.clipboard.readText();
+  const lines = text.trim().split("\n").map(line => line.trim());
+  if (lines.length < 5) {
+    alert(`Weniger als 5 Zeilen!`);
+    return;
+  }
+  pollHeadingEl.value = lines.slice(0, -4).join("\n").trim();
+  document.querySelectorAll("#poll > input").forEach((el, i) => {
+    if (i % 2) {
+      el.value = lines[lines.length - 4 + (i-1)/2].trim();
+    }
+  });
+  updatePoll();
+})
 const pollExamples = `
 Wie lautet dein Name?
 L Sir Lancelot von Camelot.
