@@ -320,6 +320,7 @@ document.querySelector("#insert-poll").addEventListener("click", async () => {
     return;
   }
   pollHeadingEl.value = lines.slice(0, -4).join("\n").trim();
+  update();
   document.querySelectorAll("#poll > input").forEach((el, i) => {
     if (i % 2) {
       el.value = lines[lines.length - 4 + (i-1)/2].trim();
