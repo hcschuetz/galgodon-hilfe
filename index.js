@@ -182,7 +182,6 @@ document.querySelector("#copy").addEventListener("click", async () => {
   alert("Text in die Zwischenablage kopiert.");
 });
 
-const pollEl = document.querySelector("#poll");
 const pollProblemsEl = document.querySelector("#poll-problems");
 const choiceUpdates = [];
 const letterEls = [];
@@ -200,6 +199,7 @@ pollAlphabetsEl.append(
   document.createElement("div"), // fill the corner
 );
 const pollAlphabetRows = [];
+
 function updatePoll() {
   const letters = upcase(lettersEl.value.trim());
   const secret = upcase(secretEl.value.trim());
@@ -212,6 +212,8 @@ function updatePoll() {
   });
   choiceUpdates.forEach(update => update());
 }
+
+const pollGrid = document.querySelector("#poll-grid");
 for (let i = 0; i < 4; i++) {
   const letterEl = document.createElement("input");
   letterEl.maxLength = 1;
@@ -238,7 +240,12 @@ for (let i = 0; i < 4; i++) {
     alert(`In die Zwischenablage kopiert:\n\n"${outText}"`);
   });
 
-  pollEl.append(wordEl);
+  pollGrid.append(
+    Object.assign(document.createElement("div"), {
+      textContent: `Antwort ${i+1}:`,
+    }),
+    wordEl,
+  );
 
   const alphabetEls = Array.from(alphabet, letter => {
     const el = document.createElement("button");

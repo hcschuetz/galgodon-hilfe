@@ -59,7 +59,8 @@ input, textarea {
   @media (width < 48em /* var(--full-width-2c) */) {
     grid-template-columns: 100%;
   }
-  gap: 1em;
+  column-gap: 1em;
+  row-gap: .5em;
   > * {
     align-self: self-start;
   }
@@ -90,22 +91,13 @@ textarea {
   white-space: pre-wrap;
 }
 
-#poll {
-  max-width: 100%;
-  overflow-x: auto;
-  display: grid;
-  grid-template-columns: auto;
-  align-items: baseline;
-  column-gap: .5em;
-}
-
 #poll-alphabets {
   margin-top: 1em;
   max-width: 100%;
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
   display: inline-grid;
-  grid-template-columns: auto repeat(30, auto) 10em;
+  grid-template-columns: auto repeat(30, auto) 12em;
   font-family: monospace;
   text-align: center;
   input {
