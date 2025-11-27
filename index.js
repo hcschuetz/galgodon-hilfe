@@ -240,7 +240,7 @@ for (let i = 0; i < 4; i++) {
   copyEl.className = "copy-button";
   copyEl.addEventListener("click", async () => {
     await navigator.clipboard.writeText(outText);
-    alert(`In die Zwischenablage kopiert:\n\n"${outText}"`);
+    alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
   });
 
   pollGrid.append(
