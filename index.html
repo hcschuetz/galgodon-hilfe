@@ -68,11 +68,6 @@
 
     <h2>Buchstaben-Umfrage (experimentell!)</h2>
 
-    <div id="poll-grid" class="input-grid">
-      <div>Frage:</div>
-      <textarea id="poll-heading"></textarea>
-    </div>
-
     <details>
       <summary>Info</summary>
       <p>
@@ -81,27 +76,31 @@
         Dieses UI versucht, beide Vorgehensweisen zu unterstützen.
       </p>
       <p>
-        In den obigen Antwort-Feldern sollen die Auswahl-Buchstaben noch nicht
+        In den 4 Antwort-Feldern sollen die Auswahl-Buchstaben <em>nicht</em>
         durch Klammern markiert werden.
       </p>
       <p>
-        Die farbig hinterlegten Buchstaben im 4*30-Buchstaben-Block unten
+        Die farbig hinterlegten Buchstaben im 4×30-Buchstaben-Block unten
         können durch Klicken ausgewählt werden.
         (Es handelt sich um diejenigen Buchstaben, die in der Antwort vorkommen,
         aber noch nicht in einer früheren Runde gewählt wurden.)
+      </p>
+      <p>
+        Buchstaben können auch in den 4 Eingabe-Feldern links von diesem Block
+        eingegeben werden.
+        (Hier können auch Buchstaben eingegeben werden,
+        die nicht in der Antwort vorkommen.
+        Dies ist für den Fall gedacht,
+        dass man zunächst die Buchstaben und erst dann die Antworten wählt.)
+        Um einen neuen Buchstaben einzugeben, ist es nicht nötig,
+        einen evtl. bereits vorhandenen Buchstaben zu löschen
+        oder zu markieren.  Es wird automatisch überschrieben.
       </p>
       <p>
         Farben:
         <span style="background: #0f08">Treffer</span>
         <span style="background: #ff08">Niete</span>
         <span style="background: #f008">Fehler</span>
-      </p>
-      <p>
-        Buchstaben können auch in den Eingabe-Feldern links eingegeben werden.
-        (Hier können auch Buchstaben eingegeben werden,
-        die nicht in der Antwort vorkommen.
-        Dies ist für den Fall gedacht,
-        dass man zunächst die Buchstaben und erst dann die Antworten wählt.)
       </p>
       <p>
         Die Daten im obigen Abschnitt "Eingaben" werden vom Browser gespeichert.
@@ -119,6 +118,9 @@
             Davon werden die letzten 4 Zeilen als die möglichen Antworten
             verwendet.
             Alles davor bildet die Frage.
+            (Dies ist dafür gedacht, dass man sich in einem Editor schon mal
+            ein paar Fragen und Antworten zurecht legt.
+            So kann man in einem Schritt die Frage + 4 Antworten übertragen.)
           </p>
           <p>
             Unter bestimmten Umständen verlangt der Browser eine Bestätigung
@@ -145,6 +147,11 @@
         </li>
       </ul>
     </details>
+
+    <div id="poll-grid" class="input-grid">
+      <div>Frage:</div>
+      <textarea id="poll-heading"></textarea>
+    </div>
 
     <div id="poll"></div>
 
