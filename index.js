@@ -180,7 +180,7 @@ document.querySelector("#copy").addEventListener("click", async () => {
   alert("Text in die Zwischenablage kopiert.");
 });
 
-const poll = document.querySelector("#poll");
+const pollEl = document.querySelector("#poll");
 const pollProblemsEl = document.querySelector("#poll-problems");
 const choiceUpdates = [];
 const letterEls = [];
@@ -216,7 +216,7 @@ for (let i = 0; i < 4; i++) {
     alert("Wahlmöglichkeit in die Zwischenablage kopiert.");
   });
 
-  poll.append(letterEl, wordEl, outEl, copyEl);
+  pollEl.append(letterEl, wordEl, outEl, copyEl);
 
   function updateChoice() {
     const letters = upcase(lettersEl.value.trim());
