@@ -116,9 +116,6 @@ textarea {
   > .poll-head {
     font-size: 130%;
   }
-  > .stat {
-    margin-bottom: .5em;
-  }
   > .letter-button {
     cursor: pointer;
     font-family: monospace;
