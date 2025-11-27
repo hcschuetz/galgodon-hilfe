@@ -307,9 +307,7 @@ function updatePollProblems() {
 document.querySelector("#clear-poll").addEventListener("click", () => {
   pollHeadingEl.value = "";
   update();
-  document.querySelectorAll("#poll > input").forEach(el => {
-    el.value = "";
-  });
+  [...letterEls, ...wordEls].forEach(el => el.value = "");
   updatePoll();
 });
 document.querySelector("#insert-poll").addEventListener("click", async () => {
@@ -321,13 +319,9 @@ document.querySelector("#insert-poll").addEventListener("click", async () => {
   }
   pollHeadingEl.value = lines.slice(0, -4).join("\n").trim();
   update();
-  document.querySelectorAll("#poll > input").forEach((el, i) => {
-    if (i % 2) {
-      el.value = lines[lines.length - 4 + (i-1)/2].trim();
-    }
-  });
+  wordEls.forEach((el, i) => el.value = lines[lines.length - 4 + i].trim());
   updatePoll();
-})
+});
 const pollExamples = `
 Wie lautet dein Name?
 L Sir Lancelot von Camelot.
@@ -372,9 +366,8 @@ document.querySelector("#poll-examples").append(
     button.addEventListener("click", () => {
       pollHeadingEl.value = question;
       update();
-      document.querySelectorAll("#poll > input").forEach((el, i) => {
-        el.value = answers.flat()[i];
-      });
+      letterEls.forEach((el, i) => el.value = answers[2*i]);
+      wordEls  .forEach((el, i) => el.value = answers[2*i+1]);
       updatePoll();
     });
     return button;
@@ -389,12 +382,14 @@ function shuffleArray(array) {
   return array;
 }
 
+// There are proposals to provide this functionality in standard JS:
+const zip = (xs, ys) =>
+  Array.from({length: Math.min(xs.length, ys.length)}, (_, i) => [xs[i], ys[i]]);
+
 document.querySelector("#poll-randomize").addEventListener("click", () => {
-  const inputs = Array.from(document.querySelectorAll("#poll > input"));
-  let [l1, w1, l2, w2, l3, w3, l4, w4] = inputs.map(input => input.value);
-  [[l1, w1], [l2, w2], [l3, w3], [l4, w4]] =
-    shuffleArray([[l1, w1], [l2, w2], [l3, w3], [l4, w4]]);
-  [l1, w1, l2, w2, l3, w3, l4, w4].forEach((val, i) => inputs[i].value = val);
+  shuffleArray(
+    zip(letterEls, wordEls).map(([l, w]) => [l.value, w.value])
+  ).forEach((pair, i) => [letterEls[i].value, wordEls  [i].value] = pair);
   updatePoll();
 });
 
