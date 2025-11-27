@@ -34,7 +34,6 @@ const pollHeadingEl
 const outEl     = document.querySelector('#out');
 const outLengthEl
                 = document.querySelector('#out-length');
-const statEl    = document.querySelector('#stat');
 
 const storageKey = "galgodon-helper-inputs";
 
@@ -133,26 +132,6 @@ breaking.]
     .replaceAll(urlRegExp, "[a 23-character string]")
     .length.toString();
 
-  const stats = {};
-  for (const c of secret) {
-    if (/^\p{Letter}$/u.test(c)) {
-      stats[c] = (stats[c] ?? 0) + 1;
-    }
-  }
-  statEl.replaceChildren(
-    ...Object.entries(stats)
-    .sort()
-    .flatMap(([c, n]) => {
-      const dt = document.createElement("dt");
-      if (letters.includes(c)) {
-        dt.className = "seen";
-      }
-      dt.append(c);
-      const dd = document.createElement("dd");
-      dd.append(n.toString());
-      return [dt, dd];
-    })
-  );
   updatePoll();
 }
 
