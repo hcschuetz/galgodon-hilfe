@@ -177,6 +177,16 @@ pollEl.append(
   ...pollHeads,
   document.createElement("div"), // fill the corner
 );
+const stats = Array.from(alphabet, letter =>
+  Object.assign(document.createElement("div"), {
+    className: "stat",
+  }),
+);
+pollEl.append(
+  document.createElement("div"), // fill the corner
+  ...stats,
+  document.createElement("div"), // fill the corner
+);
 const pollRows = [];
 
 function updatePoll() {
@@ -189,7 +199,21 @@ function updatePoll() {
       secret.includes(letter)  ? "hit" :
                                  "fail";
   });
+  stats.forEach((el, i) =>
+    el.textContent = countChars(alphabet[i], secret) || ""
+  );
   choiceUpdates.forEach(update => update());
+}
+
+function countChars(c, string) {
+  let count = 0;
+  let len = string.length;
+  for (let i = 0; i < len; i++) {
+    if (string[i] === c) {
+      count++;
+    }
+  }
+  return count;
 }
 
 const pollGrid = document.querySelector("#poll-grid");

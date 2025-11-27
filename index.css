@@ -114,8 +114,10 @@ textarea {
     background-color: #f008;
   }
   > .poll-head {
-    margin-bottom: .5em;
     font-size: 130%;
+  }
+  > .stat {
+    margin-bottom: .5em;
   }
   > .letter-button {
     cursor: pointer;
