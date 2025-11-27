@@ -288,6 +288,7 @@ for (let i = 0; i < 4; i++) {
       !word ? "(Wort fehlt)" :
       notInWord ? `("${letter}" nicht im Wort)` :
       "Kopieren";
+    copyEl.title = copyEl.disabled ? "" : outText;
 
     updatePollStatus();
   }
