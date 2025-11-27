@@ -94,7 +94,7 @@ textarea {
   max-width: 100%;
   overflow-x: auto;
   display: grid;
-  grid-template-columns: 1.2em 12em auto 10em;
+  grid-template-columns: 12em auto 10em;
   align-items: baseline;
   column-gap: .5em;
   > button[disabled] {
@@ -108,9 +108,13 @@ textarea {
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
   display: inline-grid;
-  grid-template-columns: repeat(30, auto);
+  grid-template-columns: auto repeat(30, auto);
   font-family: monospace;
   text-align: center;
+  input {
+    width: 1.2em;
+    margin-right: .5em;
+  }
   [data-status="hit"] {
     background-color: #0f08;
   }
@@ -121,7 +125,7 @@ textarea {
     background-color: #f008;
   }
   > .poll-alphabet-head {
-    margin-bottom: 3px;
+    margin-bottom: .5em;
     font-size: 130%;
   }
   > button {

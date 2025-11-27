@@ -194,7 +194,10 @@ const pollAlphabetsHeads = alphabet.split("").map(letter =>
     className: "poll-alphabet-head",
   })
 );
-pollAlphabetsEl.append(...pollAlphabetsHeads);
+pollAlphabetsEl.append(
+  document.createElement("div"), // fill the corner
+  ...pollAlphabetsHeads,
+);
 const pollAlphabetRows = [];
 function updatePoll() {
   const letters = upcase(lettersEl.value.trim());
@@ -236,7 +239,7 @@ for (let i = 0; i < 4; i++) {
     alert("Wahlmöglichkeit in die Zwischenablage kopiert.");
   });
 
-  pollEl.append(letterEl, wordEl, outEl, copyEl);
+  pollEl.append(wordEl, outEl, copyEl);
 
   const alphabetEls = Array.from(alphabet, letter => {
     const el = document.createElement("button");
@@ -247,7 +250,7 @@ for (let i = 0; i < 4; i++) {
     })
     return el;
   });
-  pollAlphabetsEl.append(...alphabetEls);
+  pollAlphabetsEl.append(letterEl, ...alphabetEls);
   pollAlphabetRows.push(alphabetEls);
 
   function updateChoice() {
