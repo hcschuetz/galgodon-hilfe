@@ -2,6 +2,8 @@ import urlRegExpData from "./url-regex.json" with {type: "json"};
 
 const urlRegExp = new RegExp(urlRegExpData.source, urlRegExpData.flags);
 
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß";
+
 const defaultInputs = {
   tags   : "@galgodon@fedigroups.social #galgenmasto #galgenfedi",
   prefix : `Das R habt Ihr also gewählt.
@@ -185,7 +187,25 @@ const pollProblemsEl = document.querySelector("#poll-problems");
 const choiceUpdates = [];
 const letterEls = [];
 const wordEls = [];
+const pollAlphabetsEl = document.querySelector("#poll-alphabets");
+const pollAlphabetsHeads = alphabet.split("").map(letter =>
+  Object.assign(document.createElement("div"), {
+    textContent: letter,
+    className: "poll-alphabet-head",
+  })
+);
+pollAlphabetsEl.append(...pollAlphabetsHeads);
+const pollAlphabetRows = [];
 function updatePoll() {
+  const letters = upcase(lettersEl.value.trim());
+  const secret = upcase(secretEl.value.trim());
+  pollAlphabetsHeads.forEach((el, j) => {
+    const letter = alphabet[j];
+    el.dataset.status =
+      letters.includes(letter) ? "seen" :
+      secret.includes(letter)  ? "hit" :
+                                 "fail";
+  });
   choiceUpdates.forEach(update => update());
 }
 for (let i = 0; i < 4; i++) {
@@ -217,6 +237,18 @@ for (let i = 0; i < 4; i++) {
   });
 
   pollEl.append(letterEl, wordEl, outEl, copyEl);
+
+  const alphabetEls = Array.from(alphabet, letter => {
+    const el = document.createElement("button");
+    el.textContent = letter;
+    el.addEventListener("click", () => {
+      letterEl.value = letter;
+      updateChoice();
+    })
+    return el;
+  });
+  pollAlphabetsEl.append(...alphabetEls);
+  pollAlphabetRows.push(alphabetEls);
 
   function updateChoice() {
     const letters = upcase(lettersEl.value.trim());
@@ -302,6 +334,29 @@ function updatePollProblems() {
     problems.push(`Auswahl-Text mit ${maxLength} Zeichen.`);
   }
   pollProblemsEl.value = problems.join(" ");
+
+  // This actually does not only update problems but also more button status:
+  pollAlphabetRows.forEach((row, i) => {
+    const rowLetter = letterEls[i].value;
+    const rowWord = upcase(wordEls[i].value);
+    row.forEach(button => {
+      const buttonLetter = button.textContent
+      const disabled =
+        letters.includes(buttonLetter) || !rowWord.includes(buttonLetter);
+      button.disabled = disabled;
+      const {dataset} = button;
+      dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
+      const selected = buttonLetter === rowLetter;
+      if (selected) {
+        const bad = disabled || letterEls.some((otherLetterEl, j) =>
+          j !== i && otherLetterEl.value === buttonLetter
+        );
+        dataset.selected = bad ? "bad" : "";
+      } else {
+        delete dataset.selected;
+      }
+    });
+  });
 }
 
 document.querySelector("#clear-poll").addEventListener("click", () => {

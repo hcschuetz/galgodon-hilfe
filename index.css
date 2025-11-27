@@ -102,6 +102,45 @@ textarea {
   }
 }
 
+#poll-alphabets {
+  margin-top: 1em;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 5px; /* keep overlay scrollbar away */
+  display: inline-grid;
+  grid-template-columns: repeat(30, auto);
+  font-family: monospace;
+  text-align: center;
+  [data-status="hit"] {
+    background-color: #0f08;
+  }
+  [data-status="fail"] {
+    background-color: #ff08;
+  }
+  [data-status="seen"] {
+    background-color: #f008;
+  }
+  > .poll-alphabet-head {
+    margin-bottom: 3px;
+    font-size: 130%;
+  }
+  > button {
+    cursor: pointer;
+    font-family: monospace;
+    border: 1px solid transparent;
+    &[data-selected] {
+      border-color: black;
+    }
+    &[data-selected="bad"] {
+      border-color: #f00;
+    }
+    &[disabled] {
+      background-color: #eee;
+      cursor: default;
+    }
+  }
+}
+
 .letter-input {
   margin-left: 2px; /* space for the focus-indicating outline */
   text-align: center;
