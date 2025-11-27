@@ -238,7 +238,7 @@ for (let i = 0; i < 4; i++) {
     outEl.replaceChildren(
       // The zero-width space ensures that outEl keeps its height even if
       // outText is empty.
-      ...(outText || "\u200b").split("").map((c, i) => {
+      ...(outText || "\u200b").split("").map(c => {
         const span = document.createElement("span");
         span.textContent = c;
 
@@ -366,8 +366,8 @@ document.querySelector("#poll-examples").append(
     button.addEventListener("click", () => {
       pollHeadingEl.value = question;
       update();
-      letterEls.forEach((el, i) => el.value = answers[2*i]);
-      wordEls  .forEach((el, i) => el.value = answers[2*i+1]);
+      letterEls.forEach((el, j) => el.value = answers[2*j]);
+      wordEls  .forEach((el, j) => el.value = answers[2*j+1]);
       updatePoll();
     });
     return button;
