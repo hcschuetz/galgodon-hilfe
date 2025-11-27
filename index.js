@@ -389,7 +389,7 @@ const zip = (xs, ys) =>
 document.querySelector("#poll-randomize").addEventListener("click", () => {
   shuffleArray(
     zip(letterEls, wordEls).map(([l, w]) => [l.value, w.value])
-  ).forEach((pair, i) => [letterEls[i].value, wordEls  [i].value] = pair);
+  ).forEach((pair, i) => [letterEls[i].value, wordEls[i].value] = pair);
   updatePoll();
 });
 
