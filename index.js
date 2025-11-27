@@ -197,6 +197,7 @@ const pollAlphabetsHeads = alphabet.split("").map(letter =>
 pollAlphabetsEl.append(
   document.createElement("div"), // fill the corner
   ...pollAlphabetsHeads,
+  document.createElement("div"), // fill the corner
 );
 const pollAlphabetRows = [];
 function updatePoll() {
@@ -231,15 +232,17 @@ for (let i = 0; i < 4; i++) {
 
   let outText = "";
   const copyEl = document.createElement("button");
+  copyEl.className = "copy-button";
   copyEl.addEventListener("click", async () => {
     await navigator.clipboard.writeText(outText);
     alert(`In die Zwischenablage kopiert:\n\n"${outText}"`);
   });
 
-  pollEl.append(wordEl, copyEl);
+  pollEl.append(wordEl);
 
   const alphabetEls = Array.from(alphabet, letter => {
     const el = document.createElement("button");
+    el.classList = "letter-button";
     el.textContent = letter;
     el.addEventListener("click", () => {
       letterEl.value = letter;
@@ -247,7 +250,7 @@ for (let i = 0; i < 4; i++) {
     })
     return el;
   });
-  pollAlphabetsEl.append(letterEl, ...alphabetEls);
+  pollAlphabetsEl.append(letterEl, ...alphabetEls, copyEl);
   pollAlphabetRows.push(alphabetEls);
 
   function updateChoice() {
