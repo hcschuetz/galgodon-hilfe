@@ -186,25 +186,25 @@ const pollProblemsEl = document.querySelector("#poll-problems");
 const choiceUpdates = [];
 const letterEls = [];
 const wordEls = [];
-const pollAlphabetsEl = document.querySelector("#poll-alphabets");
-const pollAlphabetsHeads = alphabet.split("").map(letter =>
+const pollEl = document.querySelector("#poll");
+const pollHeads = alphabet.split("").map(letter =>
   Object.assign(document.createElement("div"), {
     textContent: letter,
-    className: "poll-alphabet-head",
+    className: "poll-head",
   })
 );
-pollAlphabetsEl.append(
+pollEl.append(
   document.createElement("div"), // fill the corner
-  ...pollAlphabetsHeads,
+  ...pollHeads,
   document.createElement("div"), // fill the corner
 );
-const pollAlphabetRows = [];
+const pollRows = [];
 
 function updatePoll() {
   const letters = upcase(lettersEl.value.trim());
   const secret = upcase(secretEl.value.trim());
-  pollAlphabetsHeads.forEach((el, j) => {
-    const letter = alphabet[j];
+  pollHeads.forEach(el => {
+    const letter = el.textContent;
     el.dataset.status =
       letters.includes(letter) ? "seen" :
       secret.includes(letter)  ? "hit" :
@@ -257,8 +257,8 @@ for (let i = 0; i < 4; i++) {
     })
     return el;
   });
-  pollAlphabetsEl.append(letterEl, ...alphabetEls, copyEl);
-  pollAlphabetRows.push(alphabetEls);
+  pollEl.append(letterEl, ...alphabetEls, copyEl);
+  pollRows.push(alphabetEls);
 
   function updateChoice() {
     const letters = upcase(lettersEl.value.trim());
@@ -286,7 +286,7 @@ for (let i = 0; i < 4; i++) {
       notInWord ? `("${letter}" nicht im Wort)` :
       "Kopieren";
 
-    updatePollProblems();
+    updatePollStatus();
   }
 
   letterEls.push(letterEl);
@@ -294,7 +294,7 @@ for (let i = 0; i < 4; i++) {
   choiceUpdates.push(updateChoice);
 }
 
-function updatePollProblems() {
+function updatePollStatus() {
   const problems = [];
   const choices = letterEls.map(el => el.value);
   choices.forEach((choice, i) => {
@@ -319,7 +319,7 @@ function updatePollProblems() {
   pollProblemsEl.value = problems.join(" ");
 
   // This actually does not only update problems but also more button status:
-  pollAlphabetRows.forEach((row, i) => {
+  pollRows.forEach((row, i) => {
     const rowLetter = letterEls[i].value;
     const rowWord = upcase(wordEls[i].value);
     row.forEach(button => {

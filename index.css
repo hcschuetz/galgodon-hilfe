@@ -91,7 +91,7 @@ textarea {
   white-space: pre-wrap;
 }
 
-#poll-alphabets {
+#poll {
   margin-top: 1em;
   max-width: 100%;
   overflow-x: auto;
@@ -113,7 +113,7 @@ textarea {
   > [data-status="seen"] {
     background-color: #f008;
   }
-  > .poll-alphabet-head {
+  > .poll-head {
     margin-bottom: .5em;
     font-size: 130%;
   }
