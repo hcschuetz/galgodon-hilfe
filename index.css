@@ -94,7 +94,7 @@ textarea {
   max-width: 100%;
   overflow-x: auto;
   display: grid;
-  grid-template-columns: 12em auto 10em;
+  grid-template-columns: auto 10em;
   align-items: baseline;
   column-gap: .5em;
   > button[disabled] {

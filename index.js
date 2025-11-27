@@ -229,17 +229,14 @@ for (let i = 0; i < 4; i++) {
   const wordEl = document.createElement("input");
   wordEl.addEventListener("input", updateChoice);
 
-  const outEl = document.createElement("output");
-  outEl.classList.add("poll-out");
-
   let outText = "";
   const copyEl = document.createElement("button");
   copyEl.addEventListener("click", async () => {
     await navigator.clipboard.writeText(outText);
-    alert("Wahlmöglichkeit in die Zwischenablage kopiert.");
+    alert(`In die Zwischenablage kopiert:\n\n"${outText}"`);
   });
 
-  pollEl.append(wordEl, outEl, copyEl);
+  pollEl.append(wordEl, copyEl);
 
   const alphabetEls = Array.from(alphabet, letter => {
     const el = document.createElement("button");
@@ -269,33 +266,6 @@ for (let i = 0; i < 4; i++) {
     outText =
       notALetter ? word :
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
-    const seen = [];
-    outEl.replaceChildren(
-      // The zero-width space ensures that outEl keeps its height even if
-      // outText is empty.
-      ...(outText || "\u200b").split("").map(c => {
-        const span = document.createElement("span");
-        span.textContent = c;
-
-        const l = upcase(c);
-        if (/^[A-ZÄÖÜß]/i.test(c) && !seen.includes(l)) {
-          const known = letters.includes(l);
-          span.style.backgroundColor =
-            known              ? "#f008" :
-            secret.includes(l) ? "#0f08" :
-                                 "#ff08" ;
-          if (!known) {
-            span.addEventListener("click", () => {
-              letterEl.value = l;
-              updateChoice();
-            });
-            span.classList.add("clickable");
-          }
-        }
-        seen.push(l);
-        return span;
-      })
-    );
 
     copyEl.disabled = !letter || notALetter || seenLetter || notInWord;
     copyEl.textContent =
