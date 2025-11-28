@@ -6,7 +6,6 @@
   --grid-width-2c: calc(var(--label-width-2c) + var(--gap-width) + var(--input-width-2c));
   --full-width-2c: calc(var(--grid-width-2c) + 2 * var(--body-margin));
   --grid-width: min(100%, var(--grid-width-2c));
-  --stat-border: 1px solid #888;
 }
 
 body {
