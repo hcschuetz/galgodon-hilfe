@@ -84,13 +84,6 @@ textarea {
   }
 }
 
-#out {
-  display: block;
-  padding: 5px;
-  background: #eef;
-  white-space: pre-wrap;
-}
-
 #poll {
   margin-top: 1em;
   max-width: 100%;
@@ -100,9 +93,12 @@ textarea {
   grid-template-columns: auto repeat(30, auto) 12em;
   font-family: monospace;
   text-align: center;
-  input {
-    width: 1.2em;
+
+  .letter-input {
+    margin-left: 2px; /* space for the focus-indicating outline */
     margin-right: .5em;
+    width: 1.2em;
+    text-align: center;
   }
   > [data-status="hit"] {
     background-color: #0f08;
@@ -139,53 +135,13 @@ textarea {
   }
 }
 
-.letter-input {
-  margin-left: 2px; /* space for the focus-indicating outline */
-  text-align: center;
-}
-
-.poll-out {
-  min-width: 8rem;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  font-family: monospace;
-  font-size: 130%;
-  line-height: 130%;
-  > span {
-    border: 2px solid #0000;
-    border-radius: 3px;
-    &.clickable {
-      cursor: pointer;
-      &:hover {
-        border-color: black;
-      }
-    }
-  }
-}
-
 #poll-problems {
   color: #f00;
 }
 
-#stat {
-  margin: 0;
-  border: var(--stat-border);
-  max-width: 100%;
-  overflow-x: auto;
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-template-rows: auto auto;
-  grid-auto-columns: min-content;
-  > * {
-    margin: 0;
-    border: var(--stat-border);
-    padding: 0 .5em;
-    text-align: center;
-    font-weight: bolder;
-    background-color: #0f08;
-  }
-  > dt.seen, > .seen + dd {
-    font-weight: lighter;
-    background-color: #f008;
-  }
+#out {
+  display: block;
+  padding: 5px;
+  background: #eef;
+  white-space: pre-wrap;
 }
