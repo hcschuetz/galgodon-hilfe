@@ -116,6 +116,7 @@ textarea {
     cursor: pointer;
     font-family: monospace;
     border: 1px solid transparent;
+    padding: 0 4px;
     &[data-selected] {
       border-color: black;
     }
