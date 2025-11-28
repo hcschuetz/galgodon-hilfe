@@ -352,6 +352,7 @@ document.querySelector("#clear-poll").addEventListener("click", () => {
   [...letterEls, ...wordEls].forEach(el => el.value = "");
   updatePoll();
 });
+
 document.querySelector("#insert-poll").addEventListener("click", async () => {
   const text = await navigator.clipboard.readText();
   const lines = text.trim().split("\n").map(line => line.trim());
@@ -364,6 +365,17 @@ document.querySelector("#insert-poll").addEventListener("click", async () => {
   wordEls.forEach((el, i) => el.value = lines[lines.length - 4 + i].trim());
   updatePoll();
 });
+
+document.querySelector("#copy-poll").addEventListener("click", async () => {
+  await navigator.clipboard.writeText([
+    pollHeadingEl.value.trim(),
+    "",
+    ...wordEls.map(el => el.value),
+    "",
+  ].join("\n"));
+  alert("Umfrage in Zwischenablage kopiert.");
+});
+
 const pollExamples = `
 Wie lautet dein Name?
 L Sir Lancelot von Camelot.
