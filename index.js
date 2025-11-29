@@ -315,9 +315,8 @@ function updatePoll() {
 
     rowStatusEl.textContent = problem;
     answerOutEl.textContent =
-      problem ? `[${problem}]` :
+      problem ?  "\u200b" : // zero-width space to preserve element height
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
-    answerOutEl.classList.toggle("problem", problem);
     copyEl.disabled = Boolean(problem);
 
     alphabetEls.forEach(button => {
