@@ -66,7 +66,7 @@
       <button id="reset">Beispiel-Werte</button>
     </div>
 
-    <h2>Buchstaben-Umfrage (experimentell!)</h2>
+    <h2>Umfrage (experimentell!)</h2>
 
     <details>
       <summary>Info</summary>
@@ -78,35 +78,6 @@
       <p>
         In den 4 Antwort-Feldern sollen die Auswahl-Buchstaben <em>nicht</em>
         durch Klammern markiert werden.
-      </p>
-      <p>
-        Die farbig hinterlegten Buchstaben im 4×30-Buchstaben-Block unten
-        können durch Klicken ausgewählt werden.
-        (Es handelt sich um diejenigen Buchstaben, die in der Antwort vorkommen,
-        aber noch nicht in einer früheren Runde gewählt wurden.)
-      </p>
-      <p>
-        Buchstaben können auch in den 4 Eingabe-Feldern links von diesem Block
-        eingegeben werden.
-        (Hier können auch Buchstaben eingegeben werden,
-        die nicht in der Antwort vorkommen.
-        Dies ist für den Fall gedacht,
-        dass man zunächst die Buchstaben und erst dann die Antworten wählt.)
-        Um einen neuen Buchstaben einzugeben, ist es nicht nötig,
-        einen evtl. bereits vorhandenen Buchstaben zu löschen
-        oder zu markieren.  Es wird automatisch überschrieben.
-      </p>
-      <p>
-        Farben:
-        <span style="background: #0f08">Treffer</span>
-        <span style="background: #ff08">Niete</span>
-        <span style="background: #f008">Fehler</span>
-      </p>
-      <p>
-        Die Daten im obigen Abschnitt "Eingaben" werden vom Browser gespeichert.
-        Sie bleiben beim Schließen und erneuten Öffnen der Seite erhalten.
-        Im Gegensatz dazu sind die Umfrage-Daten hier nicht persistent,
-        denn sie werden nicht über mehrere Umfrage-Runden hinweg gebraucht.
       </p>
       <h2>Buttons</h2>
       <p>Manche Buttons benötigen etwas zusätzliche Erklärung:</p>
@@ -160,12 +131,6 @@
       <textarea id="poll-heading"></textarea>
     </div>
 
-    <div id="poll"></div>
-
-    <p>
-      <output id="poll-problems"></output>
-    </p>
-
     <div class="buttons">
       <button id="clear-poll">Umfrage löschen</button>
       <button id="insert-poll">Umfrage einfügen</button>
@@ -174,12 +139,62 @@
       <button id="poll-randomize">Zufällige Reihenfolge</button>
     </div>
 
+    <h3>Buchstaben-Auswahl</h3>
+
+    <details>
+      <summary>Info</summary>
+      <p>
+        Die farbig hinterlegten Buchstaben im 4×30-Buchstaben-Block unten
+        können durch Klicken ausgewählt werden.
+        (Es handelt sich um diejenigen Buchstaben, die in der Antwort vorkommen,
+        aber noch nicht in einer früheren Runde gewählt wurden.)
+      </p>
+      <p>
+        Buchstaben können auch in den 4 Eingabe-Feldern links von diesem Block
+        eingegeben werden.
+        (Hier können auch Buchstaben eingegeben werden,
+        die nicht in der Antwort vorkommen.
+        Dies ist für den Fall gedacht,
+        dass man zunächst die Buchstaben und erst dann die Antworten wählt.)
+        Um einen neuen Buchstaben einzugeben, ist es nicht nötig,
+        einen evtl. bereits vorhandenen Buchstaben zu löschen
+        oder zu markieren.  Es wird automatisch überschrieben.
+      </p>
+      <p>
+        Farben:
+        <span style="background: #0f08">Treffer</span>
+        <span style="background: #ff08">Niete</span>
+        <span style="background: #f008">Fehler</span>
+      </p>
+      <p>
+        Die Daten im obigen Abschnitt "Eingaben" werden vom Browser gespeichert.
+        Sie bleiben beim Schließen und erneuten Öffnen der Seite erhalten.
+        Im Gegensatz dazu sind die Umfrage-Daten hier nicht persistent,
+        denn sie werden nicht über mehrere Umfrage-Runden hinweg gebraucht.
+      </p>
+    </details>
+
+    <div id="poll"></div>
+
+    <div>
+      <output id="poll-problems"></output>
+    </div>
+
     <h2>Generierter Post-Text</h2>
 
-    <output id="out"></output>
+    <div id="output-grid" class="input-grid">
+      <div>
+        <div>
+          <button id="copy">Text kopieren</button>
+        </div>
+        <div>
+          (~<output id="out-length"></output> Zeichen)
+        </div>
+      </div>
+      <output id="out"></output>
+    </div>
     <div class="buttons">
-      <button id="copy">Kopieren</button>
-      <span>(~<output id="out-length"></output> Zeichen)</span>
+      <span></span>
     </div>
 
     <details>

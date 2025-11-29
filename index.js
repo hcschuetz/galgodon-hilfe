@@ -162,9 +162,7 @@ document.querySelector("#copy").addEventListener("click", async () => {
 });
 
 const pollProblemsEl = document.querySelector("#poll-problems");
-const choiceUpdates = [];
-const letterEls = [];
-const wordEls = [];
+const rows = [];
 const pollEl = document.querySelector("#poll");
 const pollHeads = alphabet.split("").map(letter =>
   Object.assign(document.createElement("div"), {
@@ -187,23 +185,6 @@ pollEl.append(
   ...stats,
   document.createElement("div"), // fill the corner
 );
-const pollRows = [];
-
-function updatePoll() {
-  const letters = upcase(lettersEl.value.trim());
-  const secret = upcase(secretEl.value.trim());
-  pollHeads.forEach(el => {
-    const letter = el.textContent;
-    el.dataset.status =
-      letters.includes(letter) ? "seen" :
-      secret.includes(letter)  ? "hit" :
-                                 "fail";
-  });
-  stats.forEach((el, i) =>
-    el.textContent = countChars(alphabet[i], secret) || ""
-  );
-  choiceUpdates.forEach(update => update());
-}
 
 function countChars(c, string) {
   let count = 0;
@@ -217,6 +198,7 @@ function countChars(c, string) {
 }
 
 const pollGrid = document.querySelector("#poll-grid");
+const outputGrid = document.querySelector("#output-grid");
 for (let i = 0; i < 4; i++) {
   const letterEl = document.createElement("input");
   letterEl.maxLength = 1;
@@ -227,21 +209,16 @@ for (let i = 0; i < 4; i++) {
     }
     event.stopImmediatePropagation();
     event.preventDefault();
-    updateChoice();
+    updatePoll();
   });
   letterEl.classList.add("letter-input");
-  letterEl.addEventListener("input", updateChoice);
+  letterEl.addEventListener("input", updatePoll);
 
   const wordEl = document.createElement("input");
-  wordEl.addEventListener("input", updateChoice);
+  wordEl.addEventListener("input", updatePoll);
 
-  let outText = "";
-  const copyEl = document.createElement("button");
-  copyEl.className = "copy-button";
-  copyEl.addEventListener("click", async () => {
-    await navigator.clipboard.writeText(outText);
-    alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
-  });
+  const rowStatusEl = document.createElement("div");
+  rowStatusEl.className = "row-status";
 
   pollGrid.append(
     Object.assign(document.createElement("div"), {
@@ -256,89 +233,102 @@ for (let i = 0; i < 4; i++) {
     el.textContent = letter;
     el.addEventListener("click", () => {
       letterEl.value = letter;
-      updateChoice();
+      updatePoll();
     })
     return el;
   });
-  pollEl.append(letterEl, ...alphabetEls, copyEl);
-  pollRows.push(alphabetEls);
+  pollEl.append(letterEl, ...alphabetEls, rowStatusEl);
 
-  function updateChoice() {
-    const letters = upcase(lettersEl.value.trim());
-    const secret = upcase(secretEl.value.trim());
+  const answerOutEl = document.createElement("div");
+  answerOutEl.className = "answer-out";
+
+  const copyEl = document.createElement("button");
+  copyEl.className = "copy-button";
+  copyEl.textContent = `Antwort ${i+1} kopieren`;
+  copyEl.addEventListener("click", async () => {
+    const outText = answerOutEl.textContent;
+    await navigator.clipboard.writeText(outText);
+    alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
+  });
+
+  outputGrid.append(copyEl, answerOutEl);
+
+  rows.push({
+    letterEl, wordEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
+  });
+}
+
+function updatePoll() {
+  const letters = upcase(lettersEl.value.trim());
+  const secret = upcase(secretEl.value.trim());
+  pollHeads.forEach(el => {
+    const letter = el.textContent;
+    el.dataset.status =
+      letters.includes(letter) ? "seen" :
+      secret.includes(letter)  ? "hit" :
+                                 "fail";
+  });
+  stats.forEach((el, i) =>
+    el.textContent = countChars(alphabet[i], secret) || ""
+  );
+
+  pollProblemsEl.value =
+    rows.map(({letterEl}) => letterEl.value).every(choice =>
+      /^[A-ZÄÖÜß]$/i.test(choice) &&
+      !letters.includes(choice) &&
+      !secret.includes(choice)
+    )
+    ? "Kein Treffer angeboten."
+    : "";
+
+  rows.forEach((row, i) => {
+    const {
+      letterEl, wordEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
+    } = row;
     const letter = upcase(letterEl.value);
     const word = wordEl.value.trim();
+    const wordUP = upcase(word);
+
     const notALetter = !/^[A-ZÄÖÜß]$/i.test(letter);
     const seenLetter = letters.includes(letter);
-    const notInWord = !upcase(word).includes(letter);
+    const notInWord = !wordUP.includes(letter);
+    const repeated =
+      rows.slice(0, i).some(({letterEl}) => letterEl.value === letter);
     letterEl.style.backgroundColor =
       !letter                 ? "#0000" :
       notALetter || seenLetter? "#f008" :
       secret.includes(letter) ? "#0f08" :
                                 "#ff08";
-    outText =
-      notALetter ? word :
+
+    // Instead of showing only the "most severe" problem, we might show
+    // several of them.
+    const problem =
+      !letter ? "Buchstabe fehlt" :
+      notALetter ? `"${letter}" ist kein Buchstabe` :
+      seenLetter ? `"${letter}" schon gewählt` :
+      repeated ? `"${letter}" mehrfach verwendet` :
+      !word ? "Antwort fehlt" :
+      notInWord ? `"${letter}" nicht im Wort` :
+      // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
+      word.length > 48 ? `${word.length} Zeichen` :
+      "";
+
+    rowStatusEl.textContent = problem;
+    answerOutEl.textContent =
+      problem ? `[${problem}]` :
       word.replace(RegExp(letter, "i"), match =>`(${match})`);
+    answerOutEl.classList.toggle("problem", problem);
+    copyEl.disabled = Boolean(problem);
 
-    copyEl.disabled = !letter || notALetter || seenLetter || notInWord;
-    copyEl.textContent =
-      !letter ? "(Buchstabe fehlt)" :
-      notALetter ? `("${letter}" ist kein Buchstabe)` :
-      seenLetter ? `("${letter}" schon gewählt)` :
-      !word ? "(Wort fehlt)" :
-      notInWord ? `("${letter}" nicht im Wort)` :
-      "Kopieren";
-    copyEl.title = copyEl.disabled ? "" : outText;
-
-    updatePollStatus();
-  }
-
-  letterEls.push(letterEl);
-  wordEls.push(wordEl);
-  choiceUpdates.push(updateChoice);
-}
-
-function updatePollStatus() {
-  const problems = [];
-  const choices = letterEls.map(el => el.value);
-  choices.forEach((choice, i) => {
-    if (choice && choices.findIndex(c => c == choice) < i) {
-      problems.push(`"${choice}" wiederholt angeboten.`);
-    }
-  });
-  const secret = upcase(secretEl.value.trim());
-  const letters = upcase(lettersEl.value.trim());
-  if (choices.every(choice =>
-    /^[A-ZÄÖÜß]$/i.test(choice) &&
-    !letters.includes(choice) &&
-    !secret.includes(choice)
-  )) {
-    problems.push("Kein Treffer angeboten.")
-  }
-  const maxLength = Math.max(...wordEls.map(el => el.value.length));
-  // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
-  if (maxLength > 48) {
-    problems.push(`Auswahl-Text mit ${maxLength} Zeichen.`);
-  }
-  pollProblemsEl.value = problems.join(" ");
-
-  // This actually does not only update problems but also more button status:
-  pollRows.forEach((row, i) => {
-    const rowLetter = letterEls[i].value;
-    const rowWord = upcase(wordEls[i].value);
-    row.forEach(button => {
+    alphabetEls.forEach(button => {
       const buttonLetter = button.textContent
-      const disabled =
-        letters.includes(buttonLetter) || !rowWord.includes(buttonLetter);
-      button.disabled = disabled;
+      button.disabled =
+        letters.includes(buttonLetter) || !wordUP.includes(buttonLetter);
       const {dataset} = button;
       dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
-      const selected = buttonLetter === rowLetter;
+      const selected = buttonLetter === letter;
       if (selected) {
-        const bad = disabled || letterEls.some((otherLetterEl, j) =>
-          j !== i && otherLetterEl.value === buttonLetter
-        );
-        dataset.selected = bad ? "bad" : "";
+        dataset.selected = "";
       } else {
         delete dataset.selected;
       }
@@ -349,7 +339,7 @@ function updatePollStatus() {
 document.querySelector("#clear-poll").addEventListener("click", () => {
   pollHeadingEl.value = "";
   update();
-  [...letterEls, ...wordEls].forEach(el => el.value = "");
+  rows.forEach(({letterEl, wordEl}) => letterEl.value = wordEl.value = "");
   updatePoll();
 });
 
@@ -362,7 +352,9 @@ document.querySelector("#insert-poll").addEventListener("click", async () => {
   }
   pollHeadingEl.value = lines.slice(0, -4).join("\n").trim();
   update();
-  wordEls.forEach((el, i) => el.value = lines[lines.length - 4 + i].trim());
+  rows.forEach(({wordEl}, i) => {
+    wordEl.value = lines[lines.length - 4 + i].trim();
+  });
   updatePoll();
 });
 
@@ -370,7 +362,7 @@ document.querySelector("#copy-poll").addEventListener("click", async () => {
   await navigator.clipboard.writeText([
     pollHeadingEl.value.trim(),
     "",
-    ...wordEls.map(el => el.value),
+    ...rows.map(({wordEl}) => wordEl.value),
     "",
   ].join("\n"));
   alert("Umfrage in Zwischenablage kopiert.");
@@ -420,30 +412,32 @@ document.querySelector("#poll-examples").append(
     button.addEventListener("click", () => {
       pollHeadingEl.value = question;
       update();
-      letterEls.forEach((el, j) => el.value = answers[2*j]);
-      wordEls  .forEach((el, j) => el.value = answers[2*j+1]);
+      rows.forEach(({letterEl, wordEl}, j) => {
+        letterEl.value = answers[2*j];
+        wordEl  .value = answers[2*j+1];
+      });
       updatePoll();
     });
     return button;
   })
 );
 
-function shuffleArray(array) {
-  for (let i = array.length; i > 1; i--) {
+function shuffleArray(arrayIn) {
+  const arrayOut = Array.from(arrayIn);
+  for (let i = arrayOut.length; i > 1; i--) {
     const j = Math.floor(i * Math.random());
-    [array[i-1], array[j]] = [array[j], array[i-1]];
+    [arrayOut[i-1], arrayOut[j]] = [arrayOut[j], arrayOut[i-1]];
   }
-  return array;
+  return arrayOut;
 }
 
-// There are proposals to provide this functionality in standard JS:
-const zip = (xs, ys) =>
-  Array.from({length: Math.min(xs.length, ys.length)}, (_, i) => [xs[i], ys[i]]);
-
 document.querySelector("#poll-randomize").addEventListener("click", () => {
-  shuffleArray(
-    zip(letterEls, wordEls).map(([l, w]) => [l.value, w.value])
-  ).forEach((pair, i) => [letterEls[i].value, wordEls[i].value] = pair);
+  shuffleArray(rows)
+  .map(({letterEl, wordEl}) => [letterEl.value, wordEl.value])
+  .forEach((values, i) => {
+    const {letterEl, wordEl} = rows[i];
+    [letterEl.value, wordEl.value] = values;
+  });
   updatePoll();
 });
 

@@ -86,7 +86,7 @@ textarea {
 }
 
 #poll {
-  margin-top: 1em;
+  margin-top: .5em;
   max-width: 100%;
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
@@ -124,19 +124,15 @@ textarea {
     &[data-selected] {
       border-color: black;
     }
-    &[data-selected="bad"] {
-      border-color: #f00;
-    }
     &[disabled] {
       background-color: #eee;
       cursor: default;
     }
   }
-  > .copy-button {
+  > .row-status {
+    justify-self: start;
     margin-left: .5em;
-    &[disabled] {
-      color: #f00;
-    }
+    color: #f00;
   }
 }
 
@@ -144,10 +140,15 @@ textarea {
   color: #f00;
 }
 
-#out {
-  display: block;
+.copy-button {
+  justify-self: start;
+}
+#out, .answer-out {
   padding: 5px;
   background: #eef;
   white-space: pre-wrap;
   font-size: 85%;
+}
+.answer-out.problem {
+  color: #f00;
 }
