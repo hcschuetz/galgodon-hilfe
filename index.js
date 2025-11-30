@@ -315,9 +315,31 @@ function updatePoll() {
       "";
 
     rowStatusEl.textContent = problem;
-    answerOutEl.textContent =
-      problem ?  "\u200b" : // zero-width space to preserve element height
-      word.replace(RegExp(letter, "i"), match =>`(${match})`);
+    answerOutEl.replaceChildren(
+      "\u200b", // zero-width space to preserve height upon empty answer
+      ...word.split("").map((c, j) => {
+        const C = upcase(c);
+        const isFirstOccurrence = wordUP.indexOf(C) === j;
+        const el = document.createElement("span");
+        el.textContent = C === letter && isFirstOccurrence ? `(${c})` : c;
+        if (
+          /^[A-ZÄÖÜß]$/.test(C)
+          && !letters.includes(C)
+          && isFirstOccurrence
+        ) {
+          el.classList.toggle(
+            secret.includes(C) ? "hit" : "fail",
+            true
+          );
+          el.classList.toggle("clickable", true);
+          el.addEventListener("click", () => {
+            letterEl.value = C;
+            updatePoll();
+          })
+        }
+        return el;
+      })
+    );
     copyEl.disabled = Boolean(problem);
 
     alphabetEls.forEach(button => {
