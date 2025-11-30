@@ -103,7 +103,7 @@ textarea {
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
   display: inline-grid;
-  grid-template-columns: auto repeat(30, auto) 12em;
+  grid-template-columns: auto repeat(30, auto) 13em;
   text-align: center;
 
   .letter-input {
