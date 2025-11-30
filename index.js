@@ -443,15 +443,14 @@ document.querySelector("#poll-randomize").addEventListener("click", () => {
 
 setup();
 
-{
-  // Can't we do this in CSS?
-  const show = "Weitere Informationen anzeigen";
-  const hide = "Schließen";
-  document.querySelectorAll("details > summary").forEach(summaryEl => {
-    summaryEl.title = show;
-    const detailsEl = summaryEl.parentElement;
-    detailsEl.addEventListener("toggle", () => {
-      summaryEl.title = detailsEl.open ? hide : show;
-    });
-  });
-}
+// Can't we do this in CSS?
+document.querySelectorAll("details > summary").forEach(summaryEl => {
+  const detailsEl = summaryEl.parentElement;
+  detailsEl.addEventListener("toggle", setTitle);
+  setTitle();
+
+  function setTitle() {
+    summaryEl.title =
+      detailsEl.open ? "Schließen" : "Informationen anzeigen";
+  }
+});
