@@ -293,7 +293,7 @@ function updatePoll() {
     const seenLetter = letters.includes(letter);
     const notInWord = !wordUP.includes(letter);
     const repeated =
-      rows.slice(0, i).some(({letterEl}) => letterEl.value === letter);
+      rows.some(({letterEl}, j) => i !== j && letterEl.value === letter);
     letterEl.style.backgroundColor =
       !letter                 ? "#0000" :
       notALetter || seenLetter? "#f008" :
