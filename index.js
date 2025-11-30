@@ -441,6 +441,14 @@ document.querySelector("#poll-randomize").addEventListener("click", () => {
   updatePoll();
 });
 
+document.querySelector("#first-letters").addEventListener("click", () => {
+  for (const {letterEl, wordEl} of rows) {
+    letterEl.value =
+      upcase(wordEl.value.replaceAll(/[^A-ZÄÖÜß]/ig, "")[0] ?? "");
+  }
+  updatePoll();
+});
+
 setup();
 
 // Can't we do this in CSS?
