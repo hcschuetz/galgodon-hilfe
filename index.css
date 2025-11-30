@@ -14,33 +14,45 @@ body {
   max-width: var(--grid-width);
 }
 
+summary + p {
+  margin-top: 5px;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+h1, h2, h3 {
+  &:has(+ details) {
+  margin-bottom: 0;
+  }
+}
+
 details {
-  margin: 1ex 0;
-  summary {
+  margin: 0;
+  padding: 0;
+  > summary {
     display: inline;
-    border-radius: 3px;
-    padding: 0 3px 0 1px;
-    text-decoration: underline;
+    font-size: 130%;
     color: #00f;
     cursor: pointer;
-    &:hover {
-      background-color: #00f2;
-    }
-  }
-  &:not([open]) > summary{
     &::before {
-      content: "⯆ ";
+      content: "🛈 ";
     }
-    &::after {
-      content: "...";
+    &:hover {
+      color: #00f8;
     }
   }
   &[open] {
-    border: 1px solid #888;
-    padding: 5px;
+    margin: 1ex 0;
+    border-radius: 5px;
+    padding: 0 5px 5px;
     background-color: #eef;
-    > summary::before {
-      content: "🗙 ";
+    > summary{
+      font-size: inherit;
+      &::before {
+        content: "🗙 ";
+      }
     }
   }
 }
@@ -71,7 +83,7 @@ textarea {
   height: 4lh;
 }
 
-#prefix, #letters {
+#tags, #secret, #missing, #suffix {
   background: #eef;
 }
 
@@ -138,6 +150,10 @@ textarea {
 
 #poll-problems {
   color: #f00;
+  display: block;
+  &:empty {
+    display: none;
+  }
 }
 
 .copy-button {

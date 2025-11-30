@@ -278,7 +278,7 @@ function updatePoll() {
       !letters.includes(choice) &&
       !secret.includes(choice)
     )
-    ? "Kein Treffer angeboten."
+    ? "Nur Nieten zur Auswahl angeboten"
     : "";
 
   rows.forEach((row, i) => {
@@ -303,12 +303,13 @@ function updatePoll() {
     // Instead of showing only the "most severe" problem, we might show
     // several of them.
     const problem =
+      !letter && !word ? "Antwort/Buchstabe fehlen" :
       !letter ? "Buchstabe fehlt" :
       notALetter ? `"${letter}" ist kein Buchstabe` :
       seenLetter ? `"${letter}" schon gewählt` :
       repeated ? `"${letter}" mehrfach verwendet` :
       !word ? "Antwort fehlt" :
-      notInWord ? `"${letter}" nicht im Wort` :
+      notInWord ? `"${letter}" nicht in der Antwort` :
       // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
       word.length > 48 ? `${word.length} Zeichen` :
       "";
@@ -407,7 +408,7 @@ O Eine europäische oder eine afrikanische?
 document.querySelector("#poll-examples").append(
   ...pollExamples.map(({question, answers}, i) => {
     const button = document.createElement("button");
-    button.textContent = `Beispiel #${i+1}`;
+    button.textContent = `Beispiel ${i+1}`;
     button.addEventListener("click", () => {
       pollHeadingEl.value = question;
       update();
@@ -441,3 +442,16 @@ document.querySelector("#poll-randomize").addEventListener("click", () => {
 });
 
 setup();
+
+{
+  // Can't we do this in CSS?
+  const show = "Weitere Informationen anzeigen";
+  const hide = "Schließen";
+  document.querySelectorAll("details > summary").forEach(summaryEl => {
+    summaryEl.title = show;
+    const detailsEl = summaryEl.parentElement;
+    detailsEl.addEventListener("toggle", () => {
+      summaryEl.title = detailsEl.open ? hide : show;
+    });
+  });
+}

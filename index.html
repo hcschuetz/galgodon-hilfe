@@ -10,13 +10,17 @@
   <body>
     <h1>Galgodon-Hilfe</h1>
 
+    <p>
+      Diese simple Web-App hilft Rätsel-Erstellern im Galgodon-Spiel,
+      Posts mit dem aktuellen Spielstand und einer neuen Umfrage
+      zu erstellen.
+      (<a href="https://github.com/hcschuetz/galgodon-hilfe/">Code</a>)
+    </p>
+
+    <h2>Spielstand</h2>
+
     <details>
-      <summary>Info</summary>
-      <p>
-        Diese simple Web-App hilft Rätsel-Erstellern im Galgodon-Spiel,
-        Posts mit dem aktuellen Spielstand und einer neuen Umfrage
-        zu erstellen.
-      </p>
+      <summary></summary>
       <p>
         Die meisten Eingabe-Felder zum Spielstand
         müssen nur zu Beginn eines Rätsels ausgefüllt werden.
@@ -24,15 +28,15 @@
         geschrieben und das Feld "Gewählte Buchstaben" ergänzt werden.
       </p>
       <p>
-        Und natürlich muss eine neue Umfrage erstellt werden (mit dem
-        Umfrage-Erstellungs-Tool unten oder direkt im Fedi-Client).
+        Die Spielstand-Daten werden vom Browser gespeichert und "überleben"
+        daher das Schließen und erneute Öffnen dieser Web-Seite.
       </p>
       <p>
-        <a href="https://github.com/hcschuetz/galgodon-hilfe/">Code</a>
+        Tipp: Man kann das Feld "Gewählte Buchstaben"
+        bereits am Anfang mit "äöüß" ausfüllen
+        um mitzuteilen, dass nur die Buchstaben A-Z verwendet werden.
       </p>
     </details>
-
-    <h2>Spielstand</h2>
 
     <div class="input-grid">
       <div>Tags:</div>
@@ -66,10 +70,10 @@
       <button id="reset">Beispiel-Werte</button>
     </div>
 
-    <h2>Umfrage (experimentell!)</h2>
+    <h2>Umfrage</h2>
 
     <details>
-      <summary>Info</summary>
+      <summary></summary>
       <p>
         Wenn man sich die 4 Alternativen für eine Buchstaben-Umfrage überlegt,
         beginnt man manchmal mit den Buchstaben und manchmal mit den Begriffen.
@@ -78,9 +82,23 @@
       <p>
         In den 4 Antwort-Feldern sollen die Auswahl-Buchstaben <em>nicht</em>
         durch Klammern markiert werden.
+        Dies geschieht automatisch weiter unten.
       </p>
-      <h2>Buttons</h2>
-      <p>Manche Buttons benötigen etwas zusätzliche Erklärung:</p>
+      <p>
+        Im Gegensatz zu den Spielstand-Daten
+        werden die Umfrage-Daten nur für einen Post benötigt.
+        Daher werden sie vom Browser nicht gespeichert
+        und "überleben" das Schließen und erneute Öffnen dieser Seite nicht.
+      </p>
+    </details>
+
+    <div id="poll-grid" class="input-grid">
+      <div>Frage:</div>
+      <textarea id="poll-heading"></textarea>
+    </div>
+
+    <details>
+      <summary></summary>
       <ul>
         <li>
           <p>
@@ -126,11 +144,6 @@
       </ul>
     </details>
 
-    <div id="poll-grid" class="input-grid">
-      <div>Frage:</div>
-      <textarea id="poll-heading"></textarea>
-    </div>
-
     <div class="buttons">
       <button id="clear-poll">Umfrage löschen</button>
       <button id="insert-poll">Umfrage einfügen</button>
@@ -139,48 +152,105 @@
       <button id="poll-randomize">Zufällige Reihenfolge</button>
     </div>
 
-    <h3>Buchstaben-Auswahl</h3>
+    <h3>Buchstaben-Auswahl (experimentell)</h3>
 
     <details>
-      <summary>Info</summary>
+      <summary></summary>
       <p>
-        Die farbig hinterlegten Buchstaben im 4×30-Buchstaben-Block unten
-        können durch Klicken ausgewählt werden.
-        (Es handelt sich um diejenigen Buchstaben, die in der Antwort vorkommen,
-        aber noch nicht in einer früheren Runde gewählt wurden.)
+        Dieser Abschnitt ist der komplizierteste Teil dieser Seite
+        (und auch unserer entsprechenden informellen Spielregeln).
       </p>
       <p>
-        Buchstaben können auch in den 4 Eingabe-Feldern links von diesem Block
-        eingegeben werden.
+        Die (nicht interaktive) <strong>Kopfzeile</strong>
+        gibt einen Überblick über den "Status" der 30 Buchstaben
+        sowie deren Häufigkeit im Suchbegriff.
+      </p>
+      <ul>
+        <li>
+          <p>
+            <span style="background: #f008">Schon gewählt</span>
+            (sollte also in der neuen Umfrage nicht wieder angeboten werden)
+          </p>
+        </li>
+        <li>
+          <p>
+            <span style="background: #0f08">"Treffer"</span>
+            (noch nicht gewählt und kommt im Suchbegriff vor)
+          </p>
+        </li>
+        <li>
+          <p>
+            <span style="background: #ff08">"Niete"</span>
+            (weder gewählt noch im Suchbegriff)
+          </p>
+        </li>
+      </ul>
+      <p>
+        Im <strong>4×30-Buchstaben-Block</strong> darunter
+        sind diejenigen Treffer und Nieten,
+        die in der entsprechenden Antwort vorkommen,
+        farbig hinterlegt.
+        Sie können durch Anklicken ausgewählt werden.
+      </p>
+      <p>
+        In den <strong>4 Eingabe-Feldern</strong> links davon
+        können über die Tastatur ebenfalls
+        Buchstaben zu den Antworten eingegeben werden.
         (Hier können auch Buchstaben eingegeben werden,
         die nicht in der Antwort vorkommen.
         Dies ist für den Fall gedacht,
         dass man zunächst die Buchstaben und erst dann die Antworten wählt.)
         Um einen neuen Buchstaben einzugeben, ist es nicht nötig,
-        einen evtl. bereits vorhandenen Buchstaben zu löschen
-        oder zu markieren.  Es wird automatisch überschrieben.
-      </p>
-      <p>
-        Farben:
-        <span style="background: #0f08">Treffer</span>
-        <span style="background: #ff08">Niete</span>
-        <span style="background: #f008">Fehler</span>
-      </p>
-      <p>
-        Die Daten im obigen Abschnitt "Eingaben" werden vom Browser gespeichert.
-        Sie bleiben beim Schließen und erneuten Öffnen der Seite erhalten.
-        Im Gegensatz dazu sind die Umfrage-Daten hier nicht persistent,
-        denn sie werden nicht über mehrere Umfrage-Runden hinweg gebraucht.
+        einen bereits vorhandenen Buchstaben zu löschen.
+        Er wird automatisch überschrieben.
       </p>
     </details>
 
     <div id="poll"></div>
 
-    <div>
-      <output id="poll-problems"></output>
-    </div>
+    <output id="poll-problems"></output>
 
     <h2>Generierter Post-Text</h2>
+
+    <details>
+      <summary></summary>
+      <p>
+        Die Zeichenzahl wird wie in Mastodon berechnet:
+      </p>
+      <ul>
+        <li>URLs zählen immer als 23 Zeichen.</li>
+        <li>
+          Bei Handles wie @someone@example.org wird nur der Teil @someone
+          gezählt.
+        </li>
+      </ul>
+      <p>
+        Die Berechnung ist jedoch nicht ganz kompatibel.
+        Daher das "~".
+      </p>
+      <p>
+        Es wäre nun praktisch, wenn man den Post direkt von hier aus absenden
+        könnte.  Aber:
+      </p>
+      <ul>
+        <li>
+          <p>
+            Dazu müsste man sich bei seiner Fedi-Instanz authentifizieren.
+            Das müsste nicht nur implementiert werden,
+            sondern Ihr müsstet dieser Web-Seite (und damit Github und mir)
+            vertrauen, dass Euer Fedi-Login nicht missbraucht wird.
+          </p>
+        </li>
+        <li>
+          <p>
+            Im Gegensatz zur Kommunikation <em>zwischen</em> Fedi-Instanzen ist
+            das API der Instanzen zu Client-Anwendungen nicht standardisiert.
+            Ich könnte allenfalls bestimmte Fedi-Instanzen (z.B. Mastodon)
+            unterstützen.
+          </p>
+        </li>
+      </ul>
+    </details>
 
     <div id="output-grid" class="input-grid">
       <div>
@@ -196,23 +266,5 @@
     <div class="buttons">
       <span></span>
     </div>
-
-    <details>
-      <summary>Zur Zahl der Zeichen</summary>
-      <p>
-        Diese wird wie in Mastodon berechnet:
-      </p>
-      <ul>
-        <li>URLs zählen immer als 23 Zeichen.</li>
-        <li>
-          Bei Handles wie @someone@example.org wird nur der Teil @someone
-          gezählt.
-        </li>
-      </ul>
-      <p>
-        Die Berechnung ist jedoch nicht ganz kompatibel.
-        Daher das "~".
-      </p>
-    </details>
   </body>
 </html>
