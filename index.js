@@ -303,7 +303,7 @@ function updatePoll() {
     // Instead of showing only the "most severe" problem, we might show
     // several of them.
     const problem =
-      !letter && !word ? "Antwort/Buchstabe fehlen" :
+      !letter && !word ? "Antwort&Buchstabe fehlen" :
       !letter ? "Buchstabe fehlt" :
       notALetter ? `"${letter}" ist kein Buchstabe` :
       seenLetter ? `"${letter}" schon gewählt` :
