@@ -215,6 +215,7 @@ for (let i = 0; i < 4; i++) {
   letterEl.addEventListener("input", updatePoll);
 
   const wordEl = document.createElement("input");
+  wordEl.spellcheck = true;
   wordEl.addEventListener("input", updatePoll);
 
   const rowStatusEl = document.createElement("div");
