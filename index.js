@@ -263,7 +263,7 @@ function updatePoll() {
     el.textContent = countChars(alphabet[i], secret) || ""
   );
 
-  const words = pollTextEl.value.trim().split("\n").slice(-4);
+  const answers = pollTextEl.value.trim().split("\n").slice(-4);
 
   pollProblemsEl.value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
@@ -279,12 +279,12 @@ function updatePoll() {
       letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
     } = row;
     const letter = upcase(letterEl.value);
-    const word = words[i] ?? "";
-    const wordUP = upcase(word);
+    const answer = answers[i] ?? "";
+    const answerUP = upcase(answer);
 
     const notALetter = !/^[A-ZÄÖÜß]$/i.test(letter);
     const seenLetter = letters.includes(letter);
-    const notInWord = !wordUP.includes(letter);
+    const notInWord = !answerUP.includes(letter);
     const repeated =
       rows.some(({letterEl}, j) => i !== j && letterEl.value === letter);
     letterEl.style.backgroundColor =
@@ -296,23 +296,23 @@ function updatePoll() {
     // Instead of showing only the "most severe" problem, we might show
     // several of them.
     const problem =
-      !letter && !word ? "Antwort&Buchstabe fehlen" :
+      !letter && !answer ? "Antwort&Buchstabe fehlen" :
       !letter ? "Buchstabe fehlt" :
       notALetter ? `"${letter}" ist kein Buchstabe` :
       seenLetter ? `"${letter}" schon gewählt` :
       repeated ? `"${letter}" mehrfach verwendet` :
-      !word ? "Antwort fehlt" :
+      !answer ? "Antwort fehlt" :
       notInWord ? `"${letter}" nicht in der Antwort` :
       // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
-      word.length > 48 ? `${word.length} Zeichen` :
+      answer.length > 48 ? `${answer.length} Zeichen` :
       "";
 
     rowStatusEl.textContent = problem;
     answerOutEl.replaceChildren(
       "\u200b", // zero-width space to preserve height upon empty answer
-      ...word.split("").map((c, j) => {
+      ...answer.split("").map((c, j) => {
         const C = upcase(c);
-        const isFirstOccurrence = wordUP.indexOf(C) === j;
+        const isFirstOccurrence = answerUP.indexOf(C) === j;
         const el = document.createElement("span");
         el.textContent = C === letter && isFirstOccurrence ? `(${c})` : c;
         if (
@@ -338,7 +338,7 @@ function updatePoll() {
     alphabetEls.forEach(button => {
       const buttonLetter = button.textContent
       button.disabled =
-        letters.includes(buttonLetter) || !wordUP.includes(buttonLetter);
+        letters.includes(buttonLetter) || !answerUP.includes(buttonLetter);
       const {dataset} = button;
       dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
       const selected = buttonLetter === letter;
