@@ -9,7 +9,7 @@ const defaultInputs = {
   prefix : `Das R habt Ihr also gewählt.
 Das ist ein Treffer.`,
   secret : `Schöne Grüße`,
-  letters: "espätör",
+  chosen: "espätör",
   missing: "Nicht vorhanden:",
   suffix : "(6 + 5 Zeichen; ÄÖÜß nicht aufgelöst)",
 };
@@ -18,7 +18,7 @@ const emptyInputs = {
   tags   : defaultInputs.tags,
   prefix : "",
   secret : "",
-  letters: "",
+  chosen: "",
   missing: "",
   suffix : "",
 };
@@ -26,7 +26,7 @@ const emptyInputs = {
 const tagsEl    = document.querySelector('#tags');
 const prefixEl  = document.querySelector('#prefix');
 const secretEl  = document.querySelector('#secret');
-const lettersEl = document.querySelector('#letters');
+const chosenEl = document.querySelector('#chosen');
 const missingEl = document.querySelector('#missing');
 const suffixEl  = document.querySelector('#suffix');
 const pollTextEl
@@ -45,7 +45,7 @@ function initInputs() {
   tagsEl   .value = inputs.tags;
   prefixEl .value = inputs.prefix;
   secretEl .value = inputs.secret;
-  lettersEl.value = inputs.letters;
+  chosenEl.value = inputs.chosen;
   missingEl.value = inputs.missing;
   suffixEl .value = inputs.suffix;
 }
@@ -60,15 +60,15 @@ function update() {
     tags   : tagsEl   .value,
     prefix : prefixEl .value,
     secret : secretEl .value,
-    letters: lettersEl.value,
+    chosen: chosenEl.value,
     missing: missingEl.value,
     suffix : suffixEl .value,
   }));
   const secret = upcase(secretEl.value.trim());
-  const letters = upcase(lettersEl.value.trim());
+  const chosen = upcase(chosenEl.value.trim());
   const missingText = missingEl.value.trim();
-  const missingLetters =
-    letters.split("").flatMap(c => secret.includes(c) ? [] : [c]).join(", ");
+  const missingChosen =
+    chosen.split("").flatMap(c => secret.includes(c) ? [] : [c]).join(", ");
 
   outEl.textContent = [
     tagsEl.value.trim(),
@@ -114,11 +114,11 @@ breaking.]
 */
     secret.split("").map(c =>
       c === " " ? "\u2003" :
-      letters.includes(c) || !/^\p{Letter}$/u.test(c) ? c :
+      chosen.includes(c) || !/^\p{Letter}$/u.test(c) ? c :
       "⌴"
     ).join(""),
 
-    missingText && missingLetters && (missingText + " " + missingLetters),
+    missingText && missingChosen && (missingText + " " + missingChosen),
     suffixEl.value.trim(),
     pollTextEl.value.trim().split("\n").slice(0, -4).join("\n").trim(),
   ].filter(part => part).join("\n\n");
@@ -136,7 +136,7 @@ breaking.]
 }
 
 for (const el of [
-  tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl, pollTextEl,
+  tagsEl, prefixEl, secretEl, chosenEl, missingEl, suffixEl, pollTextEl,
 ]) {
   el?.addEventListener("input", update);
 }
@@ -250,12 +250,12 @@ for (let i = 0; i < 4; i++) {
 }
 
 function updatePoll() {
-  const letters = upcase(lettersEl.value.trim());
+  const chosen = upcase(chosenEl.value.trim());
   const secret = upcase(secretEl.value.trim());
   pollHeads.forEach(el => {
     const letter = el.textContent;
     el.dataset.status =
-      letters.includes(letter) ? "seen" :
+      chosen.includes(letter) ? "seen" :
       secret.includes(letter)  ? "hit" :
                                  "fail";
   });
@@ -268,7 +268,7 @@ function updatePoll() {
   pollProblemsEl.value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
       /^[A-ZÄÖÜß]$/i.test(choice) &&
-      !letters.includes(choice) &&
+      !chosen.includes(choice) &&
       !secret.includes(choice)
     )
     ? "Nur Nieten zur Auswahl angeboten"
@@ -283,7 +283,7 @@ function updatePoll() {
     const answerUP = upcase(answer);
 
     const notALetter = !/^[A-ZÄÖÜß]$/i.test(letter);
-    const seenLetter = letters.includes(letter);
+    const seenLetter = chosen.includes(letter);
     const notInWord = !answerUP.includes(letter);
     const repeated =
       rows.some(({letterEl}, j) => i !== j && letterEl.value === letter);
@@ -317,7 +317,7 @@ function updatePoll() {
         el.textContent = C === letter && isFirstOccurrence ? `(${c})` : c;
         if (
           /^[A-ZÄÖÜß]$/.test(C)
-          && !letters.includes(C)
+          && !chosen.includes(C)
           && isFirstOccurrence
         ) {
           el.classList.toggle(
@@ -338,7 +338,7 @@ function updatePoll() {
     alphabetEls.forEach(button => {
       const buttonLetter = button.textContent
       button.disabled =
-        letters.includes(buttonLetter) || !answerUP.includes(buttonLetter);
+        chosen.includes(buttonLetter) || !answerUP.includes(buttonLetter);
       const {dataset} = button;
       dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
       const selected = buttonLetter === letter;
