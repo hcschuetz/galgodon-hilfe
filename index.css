@@ -103,7 +103,7 @@ textarea {
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
   display: inline-grid;
-  grid-template-columns: auto repeat(30, auto) 13em;
+  grid-template-columns: auto repeat(30, auto);
   text-align: center;
 
   .letter-input {
@@ -141,19 +141,22 @@ textarea {
       cursor: default;
     }
   }
-  > .row-status {
-    justify-self: start;
-    margin-left: .5em;
-    color: #f00;
-  }
+}
+
+.hint {
+  font-size: 85%;
+}
+
+.row-status {
+  font-size: 85%;
+  color: #f00;
 }
 
 #poll-problems {
+  font-size: 85%;
   color: #f00;
   display: block;
-  &:empty {
-    display: none;
-  }
+  margin: .5em 0;
 }
 
 .copy-button {

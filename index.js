@@ -173,7 +173,6 @@ const pollHeads = alphabet.split("").map(letter =>
 pollEl.append(
   document.createElement("div"), // fill the corner
   ...pollHeads,
-  document.createElement("div"), // fill the corner
 );
 const stats = Array.from(alphabet, letter =>
   Object.assign(document.createElement("div"), {
@@ -183,7 +182,6 @@ const stats = Array.from(alphabet, letter =>
 pollEl.append(
   document.createElement("div"), // fill the corner
   ...stats,
-  document.createElement("div"), // fill the corner
 );
 
 function countChars(c, string) {
@@ -238,7 +236,7 @@ for (let i = 0; i < 4; i++) {
     })
     return el;
   });
-  pollEl.append(letterEl, ...alphabetEls, rowStatusEl);
+  pollEl.append(letterEl, ...alphabetEls);
 
   const answerOutEl = document.createElement("div");
   answerOutEl.className = "answer-out";
@@ -252,7 +250,11 @@ for (let i = 0; i < 4; i++) {
     alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
   });
 
-  outputGrid.append(copyEl, answerOutEl);
+  {
+    const wrapper = document.createElement("div");
+    wrapper.append(copyEl, rowStatusEl)
+    outputGrid.append(wrapper, answerOutEl);
+  }
 
   rows.push({
     letterEl, wordEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,

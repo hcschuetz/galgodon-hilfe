@@ -157,10 +157,14 @@
 
     <details>
       <summary></summary>
+      <em>
+        Dieser Abschnitt kann übersprungen werden,
+        wenn er als zu kompliziert erscheint.
+        Er kann für die Auswahl der Antwort-Buchstaben jedoch hilfreich sein.
+      </em>
       <p>
         Die (nicht interaktive) <strong>Kopfzeile</strong>
-        gibt einen Überblick über den "Status" der 30 Buchstaben
-        sowie deren Häufigkeit im Suchbegriff.
+        gibt einen Überblick über den "Status" der 30 Buchstaben:
       </p>
       <ul>
         <li>
@@ -182,6 +186,10 @@
           </p>
         </li>
       </ul>
+      <p>
+        Darunter steht die <strong>Häufigkeit</strong> der Buchstaben
+        im Suchbegriff.
+      </p>
       <p>
         Im <strong>4×30-Buchstaben-Block</strong> darunter
         sind diejenigen Treffer und Nieten,
@@ -207,8 +215,6 @@
 
     <div id="poll"></div>
 
-    <output id="poll-problems"></output>
-
     <h2>Generierter Post-Text</h2>
 
     <details>
@@ -226,22 +232,44 @@
       <p>
         Die Berechnung ist jedoch nicht ganz kompatibel. Daher das "~".
       </p>
+    </details>
+
+    <div class="input-grid">
+      <div>
+        <div>
+          <button id="copy">Text kopieren</button>
+        </div>
+        <div class="hint">
+          (~<output id="out-length"></output> Zeichen)
+        </div>
+      </div>
+      <output id="out"></output>
+    </div>
+
+    <details>
+      <summary></summary>
       <p>
         In den Antwort-Feldern kann man
         einen farbig hinterlegten <strong>Buchstaben anklicken</strong>
+        (<span style="background-color: #0f08;">"Treffer"</span>,
+        <span style="background-color: #ff08;">"Niete"</span>)
         um ihn der jeweiligen Antwort zuzuordnen.
-        (Es kann nur das jeweils erste Vorkommen eines Buchstaben
-        in einer Antwort gewählt werden.)
+        (Nur das jeweils erste Vorkommen eines Buchstaben in einer Antwort
+        kann gewählt werden.)
       </p>
       <p>
-        Falls es schwierig ist, die schmalen Buchstaben i, I und l zu treffen,
-        kann der obige alphabetische Buchstaben-Block verwendet werden.
+        Es kann schwierig sein, schmale Buchstaben wie i, I und l zu treffen.
+        Dann kann der obige alphabetische Buchstaben-Block
+        mit breiteren Buchstaben-Feldern verwendet werden.
+        Diese haben die gleiche Funktionalität.
       </p>
-      <p>
-        Wenn der Kopier-Button für eine Antwort deaktiviert ist,
-        dann ist eine Fehlermeldung ebenso oben beim alphabetischen
-        Buchstaben-Block zu finden.
-      </p>
+    </details>
+
+    <output id="poll-problems"></output>
+    <div id="output-grid" class="input-grid"></div>
+
+    <details>
+      <summary></summary>
       <p>
         Es wäre nun praktisch, wenn man den Post direkt von hier aus
         <strong>absenden</strong> könnte.  Aber:
@@ -265,20 +293,5 @@
         </li>
       </ul>
     </details>
-
-    <div id="output-grid" class="input-grid">
-      <div>
-        <div>
-          <button id="copy">Text kopieren</button>
-        </div>
-        <div>
-          (~<output id="out-length"></output> Zeichen)
-        </div>
-      </div>
-      <output id="out"></output>
-    </div>
-    <div class="buttons">
-      <span></span>
-    </div>
   </body>
 </html>
