@@ -29,8 +29,8 @@ const secretEl  = document.querySelector('#secret');
 const lettersEl = document.querySelector('#letters');
 const missingEl = document.querySelector('#missing');
 const suffixEl  = document.querySelector('#suffix');
-const pollHeadingEl
-                = document.querySelector('#poll-heading');
+const pollTextEl
+                = document.querySelector('#poll-text');
 const outEl     = document.querySelector('#out');
 const outLengthEl
                 = document.querySelector('#out-length');
@@ -120,7 +120,7 @@ breaking.]
 
     missingText && missingLetters && (missingText + " " + missingLetters),
     suffixEl.value.trim(),
-    pollHeadingEl.value.trim(),
+    pollTextEl.value.trim().split("\n").slice(0, -4).join("\n").trim(),
   ].filter(part => part).join("\n\n");
   outLengthEl.textContent =
     outEl.textContent
@@ -136,7 +136,7 @@ breaking.]
 }
 
 for (const el of [
-  tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl, pollHeadingEl,
+  tagsEl, prefixEl, secretEl, lettersEl, missingEl, suffixEl, pollTextEl,
 ]) {
   el?.addEventListener("input", update);
 }
@@ -195,7 +195,6 @@ function countChars(c, string) {
   return count;
 }
 
-const pollGrid = document.querySelector("#poll-grid");
 const outputGrid = document.querySelector("#output-grid");
 for (let i = 0; i < 4; i++) {
   const letterEl = document.createElement("input");
@@ -212,19 +211,8 @@ for (let i = 0; i < 4; i++) {
   letterEl.classList.add("letter-input");
   letterEl.addEventListener("input", updatePoll);
 
-  const wordEl = document.createElement("input");
-  wordEl.spellcheck = true;
-  wordEl.addEventListener("input", updatePoll);
-
   const rowStatusEl = document.createElement("div");
   rowStatusEl.className = "row-status";
-
-  pollGrid.append(
-    Object.assign(document.createElement("div"), {
-      textContent: `Antwort ${i+1}:`,
-    }),
-    wordEl,
-  );
 
   const alphabetEls = Array.from(alphabet, letter => {
     const el = document.createElement("button");
@@ -257,7 +245,7 @@ for (let i = 0; i < 4; i++) {
   }
 
   rows.push({
-    letterEl, wordEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
+    letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
   });
 }
 
@@ -275,6 +263,8 @@ function updatePoll() {
     el.textContent = countChars(alphabet[i], secret) || ""
   );
 
+  const words = pollTextEl.value.trim().split("\n").slice(-4);
+
   pollProblemsEl.value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
       /^[A-ZÄÖÜß]$/i.test(choice) &&
@@ -286,10 +276,10 @@ function updatePoll() {
 
   rows.forEach((row, i) => {
     const {
-      letterEl, wordEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
+      letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
     } = row;
     const letter = upcase(letterEl.value);
-    const word = wordEl.value.trim();
+    const word = words[i] ?? "";
     const wordUP = upcase(word);
 
     const notALetter = !/^[A-ZÄÖÜß]$/i.test(letter);
@@ -362,35 +352,9 @@ function updatePoll() {
 }
 
 document.querySelector("#clear-poll").addEventListener("click", () => {
-  pollHeadingEl.value = "";
+  pollTextEl.value = "";
+  rows.forEach(({letterEl}) => letterEl.value = "");
   update();
-  rows.forEach(({letterEl, wordEl}) => letterEl.value = wordEl.value = "");
-  updatePoll();
-});
-
-document.querySelector("#insert-poll").addEventListener("click", async () => {
-  const text = await navigator.clipboard.readText();
-  const lines = text.trim().split("\n").map(line => line.trim());
-  if (lines.length < 5) {
-    alert(`Weniger als 5 Zeilen!`);
-    return;
-  }
-  pollHeadingEl.value = lines.slice(0, -4).join("\n").trim();
-  update();
-  rows.forEach(({wordEl}, i) => {
-    wordEl.value = lines[lines.length - 4 + i].trim();
-  });
-  updatePoll();
-});
-
-document.querySelector("#copy-poll").addEventListener("click", async () => {
-  await navigator.clipboard.writeText([
-    pollHeadingEl.value.trim(),
-    "",
-    ...rows.map(({wordEl}) => wordEl.value),
-    "",
-  ].join("\n"));
-  alert("Umfrage in Zwischenablage kopiert.");
 });
 
 const pollExamples = `
@@ -435,44 +399,17 @@ document.querySelector("#poll-examples").append(
     const button = document.createElement("button");
     button.textContent = `Beispiel ${i+1}`;
     button.addEventListener("click", () => {
-      pollHeadingEl.value = question;
-      update();
-      rows.forEach(({letterEl, wordEl}, j) => {
+      let pollText = question + "\n";
+      rows.forEach(({letterEl}, j) => {
         letterEl.value = answers[2*j];
-        wordEl  .value = answers[2*j+1];
+        pollText += "\n" + answers[2*j+1];
       });
-      updatePoll();
+      pollTextEl.value = pollText;
+      update();
     });
     return button;
   })
 );
-
-function shuffleArray(arrayIn) {
-  const arrayOut = Array.from(arrayIn);
-  for (let i = arrayOut.length; i > 1; i--) {
-    const j = Math.floor(i * Math.random());
-    [arrayOut[i-1], arrayOut[j]] = [arrayOut[j], arrayOut[i-1]];
-  }
-  return arrayOut;
-}
-
-document.querySelector("#poll-randomize").addEventListener("click", () => {
-  shuffleArray(rows)
-  .map(({letterEl, wordEl}) => [letterEl.value, wordEl.value])
-  .forEach((values, i) => {
-    const {letterEl, wordEl} = rows[i];
-    [letterEl.value, wordEl.value] = values;
-  });
-  updatePoll();
-});
-
-document.querySelector("#first-letters").addEventListener("click", () => {
-  for (const {letterEl, wordEl} of rows) {
-    letterEl.value =
-      upcase(wordEl.value.replaceAll(/[^A-ZÄÖÜß]/ig, "")[0] ?? "");
-  }
-  updatePoll();
-});
 
 setup();
 

@@ -80,7 +80,9 @@
         Dieses UI versucht, beide Vorgehensweisen zu unterstützen.
       </p>
       <p>
-        In den 4 Antwort-Feldern sollen die Auswahl-Buchstaben <em>nicht</em>
+        Die letzten 4 Zeilen des Umfrage-Felds
+        werden als die angebotenen Antworten verwendet.
+        Darin sollen die Auswahl-Buchstaben <em>noch nicht</em>
         durch Klammern markiert werden.
         Dies geschieht automatisch weiter unten.
       </p>
@@ -92,65 +94,27 @@
       </p>
     </details>
 
-    <div id="poll-grid" class="input-grid">
-      <div>Frage:</div>
-      <textarea id="poll-heading"></textarea>
+    <div class="input-grid">
+      <div>
+        Umfrage:
+        <br>
+        (Ein- oder mehrzeilige Frage und 4&nbsp;Antwort-Zeilen)
+      </div>
+      <textarea id="poll-text"></textarea>
     </div>
 
     <details>
       <summary></summary>
-      <ul>
-        <li>
-          <p>
-            Bevor <strong>"Umfrage einfügen"</strong> geklickt wird,
-            sollte die Zwischenablage mindestens 5 Zeilen enthalten.
-            Davon werden die letzten 4 Zeilen als die möglichen Antworten
-            verwendet.
-            Alles davor bildet die Frage.
-            (Dies ist dafür gedacht, dass man sich in einem Editor schon mal
-            ein paar Fragen und Antworten zurecht legt.
-            So kann man in einem Schritt die Frage + 4 Antworten übertragen.)
-          </p>
-          <p>
-            Unter bestimmten Umständen verlangt der Browser eine Bestätigung
-            für das Einfügen.  Damit soll vermieden werden,
-            dass bösartige Webseiten die Zwischenablage heimlich auslesen.
-          </p>
-          <p>
-            Die zu den Antworten gehörenden Buchstaben
-            werden von diesem Button nicht verändert.
-          </p>
-        </li>
-        <li>
-          <p>
-            Dagegen setzen bzw. löschen die <strong>"Beispiel"</strong>-Buttons
-            sowie <strong>"Umfrage löschen"</strong> auch die Buchstaben.
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>"Umfrage kopieren"</strong> kopiert die derzeitigen
-            Umfrage-Felder (Frage + 4 Antworten, ohne Klammerung der zugehörigen
-            Buchstaben) in die Zwischenablage.
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>"Zufällige Reihenfolge"</strong> wählt eine zufällige
-            Reihenfolge für die Antworten.  (Diese ist übrigens mit einer
-            Wahrscheinlichkeit von 1/24 wieder die derzeitige Reihenfolge.)
-          </p>
-        </li>
-      </ul>
+      <p>
+        Die Buttons "Umfrage löschen" und "Beispiel ..."
+        wirken sich nicht nur auf das obige Textfeld aus,
+        sondern auch auf die gewählten Buchstaben unten.
+      </p>
     </details>
 
     <div class="buttons">
       <button id="clear-poll">Umfrage löschen</button>
-      <button id="insert-poll">Umfrage einfügen</button>
-      <button id="copy-poll">Umfrage kopieren</button>
       <span id="poll-examples"></span>
-      <button id="poll-randomize">Zufällige Reihenfolge</button>
-      <button id="first-letters">Erste Buchstaben verwenden</button>
     </div>
 
     <h3>Alphabetische Buchstaben-Auswahl</h3>

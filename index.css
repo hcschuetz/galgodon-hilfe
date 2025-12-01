@@ -87,6 +87,10 @@ textarea {
   background: #eef;
 }
 
+#poll-text {
+  height: 7lh; /* The HTML attribute rows="7" does not work here. */
+}
+
 .buttons {
   margin: 5px 0;
   display: flex;
