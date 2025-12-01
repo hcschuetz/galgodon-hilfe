@@ -359,51 +359,55 @@ document.querySelector("#clear-poll").addEventListener("click", () => {
 
 const pollExamples = `
 Wie lautet dein Name?
-L Sir Lancelot von Camelot.
-R Sir Robin von Camelot.
-G Sir Galahad von Camelot.
-A Artus, König der Briten.
+
+Sir Lancelot von Camelot.
+Sir Robin von Camelot.
+Sir Galahad von Camelot.
+Artus, König der Briten.
+LRGA
 ---
 Welches ist dein Auftrag?
-D Die Suche nach dem heiligen Gral.
-S Die Suche nach dem heiligen Gral.
-H Die Suche nach dem heiligen Gral.
-G Die Suche nach dem heiligen Gral.
+
+Die Suche nach dem heiligen Gral.
+Die Suche nach dem heiligen Gral.
+Die Suche nach dem heiligen Gral.
+Die Suche nach dem heiligen Gral.
+DSHG
 ---
 Welches ist deine Lieblingsfarbe?
-B blau
-N blau, nein, gelb
-G gelb
-ß Egal!  Wie heißt die Hauptstadt von Assyrien?
+
+blau
+blau, nein, gelb
+gelb
+Egal!  Wie heißt die Hauptstadt von Assyrien?
+BNGß
 ---
 Wie heißt die Hauptstadt von Assyrien?
-A Assur
-T Taidu
-W Waššukanni
-N Ninive
+
+Assur
+Taidu
+Waššukanni
+Ninive
+ATWN
 ---
 Welches ist die Höchstgeschwindigkeit einer unbeladenen Schwalbe?
-R Rauchschwalbe: 20 m/s
-M Mehlschwalbe: 74 km/h
-S Simson Schwalbe: 60 km/h
-O Eine europäische oder eine afrikanische?
-`.split("---").map(poll => {
-  const [question, ...choices] = poll.trim().split("\n");
-  return {
-    question,
-    answers: choices.flatMap(line => [line[0], line.substring(1).trim()]),
-  };
-});
+
+Rauchschwalbe: 20 m/s
+Mehlschwalbe: 74 km/h
+Simson Schwalbe: 60 km/h
+Eine europäische oder eine afrikanische?
+RMSO
+`.split("---");
 document.querySelector("#poll-examples").append(
-  ...pollExamples.map(({question, answers}, i) => {
+  ...pollExamples.map((poll, i) => {
+    poll = poll.trim();
+    const cut = poll.length - 4;
+    const letters = poll.substring(cut);
+    const pollText = poll.substring(0, cut).trim();
     const button = document.createElement("button");
     button.textContent = `Beispiel ${i+1}`;
     button.addEventListener("click", () => {
-      let pollText = question + "\n";
-      rows.forEach(({letterEl}, j) => {
-        letterEl.value = answers[2*j];
-        pollText += "\n" + answers[2*j+1];
-      });
+      rows.forEach(({letterEl}, j) => letterEl.value = letters[j]);
       pollTextEl.value = pollText;
       update();
     });
