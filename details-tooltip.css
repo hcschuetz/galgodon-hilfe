@@ -1,0 +1,54 @@
+:root {
+  --details-hint: "Hinweise\a0 anzeigen";
+  /*
+  I would have hoped that this works:
+    --details-hint: "Hinweise anzeigen";
+  (with a plain space) here and
+    white-space: preserve;
+  where var(--details-hint) is used.
+  */
+
+  --appear-delay: .75s;
+  --appear-duration: .25s;
+  --disappear-delay: 0s;
+  --disappear-duration: .25s;
+}
+
+/* Phew, "hand-made" tooltips: */
+details {
+  > summary {
+    position: relative;
+    &::after {
+      position: absolute;
+      bottom: 0%;
+      left: 130%;
+      border-radius: 3px;
+      font-size: .7rlh;
+      background-color: #eee;
+      color: black;
+
+      content: var(--details-hint);
+
+      /* Make sure the tooltip is not only transparent but also that it does
+      not use any space: */
+      padding: 0;
+      max-width: 0;
+      overflow-x: hidden;
+      opacity: 0;
+      transition:
+        opacity var(--disappear-duration) var(--disappear-delay),
+        /* max-width and padding disappear immediately after opacity has faded out: */
+        max-width 0s calc(var(--disappear-duration) + var(--disappear-delay)),
+        padding 0s calc(var(--disappear-duration) + var(--disappear-delay));
+    }
+  }
+  &:not([open]) > summary:hover::after {
+    padding: 2px 4px 3px;
+    /* Why doesn't (min|fit|max)-content work during fade-out? */
+    max-width: 100vw; /* anything wide enough */
+    opacity: 1;
+    transition:
+      opacity var(--appear-duration) var(--appear-delay);
+      /* max-width and padding appear immediately before opacity fades in. */
+  }
+}
