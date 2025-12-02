@@ -22,10 +22,8 @@ p:last-child {
   margin-bottom: 0;
 }
 
-h1, h2, h3 {
-  &:has(+ details) {
+*:has(+ details) {
   margin-bottom: 0;
-  }
 }
 
 details {
@@ -37,7 +35,7 @@ details {
     color: #00f;
     cursor: pointer;
     &::before {
-      content: "🛈 ";
+      content: "🛈";
     }
     &:hover {
       color: #00f8;
@@ -51,7 +49,7 @@ details {
     > summary{
       font-size: inherit;
       &::before {
-        content: "🗙 ";
+        content: "🗙";
       }
     }
   }
