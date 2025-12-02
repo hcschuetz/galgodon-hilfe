@@ -52,7 +52,7 @@ details {
     margin: 1ex 0;
     border-radius: 5px;
     padding: 0 5px 5px;
-    background-color: #eef;
+    background-color: #eee;
     > summary{
       font-size: inherit;
       &::before {
@@ -72,7 +72,7 @@ details {
       left: 130%;
       border-radius: 3px;
       font-size: .7rlh;
-      background-color: #eef;
+      background-color: #eee;
       color: black;
 
       content: "Hinweise\a0 anzeigen";
@@ -132,7 +132,7 @@ textarea {
 }
 
 #tags, #secret, #missing, #suffix {
-  background: #eef;
+  background: #eee;
 }
 
 #poll-text {
@@ -216,7 +216,7 @@ textarea {
 }
 #out, .answer-out {
   padding: 5px;
-  background: #eef;
+  background: #eee;
   white-space: pre-wrap;
   font-size: 85%;
 }
