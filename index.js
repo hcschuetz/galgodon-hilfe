@@ -416,15 +416,3 @@ document.querySelector("#poll-examples").append(
 );
 
 setup();
-
-// Can't we do this in CSS?
-document.querySelectorAll("details > summary").forEach(summaryEl => {
-  const detailsEl = summaryEl.parentElement;
-  detailsEl.addEventListener("toggle", setTitle);
-  setTitle();
-
-  function setTitle() {
-    summaryEl.title =
-      detailsEl.open ? "Schließen" : "Informationen anzeigen";
-  }
-});
