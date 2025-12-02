@@ -241,7 +241,7 @@ for (let i = 0; i < 4; i++) {
   }, `Antwort ${i+1} kopieren`);
 
   outputGridEl.append(
-    EL("div", {}, copyEl, rowStatusEl),
+    EL("div.grid-label", {}, copyEl, rowStatusEl),
     answerOutEl,
   );
 
