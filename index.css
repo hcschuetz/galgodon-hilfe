@@ -113,7 +113,7 @@ input, textarea {
   font-size: 85%;
 }
 
-.input-grid {
+.label-grid {
   display: grid;
   grid-template-columns: var(--label-width-2c) var(--input-width-2c);
   /* variables are not supported in media queries: */
