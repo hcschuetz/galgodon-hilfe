@@ -2,6 +2,26 @@ import urlRegExpData from "./url-regex.json" with {type: "json"};
 
 const urlRegExp = new RegExp(urlRegExpData.source, urlRegExpData.flags);
 
+const QS = selector => document.querySelector(selector);
+
+const EL = (tagPlus, props = {}, ...children) => {
+  const [tag, ...classNames] = tagPlus.split(".");
+  const el = document.createElement(tag);
+  el.className = classNames.join(" ");
+  Object.entries(props).forEach(([key, value]) => {
+    if (key.startsWith("@")) {
+      el.addEventListener(key.substring(1), value);
+    } else {
+      el[key] = value;
+    }
+  });
+  el.append(...children);
+  return el;
+}
+
+// -----------------------------------------------------------------------------
+// Here comes the application-specific code
+
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß";
 
 const defaultInputs = {
@@ -23,17 +43,15 @@ const emptyInputs = {
   suffix : "",
 };
 
-const tagsEl    = document.querySelector("#tags");
-const prefixEl  = document.querySelector("#prefix");
-const secretEl  = document.querySelector("#secret");
-const chosenEl = document.querySelector("#chosen");
-const missingEl = document.querySelector("#missing");
-const suffixEl  = document.querySelector("#suffix");
-const pollTextEl
-                = document.querySelector("#poll-text");
-const outEl     = document.querySelector("#out");
-const outLengthEl
-                = document.querySelector("#out-length");
+const tagsEl      = QS("#tags");
+const prefixEl    = QS("#prefix");
+const secretEl    = QS("#secret");
+const chosenEl    = QS("#chosen");
+const missingEl   = QS("#missing");
+const suffixEl    = QS("#suffix");
+const pollTextEl  = QS("#poll-text");
+const outEl       = QS("#out");
+const outLengthEl = QS("#out-length");
 
 const storageKey = "galgodon-helper-inputs";
 
@@ -146,42 +164,29 @@ function setup() {
   update();
 }
 
-document.querySelector("#clear").addEventListener("click", () => {
+QS("#clear").addEventListener("click", () => {
   localStorage.setItem(storageKey, JSON.stringify(emptyInputs));
   setup();
 });
 
-document.querySelector("#reset").addEventListener("click", () => {
+QS("#reset").addEventListener("click", () => {
   localStorage.removeItem(storageKey);
   setup();
 });
 
-document.querySelector("#copy").addEventListener("click", async () => {
+QS("#copy").addEventListener("click", async () => {
   await navigator.clipboard.writeText(outEl.value);
   alert("Text in die Zwischenablage kopiert.");
 });
 
-const pollProblemsEl = document.querySelector("#poll-problems");
-const rows = [];
-const pollEl = document.querySelector("#poll");
-const pollHeads = alphabet.split("").map(letter =>
-  Object.assign(document.createElement("div"), {
-    textContent: letter,
-    className: "poll-head",
-  })
-);
+const pollHeads =
+  alphabet.split("").map(letter => EL("div.poll-head", {}, letter));
+
+const stats = Array.from(alphabet, letter => EL("div.stat"));
+const pollEl = QS("#poll");
 pollEl.append(
-  document.createElement("div"), // fill the corner
-  ...pollHeads,
-);
-const stats = Array.from(alphabet, letter =>
-  Object.assign(document.createElement("div"), {
-    className: "stat",
-  }),
-);
-pollEl.append(
-  document.createElement("div"), // fill the corner
-  ...stats,
+  EL("div"), ...pollHeads,
+  EL("div"), ...stats,
 );
 
 function countChars(c, string) {
@@ -195,58 +200,51 @@ function countChars(c, string) {
   return count;
 }
 
-const outputGrid = document.querySelector("#output-grid");
+const rows = [];
+const outputGrid = QS("#output-grid");
 for (let i = 0; i < 4; i++) {
-  const letterEl = document.createElement("input");
-  letterEl.maxLength = 1;
-  letterEl.addEventListener("keypress", event => {
-    const {key} = event;
-    if (/^[A-ZÄÖÜß]$/i.test(key)) {
-      letterEl.value = upcase(event.key);
-    }
-    event.stopImmediatePropagation();
-    event.preventDefault();
-    updatePoll();
+  const letterEl = EL("input.letter-input", {
+    maxLength: 1,
+    "@keypress": event => {
+      const {key} = event;
+      if (/^[A-ZÄÖÜß]$/i.test(key)) {
+        letterEl.value = upcase(key);
+        updatePoll();
+      }
+      event.stopImmediatePropagation();
+      event.preventDefault();
+    },
+    "@input": updatePoll,
   });
-  letterEl.classList.add("letter-input");
-  letterEl.addEventListener("input", updatePoll);
 
-  const rowStatusEl = document.createElement("div");
-  rowStatusEl.className = "row-status";
+  const rowStatusEl = EL("div.row-status");
 
-  const alphabetEls = Array.from(alphabet, letter => {
-    const el = document.createElement("button");
-    el.classList = "letter-button";
-    el.textContent = letter;
-    el.addEventListener("click", () => {
-      letterEl.value = letter;
-      updatePoll();
-    })
-    return el;
-  });
+  const alphabetEls = Array.from(alphabet, letter =>
+    EL("button.letter-button", {
+      "@click": () => {
+        letterEl.value = letter;
+        updatePoll();
+      }
+    }, letter)
+  );
   pollEl.append(letterEl, ...alphabetEls);
 
-  const answerOutEl = document.createElement("div");
-  answerOutEl.className = "answer-out";
+  const answerOutEl = EL("div.answer-out");
 
-  const copyEl = document.createElement("button");
-  copyEl.className = "copy-button";
-  copyEl.textContent = `Antwort ${i+1} kopieren`;
-  copyEl.addEventListener("click", async () => {
-    const outText = answerOutEl.textContent;
-    await navigator.clipboard.writeText(outText);
-    alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
-  });
+  const copyEl = EL("button.copy-button", {
+    "@click": async () => {
+      const outText = answerOutEl.textContent;
+      await navigator.clipboard.writeText(outText);
+      alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
+    },
+  }, `Antwort ${i+1} kopieren`);
 
-  {
-    const wrapper = document.createElement("div");
-    wrapper.append(copyEl, rowStatusEl)
-    outputGrid.append(wrapper, answerOutEl);
-  }
+  outputGrid.append(
+    EL("div", {}, copyEl, rowStatusEl),
+    answerOutEl,
+  );
 
-  rows.push({
-    letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
-  });
+  rows.push({letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl});
 }
 
 function updatePoll() {
@@ -265,7 +263,7 @@ function updatePoll() {
 
   const answers = pollTextEl.value.trim().split("\n").slice(-4);
 
-  pollProblemsEl.value =
+  QS("#poll-problems").value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
       /^[A-ZÄÖÜß]$/i.test(choice) &&
       !chosen.includes(choice) &&
@@ -313,8 +311,9 @@ function updatePoll() {
       ...answer.split("").map((c, j) => {
         const C = upcase(c);
         const isFirstOccurrence = answerUP.indexOf(C) === j;
-        const el = document.createElement("span");
-        el.textContent = C === letter && isFirstOccurrence ? `(${c})` : c;
+        const el = EL("span", {},
+          C === letter && isFirstOccurrence ? `(${c})` : c,
+        );
         if (
           /^[A-ZÄÖÜß]$/.test(C)
           && !chosen.includes(C)
@@ -351,13 +350,13 @@ function updatePoll() {
   });
 }
 
-document.querySelector("#clear-poll").addEventListener("click", () => {
+QS("#clear-poll").addEventListener("click", () => {
   pollTextEl.value = "";
   rows.forEach(({letterEl}) => letterEl.value = "");
   update();
 });
 
-const pollExamples = `
+const pollExamples = [`
 Wie lautet dein Name?
 
 Sir Lancelot von Camelot.
@@ -365,7 +364,7 @@ Sir Robin von Camelot.
 Sir Galahad von Camelot.
 Artus, König der Briten.
 LRGA
----
+`, `
 Welches ist dein Auftrag?
 
 Die Suche nach dem heiligen Gral.
@@ -373,7 +372,7 @@ Die Suche nach dem heiligen Gral.
 Die Suche nach dem heiligen Gral.
 Die Suche nach dem heiligen Gral.
 DSHG
----
+`, `
 Welches ist deine Lieblingsfarbe?
 
 blau
@@ -381,7 +380,7 @@ blau, nein, gelb
 gelb
 Egal!  Wie heißt die Hauptstadt von Assyrien?
 BNGß
----
+`, `
 Wie heißt die Hauptstadt von Assyrien?
 
 Assur
@@ -389,7 +388,7 @@ Taidu
 Waššukanni
 Ninive
 ATWN
----
+`, `
 Welches ist die Höchstgeschwindigkeit einer unbeladenen Schwalbe?
 
 Rauchschwalbe: 20 m/s
@@ -397,21 +396,21 @@ Mehlschwalbe: 74 km/h
 Simson Schwalbe: 60 km/h
 Eine europäische oder eine afrikanische?
 RMSO
-`.split("---");
-document.querySelector("#poll-examples").append(
+`];
+
+QS("#poll-examples").append(
   ...pollExamples.map((poll, i) => {
     poll = poll.trim();
     const cut = poll.length - 4;
     const letters = poll.substring(cut);
     const pollText = poll.substring(0, cut).trim();
-    const button = document.createElement("button");
-    button.textContent = `Beispiel ${i+1}`;
-    button.addEventListener("click", () => {
-      rows.forEach(({letterEl}, j) => letterEl.value = letters[j]);
-      pollTextEl.value = pollText;
-      update();
-    });
-    return button;
+    return EL("button", {
+      "@click": () => {
+        rows.forEach(({letterEl}, j) => letterEl.value = letters[j]);
+        pollTextEl.value = pollText;
+        update();
+      },
+    }, `Beispiel ${i+1}`);
   })
 );
 
