@@ -23,17 +23,17 @@ const emptyInputs = {
   suffix : "",
 };
 
-const tagsEl    = document.querySelector('#tags');
-const prefixEl  = document.querySelector('#prefix');
-const secretEl  = document.querySelector('#secret');
-const chosenEl = document.querySelector('#chosen');
-const missingEl = document.querySelector('#missing');
-const suffixEl  = document.querySelector('#suffix');
+const tagsEl    = document.querySelector("#tags");
+const prefixEl  = document.querySelector("#prefix");
+const secretEl  = document.querySelector("#secret");
+const chosenEl = document.querySelector("#chosen");
+const missingEl = document.querySelector("#missing");
+const suffixEl  = document.querySelector("#suffix");
 const pollTextEl
-                = document.querySelector('#poll-text');
-const outEl     = document.querySelector('#out');
+                = document.querySelector("#poll-text");
+const outEl     = document.querySelector("#out");
 const outLengthEl
-                = document.querySelector('#out-length');
+                = document.querySelector("#out-length");
 
 const storageKey = "galgodon-helper-inputs";
 
