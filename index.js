@@ -253,6 +253,8 @@ function updatePoll() {
   const secret = upcase(secretEl.value.trim());
   pollHeads.forEach(el => {
     const letter = el.textContent;
+    // Using a dataset member instead of a class since there are 3 states.
+    // (Alternatively we could represent this by 2 or 3 classes.)
     el.dataset.status =
       chosen.includes(letter) ? "chosen" :
       secret.includes(letter)  ? "hit" :
