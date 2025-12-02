@@ -294,7 +294,7 @@ function updatePoll() {
     // Instead of showing only the "most severe" problem, we might show
     // several of them.
     const problem =
-      !letter && !answer ? "Antwort&Buchstabe fehlen" :
+      !letter && !answer ? "Antwort und Buchstabe fehlen" :
       !letter ? "Buchstabe fehlt" :
       notALetter ? `"${letter}" ist kein Buchstabe` :
       seenLetter ? `"${letter}" schon gewählt` :
@@ -302,7 +302,7 @@ function updatePoll() {
       !answer ? "Antwort fehlt" :
       notInWord ? `"${letter}" nicht in der Antwort` :
       // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
-      answer.length > 48 ? `${answer.length} Zeichen` :
+      answer.length > 48 ? `${answer.length + 2} Zeichen` :
       "";
 
     rowStatusEl.textContent = problem;
