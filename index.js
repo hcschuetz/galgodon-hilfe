@@ -23,6 +23,7 @@ const EL = (tagPlus, props = {}, ...children) => {
 // Here comes the application-specific code
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß";
+const isLetter = c => /^[A-ZÄÖÜß]$/i.test(c);
 
 const defaultInputs = {
   tags   : "@galgodon@fedigroups.social #galgenmasto #galgenfedi",
@@ -207,7 +208,7 @@ for (let i = 0; i < 4; i++) {
     maxLength: 1,
     "@keypress": event => {
       const {key} = event;
-      if (/^[A-ZÄÖÜß]$/i.test(key)) {
+      if (isLetter(key)) {
         letterEl.value = upcase(key);
         updatePoll();
       }
@@ -253,7 +254,7 @@ function updatePoll() {
   pollHeads.forEach(el => {
     const letter = el.textContent;
     el.dataset.status =
-      chosen.includes(letter) ? "seen" :
+      chosen.includes(letter) ? "chosen" :
       secret.includes(letter)  ? "hit" :
                                  "fail";
   });
@@ -265,7 +266,7 @@ function updatePoll() {
 
   QS("#poll-problems").value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
-      /^[A-ZÄÖÜß]$/i.test(choice) &&
+      isLetter(choice) &&
       !chosen.includes(choice) &&
       !secret.includes(choice)
     )
@@ -280,16 +281,16 @@ function updatePoll() {
     const answer = answers[i] ?? "";
     const answerUP = upcase(answer);
 
-    const notALetter = !/^[A-ZÄÖÜß]$/i.test(letter);
-    const seenLetter = chosen.includes(letter);
+    const notALetter = !isLetter(letter);
+    const chosenLetter = chosen.includes(letter);
     const notInWord = !answerUP.includes(letter);
     const repeated =
       rows.some(({letterEl}, j) => i !== j && letterEl.value === letter);
     letterEl.style.backgroundColor =
-      !letter                 ? "#0000" :
-      notALetter || seenLetter? "#f008" :
-      secret.includes(letter) ? "#0f08" :
-                                "#ff08";
+      !letter                    ? "#0000" :
+      notALetter || chosenLetter ? "#f008" :
+      secret.includes(letter)    ? "#0f08" :
+                                   "#ff08";
 
     // Instead of showing only the "most severe" problem, we might show
     // several of them.
@@ -297,7 +298,7 @@ function updatePoll() {
       !letter && !answer ? "Antwort und Buchstabe fehlen" :
       !letter ? "Buchstabe fehlt" :
       notALetter ? `"${letter}" ist kein Buchstabe` :
-      seenLetter ? `"${letter}" schon gewählt` :
+      chosenLetter ? `"${letter}" schon gewählt` :
       repeated ? `"${letter}" mehrfach verwendet` :
       !answer ? "Antwort fehlt" :
       notInWord ? `"${letter}" nicht in der Antwort` :
@@ -315,7 +316,7 @@ function updatePoll() {
           C === letter && isFirstOccurrence ? `(${c})` : c,
         );
         if (
-          /^[A-ZÄÖÜß]$/.test(C)
+          isLetter(C)
           && !chosen.includes(C)
           && isFirstOccurrence
         ) {
