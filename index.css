@@ -185,7 +185,7 @@ textarea {
     font-family: monospace;
     border: 1px solid transparent;
     padding: 0 4px;
-    &[data-selected] {
+    &.selected {
       border-color: black;
     }
     &[disabled] {

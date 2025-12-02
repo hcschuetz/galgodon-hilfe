@@ -339,14 +339,8 @@ function updatePoll() {
       const buttonLetter = button.textContent
       button.disabled =
         chosen.includes(buttonLetter) || !answerUP.includes(buttonLetter);
-      const {dataset} = button;
-      dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
-      const selected = buttonLetter === letter;
-      if (selected) {
-        dataset.selected = "";
-      } else {
-        delete dataset.selected;
-      }
+      button.dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
+      button.classList.toggle("selected", buttonLetter === letter);
     });
   });
 }
