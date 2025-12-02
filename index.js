@@ -180,14 +180,14 @@ QS("#copy").addEventListener("click", async () => {
   alert("Text in die Zwischenablage kopiert.");
 });
 
-const pollHeads =
+const pollHeadEls =
   alphabet.split("").map(letter => EL("div.poll-head", {}, letter));
 
-const stats = Array.from(alphabet, letter => EL("div.stat"));
+const statEls = Array.from(alphabet, letter => EL("div.stat"));
 const pollEl = QS("#poll");
 pollEl.append(
-  EL("div"), ...pollHeads,
-  EL("div"), ...stats,
+  EL("div"), ...pollHeadEls,
+  EL("div"), ...statEls,
 );
 
 function countChars(c, string) {
@@ -202,7 +202,7 @@ function countChars(c, string) {
 }
 
 const rows = [];
-const outputGrid = QS("#output-grid");
+const outputGridEl = QS("#output-grid");
 for (let i = 0; i < 4; i++) {
   const letterEl = EL("input.letter-input", {
     maxLength: 1,
@@ -240,7 +240,7 @@ for (let i = 0; i < 4; i++) {
     },
   }, `Antwort ${i+1} kopieren`);
 
-  outputGrid.append(
+  outputGridEl.append(
     EL("div", {}, copyEl, rowStatusEl),
     answerOutEl,
   );
@@ -251,7 +251,7 @@ for (let i = 0; i < 4; i++) {
 function updatePoll() {
   const chosen = upcase(chosenEl.value.trim());
   const secret = upcase(secretEl.value.trim());
-  pollHeads.forEach(el => {
+  pollHeadEls.forEach(el => {
     const letter = el.textContent;
     // Using a dataset member instead of a class since there are 3 states.
     // (Alternatively we could represent this by 2 or 3 classes.)
@@ -260,7 +260,7 @@ function updatePoll() {
       secret.includes(letter)  ? "hit" :
                                  "fail";
   });
-  stats.forEach((el, i) =>
+  statEls.forEach((el, i) =>
     el.textContent = countChars(alphabet[i], secret) || ""
   );
 
