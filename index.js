@@ -11,7 +11,7 @@ const defaultInputs = {
   prefix : `Das R habt Ihr also gewählt.
 Das ist ein Treffer.`,
   secret : `Schöne Grüße`,
-  chosen: "espätör",
+  chosen : "espätör",
   missing: "Nicht vorhanden:",
   suffix : "(6 + 5 Zeichen; ÄÖÜß nicht aufgelöst)",
 };
@@ -20,7 +20,7 @@ const emptyInputs = {
   tags   : defaultInputs.tags,
   prefix : "",
   secret : "",
-  chosen: "",
+  chosen : "",
   missing: "",
   suffix : "",
 };
@@ -45,7 +45,7 @@ function initInputs() {
   tagsEl   .value = inputs.tags;
   prefixEl .value = inputs.prefix;
   secretEl .value = inputs.secret;
-  chosenEl.value = inputs.chosen;
+  chosenEl .value = inputs.chosen;
   missingEl.value = inputs.missing;
   suffixEl .value = inputs.suffix;
 }
@@ -60,7 +60,7 @@ function update() {
     tags   : tagsEl   .value,
     prefix : prefixEl .value,
     secret : secretEl .value,
-    chosen: chosenEl.value,
+    chosen : chosenEl .value,
     missing: missingEl.value,
     suffix : suffixEl .value,
   }));
@@ -238,8 +238,8 @@ function updatePoll() {
     // (Alternatively we could represent this by 2 or 3 classes.)
     el.dataset.status =
       chosen.includes(letter) ? "chosen" :
-      secret.includes(letter)  ? "hit" :
-                                 "fail";
+      secret.includes(letter) ? "hit" :
+                                "fail";
   });
   statEls.forEach((el, i) =>
     el.textContent = countChars(alphabet[i], secret) || ""
@@ -249,9 +249,7 @@ function updatePoll() {
 
   QS("#poll-problems").value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
-      isLetter(choice) &&
-      !chosen.includes(choice) &&
-      !secret.includes(choice)
+      isLetter(choice) && !chosen.includes(choice) && !secret.includes(choice)
     )
     ? "Nur Nieten zur Auswahl angeboten"
     : "";
@@ -279,15 +277,15 @@ function updatePoll() {
     // several of them.
     const problem =
       !letter && !answer ? "Antwort und Buchstabe fehlen" :
-      !letter ? "Buchstabe fehlt" :
-      notALetter ? `"${letter}" ist kein Buchstabe` :
-      chosenLetter ? `"${letter}" schon gewählt` :
-      repeated ? `"${letter}" mehrfach verwendet` :
-      !answer ? "Antwort fehlt" :
-      notInWord ? `"${letter}" nicht in der Antwort` :
+      !letter            ? "Buchstabe fehlt" :
+      notALetter         ? `"${letter}" ist kein Buchstabe` :
+      chosenLetter       ? `"${letter}" schon gewählt` :
+      repeated           ? `"${letter}" mehrfach verwendet` :
+      !answer            ? "Antwort fehlt" :
+      notInWord          ? `"${letter}" nicht in der Antwort` :
       // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
       answer.length > 48 ? `${answer.length + 2} Zeichen` :
-      "";
+                           "";
 
     rowStatusEl.textContent = problem;
     answerOutEl.replaceChildren(
@@ -298,11 +296,7 @@ function updatePoll() {
         const el = EL("span", {},
           C === letter && isFirstOccurrence ? `(${c})` : c,
         );
-        if (
-          isLetter(C)
-          && !chosen.includes(C)
-          && isFirstOccurrence
-        ) {
+        if (isLetter(C) && !chosen.includes(C) && isFirstOccurrence) {
           el.classList.toggle(
             secret.includes(C) ? "hit" : "fail",
             true
