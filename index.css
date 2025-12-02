@@ -7,10 +7,10 @@
   --full-width-2c: calc(var(--grid-width-2c) + 2 * var(--body-margin));
   --grid-width: min(100%, var(--grid-width-2c));
 
-  --tooltip-appear-delay: .3s;
-  --tooltip-appear-duration: .3s;
+  --tooltip-appear-delay: .75s;
+  --tooltip-appear-duration: .25s;
   --tooltip-disappear-delay: 0s;
-  --tooltip-disappear-duration: .3s;
+  --tooltip-disappear-duration: .25s;
 }
 
 body {
@@ -89,13 +89,13 @@ details {
       opacity: 0;
       transition:
         opacity var(--tooltip-disappear-duration) var(--tooltip-disappear-delay),
-        /* max-width and padding disappear immediately after opacity has faded out. */
+        /* max-width and padding disappear immediately after opacity has faded out: */
         max-width 0s calc(var(--tooltip-disappear-duration) + var(--tooltip-disappear-delay)),
-        padding   0s calc(var(--tooltip-disappear-duration) + var(--tooltip-disappear-delay));
+        padding 0s calc(var(--tooltip-disappear-duration) + var(--tooltip-disappear-delay));
     }
   }
   &:not([open]) > summary:hover::after {
-    padding: 3px 5px 4px;
+    padding: 2px 4px 3px;
     /* Why doesn't (min|fit|max)-content work during fade-out? */
     max-width: 100vw; /* anything wide enough */
     opacity: 1;
