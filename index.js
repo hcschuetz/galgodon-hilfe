@@ -12,7 +12,7 @@ const defaultInputs = {
 Das ist ein Treffer.`,
   secret : `Schöne Grüße`,
   chosen : "espätör",
-  missing: "Nicht vorhanden:",
+  missing: "Nicht im gesuchten Begriff:",
   suffix : "(6 + 5 Zeichen; ÄÖÜß nicht aufgelöst)",
 };
 
@@ -166,10 +166,7 @@ const pollHeadEls =
 
 const statEls = Array.from(alphabet, letter => EL("div.stat"));
 const pollEl = QS("#poll");
-pollEl.append(
-  EL("div"), ...pollHeadEls,
-  EL("div"), ...statEls,
-);
+pollEl.append(...pollHeadEls, ...statEls);
 
 function countChars(c, string) {
   let count = 0;
@@ -185,31 +182,42 @@ function countChars(c, string) {
 const rows = [];
 const outputGridEl = QS("#output-grid");
 for (let i = 0; i < 4; i++) {
-  const letterEl = EL("input.letter-input", {
-    maxLength: 1,
+  const letterEl = EL("button.letter-input", {
     "@keypress": event => {
-      const {key} = event;
-      if (isLetter(key)) {
-        letterEl.value = upcase(key);
-        updatePoll();
-      }
       event.stopImmediatePropagation();
       event.preventDefault();
+      const {key} = event;
+      if (!isLetter(key)) {
+        alert(`"${key}" ist kein deutscher Buchstabe.`);
+        return;
+      }
+      const C = upcase(key);
+      if (chosenEl.value.includes(key)) {
+        alert(`"${C}" wurde bereits gewählt.`);
+        return;
+      }
+      letterEl.textContent = C;
+      updatePoll();
     },
-    "@input": updatePoll,
   });
 
   const rowStatusEl = EL("div.row-status");
 
   const alphabetEls = Array.from(alphabet, letter =>
-    EL("button.letter-button", {
-      "@click": () => {
-        letterEl.value = letter;
+    EL("div.letter-button", {
+      "@click": event => {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        if (event.currentTarget.classList.contains("disabled")) {
+          return;
+        }
+        letterEl.textContent = letter;
         updatePoll();
+        letterEl.focus();
       }
     }, letter)
   );
-  pollEl.append(letterEl, ...alphabetEls);
+  pollEl.append(...alphabetEls);
 
   const answerOutEl = EL("div.answer-out");
 
@@ -222,8 +230,8 @@ for (let i = 0; i < 4; i++) {
   }, `Antwort ${i+1} kopieren`);
 
   outputGridEl.append(
-    EL("div.grid-label", {}, copyEl, rowStatusEl),
-    answerOutEl,
+    EL("div.answer-out-label", {}, copyEl, rowStatusEl),
+    EL("div.answer-out-value", {}, letterEl, answerOutEl),
   );
 
   rows.push({letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl});
@@ -234,12 +242,8 @@ function updatePoll() {
   const secret = upcase(secretEl.value.trim());
   pollHeadEls.forEach(el => {
     const letter = el.textContent;
-    // Using a dataset member instead of a class since there are 3 states.
-    // (Alternatively we could represent this by 2 or 3 classes.)
-    el.dataset.status =
-      chosen.includes(letter) ? "chosen" :
-      secret.includes(letter) ? "hit" :
-                                "fail";
+    el.classList.toggle("chosen", chosen.includes(letter));
+    el.classList.toggle("hit", secret.includes(letter));
   });
   statEls.forEach((el, i) =>
     el.textContent = countChars(alphabet[i], secret) || ""
@@ -248,7 +252,7 @@ function updatePoll() {
   const answers = pollTextEl.value.trim().split("\n").slice(-4);
 
   QS("#poll-problems").value =
-    rows.map(({letterEl}) => letterEl.value).every(choice =>
+    rows.map(({letterEl}) => letterEl.textContent).every(choice =>
       isLetter(choice) && !chosen.includes(choice) && !secret.includes(choice)
     )
     ? "Nur Nieten zur Auswahl angeboten"
@@ -258,30 +262,25 @@ function updatePoll() {
     const {
       letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
     } = row;
-    const letter = upcase(letterEl.value);
+    const letter = upcase(letterEl.textContent);
     const answer = answers[i] ?? "";
     const answerUP = upcase(answer);
 
-    const notALetter = !isLetter(letter);
     const chosenLetter = chosen.includes(letter);
     const notInWord = !answerUP.includes(letter);
     const repeated =
-      rows.some(({letterEl}, j) => i !== j && letterEl.value === letter);
-    letterEl.style.backgroundColor =
-      !letter                    ? "#0000" :
-      notALetter || chosenLetter ? "#f008" :
-      secret.includes(letter)    ? "#0f08" :
-                                   "#ff08";
+      rows.some(({letterEl}, j) => i !== j && letterEl.textContent === letter);
+    letterEl.classList.toggle("chosen", letter && chosen.includes(letter));
+    letterEl.classList.toggle("hit", letter && secret.includes(letter));
+
 
     // Instead of showing only the "most severe" problem, we might show
     // several of them.
     const problem =
-      !letter && !answer ? "Antwort und Buchstabe fehlen" :
-      !letter            ? "Buchstabe fehlt" :
-      notALetter         ? `"${letter}" ist kein Buchstabe` :
-      chosenLetter       ? `"${letter}" schon gewählt` :
-      repeated           ? `"${letter}" mehrfach verwendet` :
       !answer            ? "Antwort fehlt" :
+      !letter            ? "Kein Buchstabe zugeordnet" :
+      chosenLetter       ? `"${letter}" bereits gewählt` :
+      repeated           ? `"${letter}" mehrfach verwendet` :
       notInWord          ? `"${letter}" nicht in der Antwort` :
       // 48 = 50 (max. length of Mastodon poll alternatives) - 2 (parentheses)
       answer.length > 48 ? `${answer.length + 2} Zeichen` :
@@ -292,39 +291,37 @@ function updatePoll() {
       "\u200b", // zero-width space to preserve height upon empty answer
       ...answer.split("").map((c, j) => {
         const C = upcase(c);
-        const isFirstOccurrence = answerUP.indexOf(C) === j;
-        const el = EL("span", {},
-          C === letter && isFirstOccurrence ? `(${c})` : c,
+        const passive =
+          !isLetter(C) || chosen.includes(C) || answerUP.indexOf(C) < j;
+        return passive ? c : EL(
+          `span.${secret.includes(C) ? "hit" : "miss"}`,
+          {
+            "@click": () => {
+              letterEl.textContent = C;
+              updatePoll();
+            }
+          },
+          C === letter ? `(${c})` : c
         );
-        if (isLetter(C) && !chosen.includes(C) && isFirstOccurrence) {
-          el.classList.toggle(
-            secret.includes(C) ? "hit" : "fail",
-            true
-          );
-          el.classList.toggle("clickable", true);
-          el.addEventListener("click", () => {
-            letterEl.value = C;
-            updatePoll();
-          })
-        }
-        return el;
       })
     );
     copyEl.disabled = Boolean(problem);
 
     alphabetEls.forEach(button => {
-      const buttonLetter = button.textContent
-      button.disabled =
-        chosen.includes(buttonLetter) || !answerUP.includes(buttonLetter);
-      button.dataset.status = secret.includes(buttonLetter) ? "hit" : "fail";
+      const buttonLetter = button.textContent;
+      button.classList.toggle("disabled",
+        chosen.includes(buttonLetter) || !answerUP.includes(buttonLetter)
+      );
       button.classList.toggle("selected", buttonLetter === letter);
+      button.classList.toggle("chosen", chosen.includes(buttonLetter));
+      button.classList.toggle("hit", secret.includes(buttonLetter));
     });
   });
 }
 
 QS("#clear-poll").addEventListener("click", () => {
   pollTextEl.value = "";
-  rows.forEach(({letterEl}) => letterEl.value = "");
+  rows.forEach(({letterEl}) => letterEl.textContent = "");
   update();
 });
 
@@ -335,7 +332,6 @@ Sir Lancelot von Camelot.
 Sir Robin von Camelot.
 Sir Galahad von Camelot.
 Artus, König der Briten.
-LRGA
 `, `
 Welches ist dein Auftrag?
 
@@ -343,7 +339,6 @@ Die Suche nach dem heiligen Gral.
 Die Suche nach dem heiligen Gral.
 Die Suche nach dem heiligen Gral.
 Die Suche nach dem heiligen Gral.
-DSHG
 `, `
 Welches ist deine Lieblingsfarbe?
 
@@ -351,7 +346,6 @@ blau
 blau, nein, gelb
 gelb
 Egal!  Wie heißt die Hauptstadt von Assyrien?
-BNGß
 `, `
 Wie heißt die Hauptstadt von Assyrien?
 
@@ -359,7 +353,6 @@ Assur
 Taidu
 Waššukanni
 Ninive
-ATWN
 `, `
 Welches ist die Höchstgeschwindigkeit einer unbeladenen Schwalbe?
 
@@ -367,23 +360,18 @@ Rauchschwalbe: 20 m/s
 Mehlschwalbe: 74 km/h
 Simson Schwalbe: 60 km/h
 Eine europäische oder eine afrikanische?
-RMSO
 `];
 
 QS("#poll-examples").append(
-  ...pollExamples.map((poll, i) => {
-    poll = poll.trim();
-    const cut = poll.length - 4;
-    const letters = poll.substring(cut);
-    const pollText = poll.substring(0, cut).trim();
-    return EL("button", {
+  ...pollExamples.map((poll, i) =>
+    EL("button", {
       "@click": () => {
-        rows.forEach(({letterEl}, j) => letterEl.value = letters[j]);
-        pollTextEl.value = pollText;
+        rows.forEach(({letterEl}, j) => letterEl.textContent = "");
+        pollTextEl.value = poll.trim();
         update();
       },
-    }, `Beispiel ${i+1}`);
-  })
+    }, `Beispiel ${i+1}`)
+  ),
 );
 
 setup();

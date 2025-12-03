@@ -12,7 +12,7 @@
     <h1>Galgodon-Hilfe</h1>
 
     <p>
-      Diese simple Web-App hilft Rätsel-Erstellern im Galgodon-Spiel,
+      Diese Web-Seite hilft Rätsel-Erstellern im Galgodon-Spiel,
       Posts mit dem aktuellen Spielstand und einer neuen Umfrage
       zu erstellen.
       (<a href="https://github.com/hcschuetz/galgodon-hilfe/">Code</a>)
@@ -26,14 +26,14 @@
         Die meisten Eingabe-Felder zum Spielstand
         müssen nur zu Beginn eines Rätsels ausgefüllt werden.
         Nach jeder Abstimmungs-Runde muss dann nur noch das Feld "Anfang" neu
-        geschrieben und das Feld "Gewählte Buchstaben" ergänzt werden.
+        geschrieben und das Feld "Bereits gewählte Buchstaben" ergänzt werden.
       </p>
       <p>
         Die Spielstand-Daten werden vom Browser gespeichert und "überleben"
         daher das Schließen und erneute Öffnen dieser Web-Seite.
       </p>
       <p>
-        Tipp: Man kann das Feld "Gewählte Buchstaben"
+        Tipp: Man kann das Feld "Bereits gewählte Buchstaben"
         bereits am Anfang mit "äöüß" ausfüllen
         um mitzuteilen, dass nur die Buchstaben A-Z verwendet werden.
       </p>
@@ -49,7 +49,7 @@
       <div>Zu erratender Begriff:</div>
       <textarea id="secret"></textarea>
 
-      <div>Gewählte Buchstaben:</div>
+      <div>Bereits gewählte Buchstaben:</div>
       <input type="text" id="chosen">
 
       <div>
@@ -85,7 +85,12 @@
         werden als die angebotenen Antworten verwendet.
         Darin sollen die Auswahl-Buchstaben <em>noch nicht</em>
         durch Klammern markiert werden.
-        Dies geschieht automatisch weiter unten.
+        Dies geschieht im nächsten Abschnitt.
+      </p>
+      <p>
+        Frage und Antworten stehen in einem gemeinsamen Textfeld,
+        damit man sie z.B.
+        leicht aus einer Datei mit vorbereiteten Umfragen kopieren kann.
       </p>
       <p>
         Im Gegensatz zu den Spielstand-Daten
@@ -104,83 +109,12 @@
       <textarea id="poll-text"></textarea>
     </div>
 
-    <details>
-      <summary></summary>
-      <p>
-        Die Buttons "Umfrage löschen" und "Beispiel ..."
-        wirken sich nicht nur auf das obige Textfeld aus,
-        sondern auch auf die gewählten Buchstaben unten.
-      </p>
-    </details>
-
     <div class="buttons">
       <button id="clear-poll">Umfrage löschen</button>
       <span id="poll-examples"></span>
     </div>
 
-    <h3>Alphabetische Buchstaben-Auswahl</h3>
-
-    <details>
-      <summary></summary>
-      <em>
-        Dieser Abschnitt kann übersprungen werden,
-        wenn er als zu kompliziert erscheint.
-        Er kann für die Auswahl der Antwort-Buchstaben jedoch hilfreich sein.
-      </em>
-      <p>
-        Die (nicht interaktive) <strong>Kopfzeile</strong>
-        gibt einen Überblick über den "Status" der 30 Buchstaben:
-      </p>
-      <ul>
-        <li>
-          <p>
-            <span style="background: #f008">Schon gewählt</span>
-            (sollte also in der neuen Umfrage nicht wieder angeboten werden)
-          </p>
-        </li>
-        <li>
-          <p>
-            <span style="background: #0f08">"Treffer"</span>
-            (noch nicht gewählt und kommt im Suchbegriff vor)
-          </p>
-        </li>
-        <li>
-          <p>
-            <span style="background: #ff08">"Niete"</span>
-            (weder gewählt noch im Suchbegriff)
-          </p>
-        </li>
-      </ul>
-      <p>
-        Darunter steht die <strong>Häufigkeit</strong> der Buchstaben
-        im Suchbegriff.
-      </p>
-      <p>
-        Im <strong>4×30-Buchstaben-Block</strong> darunter
-        sind diejenigen Treffer und Nieten,
-        die in der entsprechenden Antwort vorkommen,
-        farbig hinterlegt.
-        Sie können durch Anklicken ausgewählt werden.
-        (Der zu einer Antwort gehörende Buchstabe kann auch im nächsten
-        Abschnitt gewählt werden.)
-      </p>
-      <p>
-        In den <strong>4 Eingabe-Feldern</strong> links davon
-        können über die Tastatur ebenfalls
-        Buchstaben zu den Antworten eingegeben werden.
-        (Hier können auch Buchstaben eingegeben werden,
-        die nicht in der Antwort vorkommen.
-        Dies ist für den Fall gedacht,
-        dass man zunächst die Buchstaben und erst dann die Antworten wählt.)
-        Um einen neuen Buchstaben einzugeben, ist es nicht nötig,
-        einen bereits vorhandenen Buchstaben zu löschen.
-        Er wird automatisch überschrieben.
-      </p>
-    </details>
-
-    <div id="poll"></div>
-
-    <h2>Generierter Post-Text</h2>
+    <h2>Generierter Post</h2>
 
     <details>
       <summary></summary>
@@ -214,19 +148,32 @@
     <details>
       <summary></summary>
       <p>
-        In den Antwort-Feldern kann man
-        einen farbig hinterlegten <strong>Buchstaben anklicken</strong>
-        (<span style="background-color: #0f08;">"Treffer"</span>,
-        <span style="background-color: #ff08;">"Niete"</span>)
-        um ihn der jeweiligen Antwort zuzuordnen.
-        (Nur das jeweils erste Vorkommen eines Buchstaben in einer Antwort
-        kann gewählt werden.)
+        In den Antwort-Feldern können die farbig hinterlegten Buchstaben
+        angeklickt werden, um sie der jeweiligen Antwort zuzuordnen.
+        Das sind diejenigen Buchstaben, die noch nicht 
+        nicht in einer früheren Runde gewählt wurden.
+        (Es kann jeweils nur das erste Vorkommen eines Buchstaben angeklickt
+        werden.)
+      </p>
+      <p>
+        Die Farbe gibt an, ob der Buchstabe im Suchbegriff vorkommt:
+        <span style="background-color: #0f08;">"Treffer"</span> /
+        <span style="background-color: #f008;">"Niete"</span>
       </p>
       <p>
         Es kann schwierig sein, schmale Buchstaben wie i, I und l zu treffen.
-        Dann kann der obige alphabetische Buchstaben-Block
+        Dann kann der alphabetische Buchstaben-Block unten
         mit breiteren Buchstaben-Feldern verwendet werden.
         Diese haben die gleiche Funktionalität.
+      </p>
+      <p>
+        In den <strong>Buchstaben-Feldern</strong> links der Antworten
+        können über die Tastatur ebenfalls
+        Buchstaben zu den Antworten eingegeben werden.
+        (Hier können auch Buchstaben eingegeben werden,
+        die nicht in der Antwort vorkommen.
+        Dies ist für den Fall gedacht,
+        dass man zuerst die Buchstaben und danach die Antworten wählt.)
       </p>
     </details>
 
@@ -258,5 +205,50 @@
         </li>
       </ul>
     </details>
+
+    <h2>Alphabetische Buchstaben-Auswahl</h2>
+
+    <details>
+      <summary></summary>
+      <em>
+        Wenn man mit Antwort-Texten beginnt
+        und dann aus diesen die zugehörigen Buchstaben auswählt,
+        dann braucht man diesen Abschnitt hier meist nicht mehr zu verwenden.
+        Er kann jedoch manchmal hilfreich sein.
+      </em>
+      <p>
+        Die (nicht interaktive) <strong>Kopfzeile</strong>
+        gibt einen Überblick über den "Status" der 30 Buchstaben:
+      </p>
+      <ul>
+        <li>
+          <p>
+            Die Farbe gibt wieder an, ob der Buchstabe im Suchbegriff vorkommt:
+            <span style="background: #0f08">"Treffer"</span> /
+            <span style="background: #f008">"Niete"</span>
+          </p>
+        </li>
+        <li>
+          <p>
+            Schon gewählte Buchstaben sind durchgestrichen (✗)
+            und können in der neuen Umfrage nicht wieder angeboten werden.
+          </p>
+        </li>
+      </ul>
+      <p>
+        Darunter steht die <strong>Häufigkeit</strong> der Buchstaben
+        im Suchbegriff.
+      </p>
+      <p>
+        Im <strong>4×30-Buchstaben-Block</strong> darunter
+        sind diejenigen Buchstaben,
+        die in der entsprechenden Antwort vorkommen
+        und noch nicht gewählt wurden,
+        farbig hinterlegt.
+        Sie können durch Anklicken ausgewählt werden.
+      </p>
+    </details>
+
+    <div id="poll"></div>
   </body>
 </html>

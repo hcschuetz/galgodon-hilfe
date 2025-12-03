@@ -26,6 +26,10 @@ p:last-child {
   margin-bottom: 0;
 }
 
+details + * {
+  margin-top: 0;
+}
+
 details {
   margin: 0;
   padding: 0;
@@ -63,18 +67,37 @@ input, textarea {
   font-size: 85%;
 }
 
+.letter-input {
+  min-width: 1.5em;
+  min-height: 1.2lh;
+  &:focus {
+    outline: 3px solid #00f8;
+  }
+  border: 1px solid black;
+  font-family: monospace;
+  cursor: pointer;
+}
+
 .label-grid {
   display: grid;
   grid-template-columns: var(--label-width-2c) var(--input-width-2c);
   /* variables are not supported in media queries: */
   @media (width < 48em /* var(--full-width-2c) */) {
     grid-template-columns: 100%;
-    .grid-label {
+    .answer-out-label {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
       gap: .5em;
     }
+  }
+  .answer-out-value {
+    display: flex;
+    align-items: stretch;
+    .answer-out {
+      flex-grow: 1;
+    }
+    gap: .5em;
   }
   column-gap: 1em;
   row-gap: .5em;
@@ -111,43 +134,56 @@ textarea {
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
   display: inline-grid;
-  grid-template-columns: auto repeat(30, auto);
+  grid-template-columns: repeat(30, auto);
   text-align: center;
+  font-family: monospace;
 
-  .letter-input {
-    margin-left: 2px; /* space for the focus-indicating outline */
-    margin-right: .5em;
-    width: 1.2em;
-    text-align: center;
-  }
-  > [data-status="hit"] {
-    background-color: #0f08;
-  }
-  > [data-status="fail"] {
-    background-color: #ff08;
-  }
-  > [data-status="chosen"] {
-    background-color: #f008;
-  }
-  > .poll-head {
-    font-family: monospace;
-    font-size: 120%;
-  }
-  > .stat {
-    font-size: 80%
-  }
-  > .letter-button {
-    cursor: pointer;
-    font-family: monospace;
-    border: 1px solid transparent;
-    padding: 0 4px;
-    &.selected {
-      border-color: black;
+  > * {
+    position: relative;
+    &.poll-head {
+      font-size: 120%;
     }
-    &[disabled] {
-      background-color: #eee;
-      cursor: default;
+    &.stat {
+      font-size: 80%
     }
+    &.letter-button {
+      cursor: pointer;
+      border: 1px solid transparent;
+      padding: 0 4px;
+      &.selected {
+        border-color: black;
+      }
+    }
+  }
+}
+
+.poll-head, .letter-input, .letter-button {
+  background-color: #f008;
+}
+.hit {
+  background-color: #0f08;
+}
+.miss {
+  background-color: #f008;
+}
+.disabled {
+  background-color: #eee;
+  color: #888;
+  cursor: default;
+}
+.chosen {
+  position: relative;
+  &::after {
+    display: inline;
+    content: "✗";
+    position: absolute;
+    left: 4%;
+    bottom: -10%;
+    font-size: 130%;
+  }
+  &.letter-input::after {
+    left: 10%;
+    bottom: 10%;
   }
 }
 
@@ -177,14 +213,6 @@ textarea {
   font-size: 85%;
 }
 
-.answer-out {
-  .clickable {
-    cursor: pointer;
-  }
-  .hit {
-    background-color: #0f08;
-  }
-  .fail {
-    background-color: #ff08;
-  }
+.answer-out > span {
+  cursor: pointer;
 }
