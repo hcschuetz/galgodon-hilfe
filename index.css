@@ -1,17 +1,20 @@
 :root {
-  --body-margin: .5em;
   --label-width-2c: 16em;
   --gap-width: 1em;
   --input-width-2c: 30em;
   --grid-width-2c: calc(var(--label-width-2c) + var(--gap-width) + var(--input-width-2c));
   --full-width-2c: calc(var(--grid-width-2c) + 2 * var(--body-margin));
   --grid-width: min(100%, var(--grid-width-2c));
+
+  background-color: #f8f8f8;
 }
 
 body {
-  margin: var(--body-margin);
+  margin: .5em auto;
+  padding: .5em;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   max-width: var(--grid-width);
+  background-color: white;
 }
 
 summary + p {
