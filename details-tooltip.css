@@ -42,7 +42,7 @@ details {
         padding 0s calc(var(--disappear-duration) + var(--disappear-delay));
     }
   }
-  &:not([open]) > summary:hover::after {
+  &:not([open]) > summary { &:hover, &:focus { &::after {
     padding: 2px 4px 3px;
     /* Why doesn't (min|fit|max)-content work during fade-out? */
     max-width: 100vw; /* anything wide enough */
@@ -50,5 +50,5 @@ details {
     transition:
       opacity var(--appear-duration) var(--appear-delay);
       /* max-width and padding appear immediately before opacity fades in. */
-  }
+  }}}
 }
