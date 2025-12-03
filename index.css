@@ -35,11 +35,12 @@ details {
   padding: 0;
   > summary {
     display: inline;
-    font-size: 130%;
+    font-size: 100%;
     color: #00f;
+    border: 2 px solid #00f;
     cursor: pointer;
     &::before {
-      content: "🛈";
+      content: "[?]"; /* "🛈" not widely available */
     }
     &:hover {
       color: #00f8;
@@ -51,9 +52,9 @@ details {
     padding: 0 5px 5px;
     background-color: #eee;
     > summary{
-      font-size: inherit;
+      font-size: 130%;
       &::before {
-        content: "🗙";
+        content: "×"; /* "🗙" not widely available */
       }
     }
   }
