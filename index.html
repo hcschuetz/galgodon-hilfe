@@ -182,6 +182,9 @@
 
     <output id="poll-problems"></output>
     <pre id="debug"></pre>
+    <input type="text" onkeypress="
+      document.querySelector('#debug').textContent += event.key + '\n---\n'
+    ">
     <div id="output-grid" class="label-grid"></div>
 
     <details>
