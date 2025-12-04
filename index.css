@@ -200,13 +200,17 @@ textarea {
   cursor: default;
 }
 .chosen {
+  /*
+   * Positioning the "✗" this way is quite hacky.
+   * Use non-pseudo elements instead?
+   */
   position: relative;
   &::after {
     display: inline;
     content: "✗";
     position: absolute;
-    left: 4%;
-    bottom: -10%;
+    left: 0%;
+    bottom: -15%;
     font-size: 130%;
   }
   &.letter-input::after {
