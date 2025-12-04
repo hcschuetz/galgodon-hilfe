@@ -77,7 +77,8 @@ input, textarea {
 .letter-input {
   min-width: 1.5em;
   min-height: 1.2lh;
-  &:focus {
+  /* not just &:focus since actually the input child has focus: */
+  &:has(:focus) {
     outline: 3px solid #00f8;
   }
   border: 1px solid black;

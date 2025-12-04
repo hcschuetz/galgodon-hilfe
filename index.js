@@ -182,7 +182,7 @@ function countChars(c, string) {
 const rows = [];
 const outputGridEl = QS("#output-grid");
 for (let i = 0; i < 4; i++) {
-  const letterEl = EL("button.letter-input", {
+  const letterEl = newLetterElement("div.letter-input", {
     "@keypress": event => {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -374,3 +374,59 @@ QS("#poll-examples").append(
 );
 
 setup();
+
+
+/**
+ * Hack for answer letters.
+ *
+ * The CSS code for crossing out a letter using an ::after pseudo-element did
+ * not work on an input element.  So I am now hiding the <input> element and
+ * display the letter in a wrapper element, for which the cross-out CSS works.
+ *
+ * Another (possibly simpler) solution might be to display the <input> element
+ * and to overlay a real DOM element containg the "✗" instead of ::after.
+ *
+ * I have also tried a single <button> element reacting to "keypress" events.
+ * This was simple and did not need a nested <input> because the button itself
+ * was focussable.  This worked well with physical keyboards, but focussing
+ * a button did not open the on-screen keyboard of mobile devices.
+ */
+function newLetterElement(nameAndClasses, {"@keypress": onkeypress, ...props}) {
+  const input = EL("input", {
+    // Redundant ways to hide the input element.
+    // (Note that "display: none" or "visibility: hidden" do not work since
+    // these values prevent focussing.)
+    style: `
+      position: absolute; top: 0; left: 0;
+      width: 0; height: 0;
+      margin: 0;
+      outline: none;
+      border: none;
+      padding: 0;
+      opacity: 0;
+      zIndex: -1;
+    `,
+    "@keypress": onkeypress,
+  });
+
+  const span = EL("span");
+
+  const wrapper = EL(nameAndClasses, {
+    style: `
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `,
+    "@click": () => input.focus(),
+    ...props,
+  }, input, span);
+
+  // Delegate .textContent to <span>:
+  Object.defineProperty(wrapper, "textContent", {
+    set: value => span.textContent = value,
+    get: () => span.textContent,
+  });
+
+  return wrapper;
+}
