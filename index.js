@@ -182,13 +182,27 @@ function countChars(c, string) {
 const rows = [];
 const outputGridEl = QS("#output-grid");
 for (let i = 0; i < 4; i++) {
-  const letterEl = newLetterElement("div.letter-input", {
+  // Hack for answer letters.
+  //
+  // The CSS code for crossing out a letter using an ::after pseudo-element did
+  // not work on an input element.  So I am now hiding the <input> element and
+  // display the letter in a wrapper element, for which the cross-out CSS works.
+  //
+  // Another (possibly simpler) solution might be to display the <input> element
+  // and to overlay a real DOM element containg the "✗" instead of ::after.
+  //
+  // I have also tried a single <button> element reacting to "keypress" events.
+  // This was simple and did not need a nested <input> because the button itself
+  // was focussable.  This worked well with physical keyboards, but focussing
+  // a button did not open the on-screen keyboard of mobile devices.
+  const letterEl = EL("output");
+
+  const inputEl = EL("input", {
     "@input": event => {
       event.stopImmediatePropagation();
       event.preventDefault();
-      const {currentTarget} = event;
-      const {value} = currentTarget;
-      currentTarget.value = "";
+      const {value} = inputEl;
+      inputEl.value = "";
       if (!isLetter(value)) {
         alert(`"${value}" ist kein deutscher Buchstabe.`);
         return;
@@ -198,10 +212,14 @@ for (let i = 0; i < 4; i++) {
         alert(`"${C}" wurde bereits gewählt.`);
         return;
       }
-      letterEl.textContent = C;
+      letterEl.value = C;
       updatePoll();
     },
   });
+
+  const letterWrapperEl = EL("div.letter-input", {
+    "@click": () => inputEl.focus(),
+  }, inputEl, letterEl);
 
   const rowStatusEl = EL("div.row-status");
 
@@ -213,7 +231,7 @@ for (let i = 0; i < 4; i++) {
         if (event.currentTarget.classList.contains("disabled")) {
           return;
         }
-        letterEl.textContent = letter;
+        letterEl.value = letter;
         updatePoll();
       }
     }, letter)
@@ -232,7 +250,7 @@ for (let i = 0; i < 4; i++) {
 
   outputGridEl.append(
     EL("div.answer-out-label", {}, copyEl, rowStatusEl),
-    EL("div.answer-out-value", {}, letterEl, answerOutEl),
+    EL("div.answer-out-value", {}, letterWrapperEl, answerOutEl),
   );
 
   rows.push({letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl});
@@ -253,7 +271,7 @@ function updatePoll() {
   const answers = pollTextEl.value.trim().split("\n").slice(-4);
 
   QS("#poll-problems").value =
-    rows.map(({letterEl}) => letterEl.textContent).every(choice =>
+    rows.map(({letterEl}) => letterEl.value).every(choice =>
       isLetter(choice) && !chosen.includes(choice) && !secret.includes(choice)
     )
     ? "Nur Nieten zur Auswahl angeboten"
@@ -263,16 +281,17 @@ function updatePoll() {
     const {
       letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
     } = row;
-    const letter = upcase(letterEl.textContent);
+    const letter = upcase(letterEl.value);
     const answer = answers[i] ?? "";
     const answerUP = upcase(answer);
 
     const chosenLetter = chosen.includes(letter);
     const notInWord = !answerUP.includes(letter);
     const repeated =
-      rows.some(({letterEl}, j) => i !== j && letterEl.textContent === letter);
-    letterEl.classList.toggle("chosen", letter && chosen.includes(letter));
-    letterEl.classList.toggle("hit", letter && secret.includes(letter));
+      rows.some(({letterEl}, j) => i !== j && letterEl.value === letter);
+    const cl = letterEl.parentElement.classList;
+    cl.toggle("chosen", letter && chosen.includes(letter));
+    cl.toggle("hit", letter && secret.includes(letter));
 
 
     // Instead of showing only the "most severe" problem, we might show
@@ -298,7 +317,7 @@ function updatePoll() {
           `span.${secret.includes(C) ? "hit" : "miss"}`,
           {
             "@click": () => {
-              letterEl.textContent = C;
+              letterEl.value = C;
               updatePoll();
             }
           },
@@ -322,7 +341,7 @@ function updatePoll() {
 
 QS("#clear-poll").addEventListener("click", () => {
   pollTextEl.value = "";
-  rows.forEach(({letterEl}) => letterEl.textContent = "");
+  rows.forEach(({letterEl}) => letterEl.value = "");
   update();
 });
 
@@ -367,7 +386,7 @@ QS("#poll-examples").append(
   ...pollExamples.map((poll, i) =>
     EL("button", {
       "@click": () => {
-        rows.forEach(({letterEl}, j) => letterEl.textContent = "");
+        rows.forEach(({letterEl}, j) => letterEl.value = "");
         pollTextEl.value = poll.trim();
         update();
       },
@@ -376,59 +395,3 @@ QS("#poll-examples").append(
 );
 
 setup();
-
-
-/**
- * Hack for answer letters.
- *
- * The CSS code for crossing out a letter using an ::after pseudo-element did
- * not work on an input element.  So I am now hiding the <input> element and
- * display the letter in a wrapper element, for which the cross-out CSS works.
- *
- * Another (possibly simpler) solution might be to display the <input> element
- * and to overlay a real DOM element containg the "✗" instead of ::after.
- *
- * I have also tried a single <button> element reacting to "keypress" events.
- * This was simple and did not need a nested <input> because the button itself
- * was focussable.  This worked well with physical keyboards, but focussing
- * a button did not open the on-screen keyboard of mobile devices.
- */
-function newLetterElement(nameAndClasses, {"@input": oninput, ...props}) {
-  const input = EL("input", {
-    // Redundant ways to hide the input element.
-    // (Note that "display: none" or "visibility: hidden" do not work since
-    // these values prevent focussing.)
-    style: `
-      position: absolute; top: 0; left: 0;
-      width: 0; height: 0;
-      margin: 0;
-      outline: none;
-      border: none;
-      padding: 0;
-      opacity: 0;
-      zIndex: -1;
-    `,
-    "@input": oninput,
-  });
-
-  const span = EL("span");
-
-  const wrapper = EL(nameAndClasses, {
-    style: `
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    `,
-    "@click": () => input.focus(),
-    ...props,
-  }, input, span);
-
-  // Delegate .textContent to <span>:
-  Object.defineProperty(wrapper, "textContent", {
-    set: value => span.textContent = value,
-    get: () => span.textContent,
-  });
-
-  return wrapper;
-}

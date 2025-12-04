@@ -85,6 +85,27 @@ input, textarea {
   border: 1px solid black;
   font-family: monospace;
   cursor: pointer;
+
+  /* center letterEl */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Hide input element (even from the flex layout) */
+  position: relative;
+  input {
+    /* Redundant ways to hide the input element.
+    (Note that "display: none" or "visibility: hidden" would not work since
+    these values prevent focussing.) */
+    position: absolute; top: 0; left: 0;
+    width: 0; height: 0;
+    margin: 0;
+    outline: none;
+    border: none;
+    padding: 0;
+    opacity: 0;
+    z-index: -1;
+  }
 }
 
 .label-grid {
