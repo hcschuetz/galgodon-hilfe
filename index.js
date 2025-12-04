@@ -187,6 +187,7 @@ for (let i = 0; i < 4; i++) {
       event.stopImmediatePropagation();
       event.preventDefault();
       const {key} = event;
+      QS("#debug").textContent = key;
       if (!isLetter(key)) {
         alert(`"${key}" ist kein deutscher Buchstabe.`);
         return;
