@@ -70,6 +70,7 @@ input, textarea {
   /* Without this border rule, the border width differs between elements
    * without and with a background color, at least on Firefox 145.0. */
   border-width: 1px;
+  padding: 4px;
   font-family: inherit;
   font-size: 85%;
 }
