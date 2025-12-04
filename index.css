@@ -167,12 +167,10 @@ textarea {
   grid-template-columns: repeat(30, auto);
   text-align: center;
   font-family: monospace;
+  font-size: 150%;
 
   > * {
     position: relative;
-    &.poll-head {
-      font-size: 120%;
-    }
     &.stat {
       font-size: 80%
     }
