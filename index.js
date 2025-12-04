@@ -183,16 +183,18 @@ const rows = [];
 const outputGridEl = QS("#output-grid");
 for (let i = 0; i < 4; i++) {
   const letterEl = newLetterElement("div.letter-input", {
-    "@keypress": event => {
+    "@input": event => {
       event.stopImmediatePropagation();
       event.preventDefault();
-      const {key} = event;
-      if (!isLetter(key)) {
-        alert(`"${key}" ist kein deutscher Buchstabe.`);
+      const {currentTarget} = event;
+      const {value} = currentTarget;
+      currentTarget.value = "";
+      if (!isLetter(value)) {
+        alert(`"${value}" ist kein deutscher Buchstabe.`);
         return;
       }
-      const C = upcase(key);
-      if (chosenEl.value.includes(key)) {
+      const C = upcase(value);
+      if (chosenEl.value.includes(value)) {
         alert(`"${C}" wurde bereits gewählt.`);
         return;
       }
@@ -391,7 +393,7 @@ setup();
  * was focussable.  This worked well with physical keyboards, but focussing
  * a button did not open the on-screen keyboard of mobile devices.
  */
-function newLetterElement(nameAndClasses, {"@keypress": onkeypress, ...props}) {
+function newLetterElement(nameAndClasses, {"@input": oninput, ...props}) {
   const input = EL("input", {
     // Redundant ways to hide the input element.
     // (Note that "display: none" or "visibility: hidden" do not work since
@@ -406,7 +408,7 @@ function newLetterElement(nameAndClasses, {"@keypress": onkeypress, ...props}) {
       opacity: 0;
       zIndex: -1;
     `,
-    "@keypress": onkeypress,
+    "@input": oninput,
   });
 
   const span = EL("span");
