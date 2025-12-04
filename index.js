@@ -198,6 +198,11 @@ for (let i = 0; i < 4; i++) {
   const letterEl = EL("output");
 
   const inputEl = EL("input", {
+    // Intercepting the "keypress" event and using its "key" member would be
+    // simpler.  But due to a bug in Firefox on Android the ä, ö, and ü keys
+    // do not trigger a "keypress" event.  (Strangely, the problem does not
+    // arise with ß.)  So we use the "input" event, clearing the input
+    // element's value every time.
     "@input": event => {
       event.stopImmediatePropagation();
       event.preventDefault();
