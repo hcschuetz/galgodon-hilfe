@@ -197,7 +197,7 @@ for (let i = 0; i < 4; i++) {
   // a button did not open the on-screen keyboard of mobile devices.
   const letterEl = EL("output");
 
-  const inputEl = EL("input", {
+  const letterInputEl = EL("input", {
     // Intercepting the "keypress" event and using its "key" member would be
     // simpler.  But due to a bug in Firefox on Android the ä, ö, and ü keys
     // do not trigger a "keypress" event.  (Strangely, the problem does not
@@ -206,8 +206,8 @@ for (let i = 0; i < 4; i++) {
     "@input": event => {
       event.stopImmediatePropagation();
       event.preventDefault();
-      const {value} = inputEl;
-      inputEl.value = "";
+      const {value} = letterInputEl;
+      letterInputEl.value = "";
       if (!isLetter(value)) {
         alert(`"${value}" ist kein deutscher Buchstabe.`);
         return;
@@ -223,8 +223,8 @@ for (let i = 0; i < 4; i++) {
   });
 
   const letterWrapperEl = EL("div.letter-input", {
-    "@click": () => inputEl.focus(),
-  }, inputEl, letterEl);
+    "@click": () => letterInputEl.focus(),
+  }, letterInputEl, letterEl);
 
   const rowStatusEl = EL("div.row-status");
 
