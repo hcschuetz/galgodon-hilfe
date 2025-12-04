@@ -20,8 +20,8 @@ details {
     position: relative;
     &::after {
       position: absolute;
-      bottom: 0%;
-      left: 130%;
+      bottom: -3px;
+      right: 130%;
       border-radius: 3px;
       font-size: .7rlh;
       background-color: #eee;

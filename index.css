@@ -36,7 +36,10 @@ details + * {
 details {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
   > summary {
+    align-self: flex-end;
     display: inline;
     font-size: 100%;
     color: #00f;
