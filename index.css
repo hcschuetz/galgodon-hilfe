@@ -212,7 +212,7 @@ textarea {
     font-size: 130%;
   }
   &.letter-input::after {
-    left: 10%;
+    left: 15%;
     bottom: 10%;
   }
 }
