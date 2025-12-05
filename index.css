@@ -114,7 +114,7 @@ input, textarea {
   /* variables are not supported in media queries: */
   @media (width < 48em /* var(--full-width-2c) */) {
     grid-template-columns: 100%;
-    .answer-out-label {
+    .post-label, .answer-out-label {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
