@@ -4,9 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Galgodon-Hilfe</title>
+
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="details-tooltip.css">
     <script type="module" src="index.js"></script>
+
+    <link rel='stylesheet' type='text/css' media='screen'
+      href='https://hcschuetz.github.io/mastodon-toots/mastodon-toots.css'>
+    <script type="module"
+      src="https://hcschuetz.github.io/mastodon-toots/mastodon-toots.js">
+    </script>
   </head>
   <body>
     <h1>Galgodon-Hilfe</h1>
@@ -179,32 +186,6 @@
     <output id="poll-problems"></output>
     <div id="output-grid" class="label-grid"></div>
 
-    <details>
-      <summary></summary>
-      <p>
-        Es wäre nun praktisch, wenn man den Post direkt von hier aus
-        <strong>absenden</strong> könnte.  Aber:
-      </p>
-      <ul>
-        <li>
-          <p>
-            Dazu müsste man sich bei seiner Fedi-Instanz authentifizieren.
-            Das müsste nicht nur implementiert werden,
-            sondern Ihr müsstet dieser Web-Seite (und damit Github und mir)
-            vertrauen, dass Euer Fedi-Login nicht missbraucht wird.
-          </p>
-        </li>
-        <li>
-          <p>
-            Im Gegensatz zur Kommunikation <em>zwischen</em> Fedi-Instanzen ist
-            das API der Instanzen zu Client-Anwendungen nicht standardisiert.
-            Ich könnte allenfalls bestimmte Fedi-Instanzen (z.B. Mastodon)
-            unterstützen.
-          </p>
-        </li>
-      </ul>
-    </details>
-
     <h2>Alphabetische Buchstaben-Auswahl</h2>
 
     <details>
@@ -249,5 +230,53 @@
     </details>
 
     <div id="poll"></div>
+
+    <h2>Aktuelle Galgodon-Toots</h2>
+
+    <details>
+      <summary></summary>
+      <p>
+        Es wäre praktisch, wenn man den neu erstellten Post
+        auch direkt von hier aus <strong>absenden</strong> könnte.
+        Aber:
+      </p>
+      <ul>
+        <li>
+          <p>
+            Dazu müsste man sich bei seiner Fedi-Instanz authentifizieren.
+            Das müsste nicht nur implementiert werden,
+            sondern Ihr müsstet dieser Web-Seite (und damit Github und mir)
+            vertrauen, dass Euer Fedi-Login nicht missbraucht wird.
+          </p>
+        </li>
+        <li>
+          <p>
+            Im Gegensatz zur Kommunikation <em>zwischen</em> Fedi-Instanzen ist
+            das API der Instanzen zu Client-Anwendungen nicht standardisiert.
+            Ich könnte allenfalls bestimmte Fedi-Instanzen (z.B. Mastodon)
+            unterstützen.
+          </p>
+        </li>
+      </ul>
+    </details>
+
+    <div class="buttons">
+      <button onclick='
+        const tootsEl = document.querySelector("#toots");
+        tootsEl.innerHTML = "Lädt...";
+        tootsEl.connectedCallback();
+      '>Aktualisieren</button>
+    </div>
+
+    <hr>
+
+    <div id="toot-wrapper">
+      <mastodon-toots
+        id="toots"
+        url="https://fedigroups.social/api/v1/accounts/115186246422725896/statuses?limit=30"
+      ></mastodon-toots>
+    </div>
+
+    <hr>
   </body>
 </html>
