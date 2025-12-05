@@ -249,6 +249,12 @@ textarea {
   cursor: pointer;
 }
 
+hr {
+  display: block;
+  border-top: 2px solid black;
+  margin: 5px 0;
+}
+
 #toot-wrapper {
   height: 70vh;
   overflow-y: auto;
@@ -264,7 +270,7 @@ textarea {
       width: auto;
       min-width: auto;
       max-width: none;
-      border: 1px solid black !important;
+      border: 1px solid black;
       border-radius: 4px;
       padding: 4px;
     }
@@ -273,13 +279,12 @@ textarea {
     @media (width >= 48em /* var(--full-width-2c) */) {
       grid-template-columns: auto auto;
       .toot {
-        &:nth-child(odd) {
-          margin-bottom: 1em;
-        }
         &:nth-child(even) {
-          margin-top: 1em;
+          margin-top: 3em;
+          margin-bottom: -3em;
         }
       }
+      padding-bottom: 3.01em;
     }
   }
 }
