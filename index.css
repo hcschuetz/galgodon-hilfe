@@ -274,12 +274,21 @@ hr {
       border-radius: 4px;
       padding: 4px;
 
+      .poll-count.poll-max::before {
+        content: "∗";
+      }
+
       .poll-expiry {
+        display: inline;
+        background-color: #0f08;
         &::before {
-          content: "bis "
+          content: "bis ";
         }
-        &.poll-expired::before {
-          content: "beendet "
+        &.poll-expired {
+          background-color: #f008;
+          &::before {
+            content: "beendet ";
+          }
         }
       }
     }
