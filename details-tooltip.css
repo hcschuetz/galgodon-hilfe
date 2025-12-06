@@ -42,7 +42,8 @@ details {
         padding 0s calc(var(--disappear-duration) + var(--disappear-delay));
     }
   }
-  &:not([open]) > summary { &:hover, &:focus { &::after {
+  /* We should show the tooltip on focus, but only for a short while. */
+  &:not([open]) > summary { &:hover /* , &:focus */ { &::after {
     padding: 2px 4px 3px;
     /* Why doesn't (min|fit|max)-content work during fade-out? */
     max-width: 100vw; /* anything wide enough */
