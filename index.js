@@ -12,7 +12,7 @@ const defaultInputs = {
 Das ist ein Treffer.`,
   secret : `Schöne Grüße`,
   chosen : "espätör",
-  missing: "Nicht im gesuchten Begriff:",
+  missing: "Nicht enthalten:",
   suffix : "(6 + 5 Zeichen; ÄÖÜß nicht aufgelöst)",
 };
 
