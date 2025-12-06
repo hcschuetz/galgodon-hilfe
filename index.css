@@ -259,26 +259,35 @@ hr {
   height: 70vh;
   overflow-y: auto;
 
-  #toots {
+  > #toots {
     width: auto;
     max-width: none;
     display: grid;
     grid-template-columns: auto;
     gap: .5em;
 
-    .toot {
+    > .toot {
       width: auto;
       min-width: auto;
       max-width: none;
       border: 1px solid black;
       border-radius: 4px;
       padding: 4px;
+
+      .poll-expiry {
+        &::before {
+          content: "bis "
+        }
+        &.poll-expired::before {
+          content: "beendet "
+        }
+      }
     }
 
     /* variables are not supported in media queries: */
     @media (width >= 48em /* var(--full-width-2c) */) {
       grid-template-columns: auto auto;
-      .toot {
+      > .toot {
         &:nth-child(even) {
           position: relative;
           top: 3em;
