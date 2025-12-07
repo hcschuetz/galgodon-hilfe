@@ -6,18 +6,22 @@
   --full-width-2c: calc(var(--grid-width-2c) + 2 * var(--body-margin));
   --grid-width: min(100%, var(--grid-width-2c));
 
-  background-color: #f8f8f8;
+  background-color: #eee;
+  /* If the side margins of <body> are narrower than the top/bottom margins,
+  "hide" all margins by using the same background color as in <body>: */
+  @media (width < calc(48em /* var(--full-width-2c) */ + 1em)) {
+    background-color: #fff;
+  }
 }
 
 body {
-  margin: .5em auto;
-  /* variables are not supported in media queries: */
+  max-width: var(--grid-width);
+  margin: 0.5em auto;
   @media (width < 48em /* var(--full-width-2c) */) {
     margin: 0;
   }
-  padding: .5em;
+  padding: 0.5em;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  max-width: var(--grid-width);
   background-color: white;
 
   #icon {
@@ -125,14 +129,13 @@ input, textarea {
 .label-grid {
   display: grid;
   grid-template-columns: var(--label-width-2c) var(--input-width-2c);
-  /* variables are not supported in media queries: */
   @media (width < 48em /* var(--full-width-2c) */) {
     grid-template-columns: 100%;
     .post-label, .answer-out-label {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
-      gap: .5em;
+      gap: 0.5em;
     }
   }
   .answer-out-value {
@@ -141,10 +144,10 @@ input, textarea {
     .answer-out {
       flex-grow: 1;
     }
-    gap: .5em;
+    gap: 0.5em;
   }
   column-gap: 1em;
-  row-gap: .5em;
+  row-gap: 0.5em;
   > * {
     align-self: self-start;
   }
@@ -173,7 +176,7 @@ textarea {
 }
 
 #poll {
-  margin-top: .5em;
+  margin-top: 0.5em;
   max-width: 100%;
   overflow-x: auto;
   padding-bottom: 5px; /* keep overlay scrollbar away */
@@ -246,7 +249,7 @@ textarea {
   font-size: 85%;
   color: #f00;
   display: block;
-  margin: .5em 0;
+  margin: 0.5em 0;
 }
 
 .copy-button {
@@ -278,7 +281,7 @@ hr {
     max-width: none;
     display: grid;
     grid-template-columns: auto;
-    gap: .5em;
+    gap: 0.5em;
 
     > .toot {
       width: auto;
@@ -307,7 +310,6 @@ hr {
       }
     }
 
-    /* variables are not supported in media queries: */
     @media (width >= 48em /* var(--full-width-2c) */) {
       grid-template-columns: auto auto;
       > .toot {
