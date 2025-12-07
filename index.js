@@ -225,6 +225,7 @@ for (let i = 0; i < 4; i++) {
         event.stopImmediatePropagation();
         event.preventDefault();
         letterEl.value = "";
+        updatePoll();
       }
     },
   });
