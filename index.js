@@ -220,6 +220,13 @@ for (let i = 0; i < 4; i++) {
       letterEl.value = C;
       updatePoll();
     },
+    "@keydown": event => {
+      if (event.key === "Backspace" || event.key === "Delete") {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        letterEl.value = "";
+      }
+    },
   });
 
   const letterWrapperEl = EL("div.letter-input", {
