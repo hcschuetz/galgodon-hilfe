@@ -249,9 +249,9 @@ for (let i = 0; i < 4; i++) {
     "@click": async () => {
       const outText = answerOutEl.textContent;
       await navigator.clipboard.writeText(outText);
-      alert(`Antwort ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
+      alert(`Option ${i+1} in die Zwischenablage kopiert:\n\n"${outText}"`);
     },
-  }, `Antwort ${i+1} kopieren`);
+  }, `Option ${i+1} kopieren`);
 
   outputGridEl.append(
     EL("div.answer-out-label", {}, copyEl, rowStatusEl),
