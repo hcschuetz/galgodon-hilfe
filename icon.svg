@@ -6,12 +6,14 @@
       text-anchor: middle;
       font-family: Helvetica, Arial, sans-serif;
       font-size: 20px;
-      color: black;
+      font-weight: 700;
+      color: #000;
     }
   </style>
-  <circle cx="50" cy="50" r="55" fill="#8f8"/>
+  <rect width="100" height="100" rx="33" fill="#8f8"/>
 
-  <!-- g stroke="none" fill="none" stroke-width="4">
+<!--
+  <g stroke="#000" fill="none" stroke-width="4">
     <line x1="20" y1="90" x2="80" y2="90"/>
     <polyline points="30,90 30,10 65,10 65,24"/>
     <line x1="30" y1="30" x2="50" y2="10"/>
@@ -20,7 +22,8 @@
     <line x1="65" y1="62" x2="65" y2="40"/>
     <line x1="52" y1="47" x2="78" y2="47"/>
     <polyline points="55,80 65,62 75,80"/>
-  </g -->
+  </g>
+-->
 
   <text x="50" y="37">⌴⌴GA⌴L</text>
   <text x="50" y="57">GO⌴⌴</text>
