@@ -19,6 +19,16 @@ body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   max-width: var(--grid-width);
   background-color: white;
+
+  #icon {
+    width: 150px;
+    height: 150px;
+    padding: 0.3em 0 0.5em 0.5em;
+    float: inline-end;
+  }
+  .clear-logo {
+    clear: both;
+  }
 }
 
 summary + p {
