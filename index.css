@@ -194,7 +194,7 @@ textarea {
     &.letter-button {
       cursor: pointer;
       border: 4px solid transparent;
-      padding: 0 4px;
+      padding: 0 3px;
       &.selected {
         border-color: black;
       }
