@@ -146,6 +146,57 @@
       <p>
         Die Berechnung ist jedoch nicht ganz kompatibel. Daher das "~".
       </p>
+      <p>
+        Für den partiell gelösten Suchbegriff werden übrigens zwei
+        <strong>spezielle Unicode-Zeichen</strong> verwendet:
+      </p>
+      <ul>
+        <li>
+          <p>
+            Noch unbekannte Buchstaben werden als
+            <strong>"⌴" (U+2334, counterbore)</strong>
+            dargestellt.
+            Dieses Zeichen steht eigentlich für eine Senkbohrung.
+            Es hat sich aber herausgestellt, dass es in manchen Fonts besser
+            lesbar ist als "␣" (U+2423, open box), welches ansonsten die
+            natürlichere Wahl gewesen wäre.
+          </p>
+          <p>
+            Noch unbekannte Buchstaben wurden in diesem Spiel auch als
+            "_" (Underscore) dargestellt.
+            Weil aber mehrere Underscores eine durchgehende Linie bilden,
+            konnte man die Buchstaben nicht gut durchzählen.
+            Also wurden zwischen die Buchstaben und Underscores eines Worts
+            Leerzeichen gesetzt.
+            Wenn nun der Suchbegriff aus mehreren Worten bestand,
+            wurden Wortzwischenräume entsprechend durch
+            drei Leerzeichen dargestellt.
+            Das war aber nicht auf allen Fedi-UIs unterscheidbar von den
+            einzelnen Leerzeichen innerhalb der Wörter,
+            wie im Folgenden beschrieben.
+          </p>
+        </li>
+        <li>
+          <p>
+            Leerzeichen im Suchbegriff werden durch
+            <strong>"&#x2003;" (U+2003, em space)</strong>
+            ersetzt.
+            Dieses besonders breite Leerzeichen soll sicherstellen, dass
+            Wort-Zwischenräume gut erkennbar sind.
+          </p>
+          <p>
+            In einer früheren Version wurden einfach mehrere "normale"
+            Leerzeichen verwendet.
+            Das hat in Mastodon gut funktioniert,
+            aber in GoToSocial wurden mehrere aufeinander folgende
+            Leerzeichen entsprechend dem Default-Verhalten von HTML
+            wie ein einzelnes Leerzeichen dargestellt.
+            Mittlerweile wurde das in GoToSocial behoben, aber vielleicht
+            gibt es noch andere Fedi-UIs, in denen das Problem auftritt.
+            Dort ist U+2003 wohl "robuster".
+          </p>
+        </li>
+      </ul>
     </details>
 
     <div class="label-grid">
