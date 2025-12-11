@@ -55,6 +55,43 @@ const upcase = s =>
   // as it still looks bad with some fonts:
   s.replaceAll("ß", "ẞ").toLocaleUpperCase("de").replaceAll("ẞ", "ß");
 
+/** [from, to] index pairs */
+let answerSections;
+
+function findAnswerSections(text) {
+  const length = text.length;
+  const sections = [];
+
+  let i = 0, prev = 0;
+  while ((i = text.indexOf("\n", prev)) >= 0) {
+    sections.push([prev, i]);
+    prev = i+1;
+  }
+  sections.push([prev, length]);
+
+  // Ignore leading empty lines
+  while (sections.length) {
+    const [from, to] = sections.at(0);
+    if (text.substring(from, to).trimEnd()) break;
+    sections.shift();
+  }
+
+  // Ignore trailing empty lines
+  while (sections.length) {
+    const [from, to] = sections.at(-1);
+    if (text.substring(from, to).trimEnd()) break;
+    sections.pop();
+  }
+
+  // Fill if needed
+  while (sections.length < 4) {
+    sections.push([length, length]);
+  }
+
+  // Take the last 4 lines
+  return sections.slice(-4);
+}
+
 function update() {
   localStorage.setItem(storageKey, JSON.stringify({
     tags   : tagsEl   .value,
@@ -64,15 +101,18 @@ function update() {
     missing: missingEl.value,
     suffix : suffixEl .value,
   }));
-  const secret = upcase(secretEl.value.trim());
+  const secret = upcase(secretEl.value.trimEnd());
   const chosen = upcase(chosenEl.value.trim());
-  const missingText = missingEl.value.trim();
-  const missingChosen =
-    chosen.split("").flatMap(c => secret.includes(c) ? [] : [c]).join(", ");
+  const missingText = missingEl.value.trimEnd();
+  const missingChosen = chosen.split("").flatMap(c =>
+    isLetter(c) && secret.includes(c) ? [] : [c]
+  ).join(", ");
+
+  answerSections = findAnswerSections(pollTextEl.value);
 
   outEl.textContent = [
-    tagsEl.value.trim(),
-    prefixEl.value.trim(),
+    tagsEl.value.trimEnd(),
+    prefixEl.value.trimEnd(),
 
 /*
 Choices for representing unknown letters:
@@ -119,8 +159,8 @@ breaking.]
     ).join(""),
 
     missingText && missingChosen && (missingText + " " + missingChosen),
-    suffixEl.value.trim(),
-    pollTextEl.value.trim().split("\n").slice(0, -4).join("\n").trim(),
+    suffixEl.value.trimEnd(),
+    pollTextEl.value.slice(0, answerSections[0][0]).trimEnd(),
   ].filter(part => part).join("\n\n");
   outLengthEl.textContent =
     outEl.textContent
@@ -261,17 +301,27 @@ for (let i = 0; i < 4; i++) {
     },
   }, `Option ${i+1} kopieren`);
 
+  const editEl = EL("button.edit-button", {
+    "title": "Antwort bearbeiten",
+    "@click": () => {
+      const [from, to] = answerSections[i];
+      pollTextEl.setSelectionRange(from, to);
+      pollTextEl.focus();
+      pollTextEl.previousElementSibling.scrollIntoView(true);
+    }
+  }, "✏️");
+
   outputGridEl.append(
     EL("div.answer-out-label", {}, copyEl, rowStatusEl),
-    EL("div.answer-out-value", {}, letterWrapperEl, answerOutEl),
+    EL("div.answer-out-value", {}, letterWrapperEl, answerOutEl, editEl),
   );
 
   rows.push({letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl});
 }
 
 function updatePoll() {
+  const secret = upcase(secretEl.value.trimEnd());
   const chosen = upcase(chosenEl.value.trim());
-  const secret = upcase(secretEl.value.trim());
   pollHeadEls.forEach(el => {
     const letter = el.textContent;
     el.classList.toggle("chosen", chosen.includes(letter));
@@ -280,8 +330,6 @@ function updatePoll() {
   statEls.forEach((el, i) =>
     el.textContent = countChars(alphabet[i], secret) || ""
   );
-
-  const answers = pollTextEl.value.trim().split("\n").slice(-4);
 
   QS("#poll-problems").value =
     rows.map(({letterEl}) => letterEl.value).every(choice =>
@@ -295,7 +343,8 @@ function updatePoll() {
       letterEl, alphabetEls, rowStatusEl, answerOutEl, copyEl,
     } = row;
     const letter = upcase(letterEl.value);
-    const answer = answers[i] ?? "";
+    const [from, to] = answerSections[i];
+    const answer = pollTextEl.value.substring(from, to).trimEnd();
     const answerUP = upcase(answer);
 
     const chosenLetter = chosen.includes(letter);

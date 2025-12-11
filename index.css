@@ -151,6 +151,10 @@ input, textarea {
   > * {
     align-self: self-start;
   }
+  button.edit-button {
+    border: none;
+    background: none;
+  }
 }
 
 textarea {
