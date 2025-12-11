@@ -306,8 +306,11 @@ for (let i = 0; i < 4; i++) {
     "@click": () => {
       const [from, to] = answerSections[i];
       pollTextEl.setSelectionRange(from, to);
-      pollTextEl.focus();
-      pollTextEl.previousElementSibling.scrollIntoView(true);
+      pollTextEl.focus({preventScroll: true});
+      pollTextEl.previousElementSibling.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, "✏️");
 
