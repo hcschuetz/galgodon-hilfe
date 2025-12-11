@@ -307,7 +307,7 @@ for (let i = 0; i < 4; i++) {
       const [from, to] = answerSections[i];
       pollTextEl.setSelectionRange(from, to);
       pollTextEl.focus({preventScroll: true});
-      pollTextEl.previousElementSibling.scrollIntoView({
+      QS("#poll-heading").scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
