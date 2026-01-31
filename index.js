@@ -235,6 +235,10 @@ for (let i = 0; i < 4; i++) {
   // This was simple and did not need a nested <input> because the button itself
   // was focussable.  This worked well with physical keyboards, but focussing
   // a button did not open the on-screen keyboard of mobile devices.
+  //
+  // (Instead of buttons I could have used the tabindex attribute to make the
+  // element focussable.  But most probably the problem with the non-appearing
+  // Android keyboard and the Firefox äöü bug below would still show up.)
   const letterEl = EL("output");
 
   const letterInputEl = EL("input", {
