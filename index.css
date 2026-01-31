@@ -52,34 +52,41 @@ details + * {
 }
 
 details {
-  margin: 0;
+  margin: 0.25em 0;
+  border-radius: 0.25em;
   padding: 0;
   display: flex;
   flex-direction: column;
   > summary {
     align-self: flex-end;
-    display: inline;
-    font-size: 100%;
+    border-radius: 0.25em;
+    border: 1px solid #00f;
+    padding: 0;
+    width: 1.25em;
+    height: 1.25em;
+    text-align: center;
+    line-height: 1em; /* empirical; how to calculate this? */
     color: #00f;
-    border: 2 px solid #00f;
     cursor: pointer;
+    display: inline;
     &::before {
-      content: "[?]"; /* "🛈" not widely available */
+      font-weight: bold;
+      content: "?"; /* "🛈" not widely available */
     }
     &:hover {
-      color: #00f8;
+      box-shadow: 0 0 4px #00f;
+      &:active {
+        box-shadow: inset 0 0 3px #00f;
+      }
     }
   }
   &[open] {
-    margin: 1ex 0;
-    border-radius: 5px;
-    padding: 0 5px 5px;
     background-color: #eee;
-    > summary{
-      font-size: 130%;
-      &::before {
-        content: "×"; /* "🗙" not widely available */
-      }
+    > summary::before {
+      content: "×"; /* "🗙" not widely available */
+    }
+    &::details-content {
+      padding: 0 0.5em 0.5em;
     }
   }
 }
